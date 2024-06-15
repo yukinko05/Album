@@ -8,8 +8,11 @@ import {createClient} from "@/utils/supabase/client";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage,setErrorMessage] = useState("");
 
     const handleSignUp = async () => {
+        setErrorMessage("");
+
         const supabase = createClient();
 
         const {error} = await supabase.auth.signUp({
@@ -18,7 +21,7 @@ export default function LoginPage() {
         })
 
         if(error){
-            console.log(error.message)
+            setErrorMessage(error.message)
         }
     }
 
@@ -42,6 +45,8 @@ export default function LoginPage() {
                 </div>
 
                 <button className={styles.button} onClick={handleSignUp}>新規登録する</button>
+
+                {errorMessage? <p className={styles.errorMessage}>{errorMessage}</p> : null}
             </div>
         </div>
     )

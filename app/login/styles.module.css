@@ -48,3 +48,8 @@
     padding: 8px 0;
     height: 48px;
 }
+
+.errorMessage {
+    color: red;
+    text-align: center;
+}
