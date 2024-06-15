@@ -1,17 +1,22 @@
-export default function LoginPage () {
-    return(
-        <div>
-            <div>
-                <label htmlFor="email">メールアドレス</label>
-                <input type="text" name="email" id="email"/>
-            </div>
+import styles from "./styles.module.css";
 
-            <div>
-                <label htmlFor="password">パスワード</label>
-                <input type="password" name="password" id="password"/>
-            </div>
+export default function LoginPage() {
+    return (
+        <div className={styles.wrap}>
+            <div className={styles.loginForm}>
+                <h1 className={styles.title}>ALBUM</h1>
+                <div className={styles.inputWrap}>
+                    <label className={styles.label} htmlFor="email">メールアドレス</label>
+                    <input className={styles.input} type="text" name="email" id="email"/>
+                </div>
 
-            <button>新規登録する</button>
+                <div className={styles.inputWrap}>
+                    <label className={styles.label} htmlFor="password">パスワード</label>
+                    <input className={styles.input} type="password" name="password" id="password"/>
+                </div>
+
+                <button className={styles.button}>新規登録する</button>
+            </div>
         </div>
     )
 }
