@@ -4,6 +4,7 @@ import styles from "./styles.module.css";
 import React, {useEffect, useState} from "react";
 import {Spinner} from "@nextui-org/spinner";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
+import Link from "next/link";
 
 type Album = {
     id: string,
@@ -36,12 +37,14 @@ export default function Albums() {
                 <div className={styles.loading}><Spinner/></div> :
                 <div className={styles.wrap}>
                     {albums.map((album) => (
-                        <div className={styles.card} key={album.id}>
-                            <h2 className={styles.cardTitle}>{album.title}</h2>
-                            <time className={styles.cardDate}>{album.createdAt}</time>
-                            <img className={styles.cardImg} src={album.coverImg}
-                                 alt={album.altText}/>
-                        </div>
+                        <Link href={`/albums/${album.id}`} key={album.id}>
+                            <div className={styles.card} >
+                                <h2 className={styles.cardTitle}>{album.title}</h2>
+                                <time className={styles.cardDate}>{album.createdAt}</time>
+                                <img className={styles.cardImg} src={album.coverImg}
+                                     alt={album.altText}/>
+                            </div>
+                        </Link>
                     ))}
                 </div>
             }
