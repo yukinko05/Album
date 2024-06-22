@@ -5,14 +5,7 @@ import React, {useEffect, useState} from "react";
 import {Spinner} from "@nextui-org/spinner";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Link from "next/link";
-
-type Album = {
-    id: string,
-    title: string,
-    createdAt: string,
-    coverImg: string
-    altText: string
-}
+import {Album} from "@/types/type";
 
 export default function Albums() {
     const [albums, setAlbums] = useState<Album[]>([]);

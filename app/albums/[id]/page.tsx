@@ -1,14 +1,9 @@
 "use client"
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import React, {useEffect, useState} from "react";
+import {Album} from "@/types/type";
 
-type Album = {
-    id: string,
-    title: string,
-    createdAt: string,
-    coverImg: string
-    altText: string
-}
+
 export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     const [album, setAlbum] = useState<Album | null>(null);
 
