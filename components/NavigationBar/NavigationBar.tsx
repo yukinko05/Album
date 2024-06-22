@@ -6,7 +6,7 @@ const NavigationBar = () => {
     return(
         <Navbar position="static" isBordered maxWidth="full">
             <NavbarBrand>
-                <p className="font-bold text-inherit">ALBUM</p>
+                <Link className="font-bold text-inherit" href="/albums">ALBUM</Link>
             </NavbarBrand>
             <NavbarContent justify="end">
                 <NavbarItem>
