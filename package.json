@@ -7,9 +7,11 @@
     "api": "node server.js"
   },
   "dependencies": {
+    "@nextui-org/react": "^2.4.2",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "autoprefixer": "10.4.17",
+    "framer-motion": "^11.2.11",
     "geist": "^1.2.1",
     "json-server": "v0.17.4",
     "next": "latest",
