@@ -2,6 +2,7 @@
 
 import styles from "./styles.module.css";
 import {useEffect, useState} from "react";
+import {Spinner} from "@nextui-org/spinner";
 
 type Album = {
     id: string,
@@ -30,7 +31,8 @@ export default function Albums() {
     return (
         <div>
             <h1 className={styles.title}>ALBUM</h1>
-            {loading ? <div>ロード中</div> :
+            {loading ?
+                <div className={styles.loading}><Spinner/></div> :
                 <div className={styles.wrap}>
                     {albums.map((album) => (
                         <div className={styles.card} key={album.id}>
