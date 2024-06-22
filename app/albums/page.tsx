@@ -3,8 +3,7 @@
 import styles from "./styles.module.css";
 import React, {useEffect, useState} from "react";
 import {Spinner} from "@nextui-org/spinner";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
-import Link from "next/link";
+import NavigationBar from "@/components/NavigationBar/NavigationBar";
 
 type Album = {
     id: string,
@@ -32,19 +31,7 @@ export default function Albums() {
 
     return (
         <div>
-            <Navbar position="static" isBordered maxWidth="full">
-                <NavbarBrand>
-                    <p className="font-bold text-inherit">ALBUM</p>
-                </NavbarBrand>
-                <NavbarContent justify="end">
-                    <NavbarItem>
-                        <Button as={Link} color="primary" href="/login" variant="flat">
-                            Login
-                        </Button>
-                    </NavbarItem>
-                </NavbarContent>
-            </Navbar>
-
+            <NavigationBar/>
             {loading ?
                 <div className={styles.loading}><Spinner/></div> :
                 <div className={styles.wrap}>
