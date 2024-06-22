@@ -8,7 +8,7 @@ import {createClient} from "@/utils/supabase/client";
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [errorMessage,setErrorMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const handleSignUp = async () => {
         setErrorMessage("");
