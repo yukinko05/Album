@@ -1,8 +1,10 @@
 "use client";
 
 import styles from "./styles.module.css";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Spinner} from "@nextui-org/spinner";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Button} from "@nextui-org/react";
+import Link from "next/link";
 
 type Album = {
     id: string,
@@ -30,7 +32,19 @@ export default function Albums() {
 
     return (
         <div>
-            <h1 className={styles.title}>ALBUM</h1>
+            <Navbar position="static" isBordered maxWidth="full">
+                <NavbarBrand>
+                    <p className="font-bold text-inherit">ALBUM</p>
+                </NavbarBrand>
+                <NavbarContent justify="end">
+                    <NavbarItem>
+                        <Button as={Link} color="primary" href="/login" variant="flat">
+                            Login
+                        </Button>
+                    </NavbarItem>
+                </NavbarContent>
+            </Navbar>
+
             {loading ?
                 <div className={styles.loading}><Spinner/></div> :
                 <div className={styles.wrap}>
