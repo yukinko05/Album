@@ -13,32 +13,35 @@ type Album = {
 
 export default function Albums() {
     const [albums, setAlbums] = useState<Album[]>([]);
-
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         fetch("http://localhost:3000/albums")
             .then((res) => res.json())
             .then((data) => {
                 setAlbums(data);
+                setLoading(false);
             })
             .catch((error) => {
-                console.error("Fetchに失敗しました: ",error)
+                console.error("Fetchに失敗しました: ", error)
+                setLoading(false);
             })
     }, [])
 
     return (
         <div>
             <h1 className={styles.title}>ALBUM</h1>
-
-            <div className={styles.wrap}>
-                {albums.map((album) => (
-                    <div className={styles.card} key={album.id}>
-                        <h2 className={styles.cardTitle}>{album.title}</h2>
-                        <time className={styles.cardDate}>{album.createdAt}</time>
-                        <img className={styles.cardImg} src={album.coverImg}
-                             alt={album.altText}/>
-                    </div>
-                ))}
-            </div>
+            {loading ? <div>ロード中</div> :
+                <div className={styles.wrap}>
+                    {albums.map((album) => (
+                        <div className={styles.card} key={album.id}>
+                            <h2 className={styles.cardTitle}>{album.title}</h2>
+                            <time className={styles.cardDate}>{album.createdAt}</time>
+                            <img className={styles.cardImg} src={album.coverImg}
+                                 alt={album.altText}/>
+                        </div>
+                    ))}
+                </div>
+            }
 
         </div>
     )
