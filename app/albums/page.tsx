@@ -1,20 +1,24 @@
 "use client";
-
 import styles from "./styles.module.css";
 import React, {useEffect, useState} from "react";
 import {Spinner} from "@nextui-org/spinner";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Link from "next/link";
-import {Album} from "@/types/type";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "@/store/store";
+import {setAlbums} from "@/features/albums/albumsSlice";
+
 
 export default function Albums() {
-    const [albums, setAlbums] = useState<Album[]>([]);
     const [loading, setLoading] = useState(true);
+    const albums = useSelector((state: RootState) => state.albums.albums);
+    const dispatch = useDispatch();
+
     useEffect(() => {
         fetch("http://localhost:3000/albums")
             .then((res) => res.json())
             .then((data) => {
-                setAlbums(data);
+                dispatch(setAlbums(data));
                 setLoading(false);
             })
             .catch((error) => {
@@ -31,7 +35,7 @@ export default function Albums() {
                 <div className={styles.wrap}>
                     {albums.map((album) => (
                         <Link href={`/albums/${album.id}`} key={album.id}>
-                            <div className={styles.card} >
+                            <div className={styles.card}>
                                 <h2 className={styles.cardTitle}>{album.title}</h2>
                                 <time className={styles.cardDate}>{album.createdAt}</time>
                                 <img className={styles.cardImg} src={album.coverImg}
@@ -41,7 +45,6 @@ export default function Albums() {
                     ))}
                 </div>
             }
-
         </div>
     )
 }
