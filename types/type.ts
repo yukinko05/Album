@@ -11,3 +11,8 @@ export interface Photos {
     albumId: string,
     altText: string
 }
+
+export interface AlbumsProps {
+    albums: Album[],
+    basePath:string
+}
