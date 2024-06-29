@@ -1,0 +1,10 @@
+.warp {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    padding: 0 24px;
+}
+
+.photo {
+    border-radius: 16px;
+}
