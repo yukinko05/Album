@@ -8,3 +8,11 @@
 .photo {
     border-radius: 16px;
 }
+
+.loading {
+    display: flex;
+    justify-content: center;
+    padding-top: 100px;
+    /*align-content: center;*/
+    /*height: calc(100vh - 88px);*/
+}
