@@ -9,11 +9,6 @@ import {setPhotos} from "@/features/photos/photosSlice";
 import Image from 'next/image'
 
 
-/*
-1. アップロードする画像ファイルを選択するための入力フォームを設置する
-2. そこで入力されたファイルをローカルStateに保持する
- */
-
 export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     const photos = useSelector((state: RootState) => state.photos.photos);
     const dispatch = useDispatch();
@@ -32,20 +27,37 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     // }, [])
 
     const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files === null){
+        if (e.target.files === null) {
             return
         }
 
         const reader = new FileReader();
 
         reader.onloadend = (evt) => {
-            if(evt.target !== null){
+            if (evt.target !== null) {
                 setBase64Image(evt.target.result as string)
             }
         }
 
         reader.readAsDataURL(e.target.files[0]);
     }
+
+    const handleSubmit = () => {
+        const newPhoto = {
+            url: base64Image,
+            albumId: params.id,
+            altText: "",
+        }
+
+        fetch("http://localhost:3000/photos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newPhoto),
+        })
+            .catch((error) => console.log(error))
+    };
 
     useEffect(() => {
         fetch(`http://localhost:3000/photos?albumId=${params.id}`)
@@ -78,6 +90,7 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
                 accept="image/*"
             />
             {base64Image && <img src={base64Image} alt=""/>}
+            <button onClick={handleSubmit}>送信</button>
         </div>
     )
 }
