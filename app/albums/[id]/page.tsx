@@ -6,7 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/store";
 import styles from "./page.module.css";
 import {setPhotos} from "@/features/photos/photosSlice";
-import Image from 'next/image'
+import {Button} from "@nextui-org/react";
 
 
 export default function AlbumPhotosPage({params}: { params: { id: string } }) {
@@ -15,16 +15,6 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     const [loading, setLoading] = useState(true);
     const [base64Image, setBase64Image] = useState<string | null>(null);
 
-    // useEffect(() => {
-    //     fetch(`http://localhost:3000/albums/${params.id}`)
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             dispatch(setAlbums(data));
-    //         })
-    //         .catch((error) => {
-    //             console.log("Fetchに失敗しました: ", error)
-    //         })
-    // }, [])
 
     const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files === null) {
@@ -35,7 +25,7 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
 
         reader.onloadend = (evt) => {
             if (evt.target !== null) {
-                setBase64Image(evt.target.result as string)
+                setBase64Image(evt.target.result as string);
             }
         }
 
@@ -43,6 +33,10 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     }
 
     const handleSubmit = () => {
+        if (base64Image === null) {
+            return;
+        }
+
         const newPhoto = {
             url: base64Image,
             albumId: params.id,
@@ -55,8 +49,8 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newPhoto),
-        })
-            .catch((error) => console.log(error))
+        }).then(() => setBase64Image(null))
+            .catch((error) => console.log(error));
     };
 
     useEffect(() => {
@@ -83,14 +77,21 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
                     ))}
                 </div>
             }
-            <input
-                type="file"
-                id="photo"
-                onChange={handleChangeFile}
-                accept="image/*"
-            />
-            {base64Image && <img src={base64Image} alt=""/>}
-            <button onClick={handleSubmit}>送信</button>
+            <div className={styles.imgUpload}>
+                <input
+                    type="file"
+                    id="photo"
+                    onChange={handleChangeFile}
+                    accept="image/*"
+                />
+                {base64Image && <img src={base64Image} alt=""/>}
+                <Button
+                    color="primary"
+                    onClick={handleSubmit}
+                    isDisabled={!base64Image}
+                >送信</Button>
+            </div>
+
         </div>
     )
 }
