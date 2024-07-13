@@ -1,6 +1,6 @@
 "use client"
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {Spinner} from "@nextui-org/spinner";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/store";
@@ -9,10 +9,16 @@ import {setPhotos} from "@/features/photos/photosSlice";
 import Image from 'next/image'
 
 
+/*
+1. アップロードする画像ファイルを選択するための入力フォームを設置する
+2. そこで入力されたファイルをローカルStateに保持する
+ */
+
 export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     const photos = useSelector((state: RootState) => state.photos.photos);
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(true);
+    const [base64Image, setBase64Image] = useState<string | null>(null);
 
     // useEffect(() => {
     //     fetch(`http://localhost:3000/albums/${params.id}`)
@@ -24,6 +30,22 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
     //             console.log("Fetchに失敗しました: ", error)
     //         })
     // }, [])
+
+    const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+        if(e.target.files === null){
+            return
+        }
+
+        const reader = new FileReader();
+
+        reader.onloadend = (evt) => {
+            if(evt.target !== null){
+                setBase64Image(evt.target.result as string)
+            }
+        }
+
+        reader.readAsDataURL(e.target.files[0]);
+    }
 
     useEffect(() => {
         fetch(`http://localhost:3000/photos?albumId=${params.id}`)
@@ -49,6 +71,13 @@ export default function AlbumPhotosPage({params}: { params: { id: string } }) {
                     ))}
                 </div>
             }
+            <input
+                type="file"
+                id="photo"
+                onChange={handleChangeFile}
+                accept="image/*"
+            />
+            {base64Image && <img src={base64Image} alt=""/>}
         </div>
     )
 }
