@@ -25,7 +25,7 @@ export default function Albums() {
                 console.error("Fetchに失敗しました: ", error)
                 setLoading(false);
             })
-    }, [])
+    }, []);
 
     return (
         <div>

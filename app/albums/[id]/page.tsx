@@ -6,6 +6,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "@/store/store";
 import styles from "./page.module.css";
 import {setPhotos} from "@/features/photos/photosSlice";
+import Image from 'next/image'
 
 
 export default function AlbumPhotosPage({params}: { params: { id: string } }) {

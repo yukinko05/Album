@@ -1,23 +1,31 @@
-import {AlbumsProps} from "@/types/type";
-import React from "react";
+import styles from "./styles.module.css";
+import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Link from "next/link";
-import styles from "./styles.module.css"
+import {Album} from "@/types/type";
 
-const Albums: React.FC<AlbumsProps> = ({albums, basePath}) => {
+
+export default async function Albums() {
+    const albums: Album[] = await fetch("http://localhost:3000/albums")
+        .then((res) => res.json())
+        .catch((error) => {
+            console.error("Fetchに失敗しました: ", error)
+        })
+
     return (
         <div>
-            {albums.map((album) => (
-                <Link href={`${basePath}/albums/${album.id}`} key={album.id}>
-                    <div className={styles.card}>
-                        <h2 className={styles.cardTitle}>{album.title}</h2>
-                        <time className={styles.cardDate}>{album.createdAt}</time>
-                        <img className={styles.cardImg} src={album.coverImg} alt={album.altText}/>
-
-                    </div>
-                </Link>
-            ))}
+            <NavigationBar/>
+            <div className={styles.wrap}>
+                {albums.map((album) => (
+                    <Link href={`/albums/${album.id}`} key={album.id}>
+                        <div className={styles.card}>
+                            <h2 className={styles.cardTitle}>{album.title}</h2>
+                            <time className={styles.cardDate}>{album.createdAt}</time>
+                            <img className={styles.cardImg} src={album.coverImg}
+                                 alt={album.altText}/>
+                        </div>
+                    </Link>
+                ))}
+            </div>
         </div>
     )
 }
-
-export default Albums;
