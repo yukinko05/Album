@@ -3,18 +3,30 @@
 import styles from "./styles.module.css";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import {SubmitHandler, useForm} from "react-hook-form";
-
+import {zodResolver} from "@hookform/resolvers/zod";
+import * as zod from "zod";
 
 type Inputs = {
     email: string;
     password: string;
 }
+
+const schema = zod.object({
+    email: zod.string().min(1,{message:"メールアドレスは必須です"}).email({message:"メールアドレスの形式で入力してください"}),
+    password: zod.string().min(8,{message:"8文字以上で入力してください"}),
+})
+
 export default function LoginPage() {
-    const {register, handleSubmit, formState: {errors},} = useForm<Inputs>()
+    const {
+        register,
+        handleSubmit,
+        formState: {errors},
+    } = useForm<Inputs>({resolver: zodResolver(schema)})
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         console.log(data);
     };
+
 
     return (
         <div>
@@ -29,14 +41,7 @@ export default function LoginPage() {
                     <div className={styles.inputWrap}>
                         <label className={styles.label} htmlFor="email">メールアドレス</label>
                         <input
-                            {...register("email", {
-                                required: "メールアドレスは必須です。",
-                                pattern: {
-                                    value:
-                                        /^[a-zA-Z0-9_.+-]+@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-                                    message: "不適切なメールアドレスです。",
-                                },
-                            })}
+                            {...register("email")}
                             className={errors.email ? styles.inputError : styles.input}
                             type="text"
                         />
@@ -48,13 +53,7 @@ export default function LoginPage() {
                     <div className={styles.inputWrap}>
                         <label className={styles.label} htmlFor="password">パスワード</label>
                         <input
-                            {...register("password", {
-                                required: "パスワードを入力してください。",
-                                minLength: {
-                                    value: 6,
-                                    message: "6文字以上入力してください。"
-                                }
-                            })}
+                            {...register("password")}
                             className={errors.password ? styles.inputError : styles.input}
                             type="password"
                         />
