@@ -37,7 +37,7 @@ export default function LoginPage() {
                                     message: "不適切なメールアドレスです。",
                                 },
                             })}
-                            className={styles.input}
+                            className={errors.email ? styles.inputError : styles.input}
                             type="text"
                         />
                         {errors.email && (
@@ -55,7 +55,7 @@ export default function LoginPage() {
                                     message: "6文字以上入力してください。"
                                 }
                             })}
-                            className={styles.input}
+                            className={errors.password ? styles.inputError : styles.input}
                             type="password"
                         />
                         {errors.password && (

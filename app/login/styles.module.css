@@ -35,6 +35,14 @@
     outline-color: #111111;
 }
 
+.inputError {
+    background-color: rgba(128, 128, 128, 0.21);
+    border-radius: 16px;
+    height: 48px;
+    padding: 0 12px;
+    outline-color: #ff4040;
+}
+
 .title {
     font-size: 36px;
     font-weight: bold;
