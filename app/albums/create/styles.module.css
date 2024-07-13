@@ -53,6 +53,11 @@
     font-size: 12px;
 }
 
+.viewImg {
+    height: 100px;
+    width: 100px;
+}
+
 .title {
     font-size: 36px;
     font-weight: bold;

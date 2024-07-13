@@ -20,7 +20,7 @@ const schema = zod.object({
 })
 
 export default function CreatePage()  {
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState<string | null>(null);
     const [inputCoverImg, setInputCoverImg] = useState<string | null>(null);
 
     const {
@@ -55,7 +55,7 @@ export default function CreatePage()  {
         const newAlbum = {
             title:data.title,
             createdAt,
-            url:inputCoverImg,
+            coverImg:inputCoverImg,
             altText: "",
         };
 
@@ -68,6 +68,7 @@ export default function CreatePage()  {
         }).then(() => {
             setInputCoverImg(null);
             setTitle("");
+            console.log(title);
         }).catch((error) => console.log(error));
     };
 
@@ -101,6 +102,7 @@ export default function CreatePage()  {
                             accept="image/*"
                             className={styles.coverImg}
                         />
+                        {inputCoverImg && <img className={styles.viewImg} src={inputCoverImg} alt=""/>}
                     </div>
 
                     <Button
