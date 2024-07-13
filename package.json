@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
+    "@mui/icons-material": "^5.16.1",
     "@nextui-org/react": "^2.4.2",
     "@reduxjs/toolkit": "^2.2.6",
     "@supabase/ssr": "latest",
