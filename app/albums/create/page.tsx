@@ -10,34 +10,32 @@ import {ChangeEvent, useState} from "react";
 
 type Inputs = {
     title: string;
-    coverImg: string | null;
-    altText: string | null;
-    createdAt:　string;
 }
 
 const schema = zod.object({
-    title:zod.string().min(1, {message:"タイトルを入力してください"}),
+    title: zod.string().min(1, {message: "タイトルを入力してください"}),
 })
 
-export default function CreatePage()  {
-    const [title, setTitle] = useState<string | null>(null);
+export default function CreatePage() {
     const [inputCoverImg, setInputCoverImg] = useState<string | null>(null);
 
     const {
         register,
         handleSubmit,
-        formState:{errors},
+        formState: {errors},
+        getValues,
+        reset
     } = useForm<Inputs>({resolver: zodResolver(schema)})
 
-    const handleChangeFile = ((e : ChangeEvent<HTMLInputElement>) => {
-        if(e.target.files === null) {
+    const handleChangeFile = ((e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files === null) {
             return
         }
 
         const reader = new FileReader();
 
         reader.onloadend = (evt) => {
-            if(evt.target !== null){
+            if (evt.target !== null) {
                 setInputCoverImg(evt.target.result as string);
             }
         }
@@ -46,9 +44,10 @@ export default function CreatePage()  {
 
     })
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        const createdAt = new Date().toISOString().split("T")[0].replaceAll("-", "/");
+        const date = new Date()
+        const createdAt = date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate()
 
-        if(title || inputCoverImg === null) {
+        if(!data.title  || inputCoverImg === null) {
             return;
         }
 
@@ -67,15 +66,14 @@ export default function CreatePage()  {
             body: JSON.stringify(newAlbum),
         }).then(() => {
             setInputCoverImg(null);
-            setTitle("");
-            console.log(title);
+            reset()
         }).catch((error) => console.log(error));
     };
 
     return (
         <div>
             <NavigationBar/>
-            <div　className={styles.wrap}>
+            <div className={styles.wrap}>
                 <form
                     onSubmit={handleSubmit(onSubmit)}
                     className={styles.createForm}
@@ -107,10 +105,9 @@ export default function CreatePage()  {
 
                     <Button
                         type="submit"
-                        isDisabled={!title && !inputCoverImg}
+                        isDisabled={!getValues("title") && !inputCoverImg}
                         className={styles.button}
                     >送信</Button>
-
                 </form>
             </div>
         </div>
