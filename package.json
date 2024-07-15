@@ -15,6 +15,7 @@
 		"@supabase/ssr": "latest",
 		"@supabase/supabase-js": "latest",
 		"autoprefixer": "10.4.17",
+		"firebase": "^10.12.3",
 		"framer-motion": "^11.2.11",
 		"geist": "^1.2.1",
 		"json-server": "v0.17.4",

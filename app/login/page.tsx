@@ -5,6 +5,9 @@ import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { auth } from "@/firebase";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
 	email: string;
@@ -20,6 +23,8 @@ const schema = zod.object({
 });
 
 export default function LoginPage() {
+	const router = useRouter();
+
 	const {
 		register,
 		handleSubmit,
@@ -27,7 +32,18 @@ export default function LoginPage() {
 	} = useForm<Inputs>({ resolver: zodResolver(schema) });
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		console.log(data);
+		await createUserWithEmailAndPassword(auth, data.email, data.password)
+			.then((userCrendential) => {
+				const user = userCrendential.user;
+				router.push("/albums");
+			})
+			.catch((error) => {
+				if (error.code === "auth/email-already-in-use") {
+					alert("このメールアドレスはすでに使用されています。");
+				} else {
+					alert(error.message);
+				}
+			});
 	};
 
 	return (
