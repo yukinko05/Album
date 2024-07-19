@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAlbums } from "@/features/albums/albumsSlice";
+import { Button } from "@nextui-org/react";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
@@ -14,16 +15,19 @@ export default function Albums() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		fetch("http://localhost:3000/albums")
-			.then((res) => res.json())
-			.then((data) => {
+		const fetchData = async () => {
+			try {
+				const response = await fetch("http://localhost:3000/albums");
+				const data = await response.json();
 				dispatch(setAlbums(data));
 				setLoading(false);
-			})
-			.catch((error) => {
+			} catch (error) {
 				console.error("Fetchに失敗しました: ", error);
 				setLoading(false);
-			});
+			}
+		};
+
+		fetchData();
 	}, []);
 
 	return (
@@ -50,6 +54,15 @@ export default function Albums() {
 					))}
 				</div>
 			)}
+			<Button
+				className={styles.uploadBtn}
+				as={Link}
+				color="primary"
+				variant="flat"
+				href="/albums/create"
+			>
+				アルバム追加
+			</Button>
 		</div>
 	);
 }

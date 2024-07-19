@@ -33,8 +33,8 @@ export default function LoginPage() {
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
 		await createUserWithEmailAndPassword(auth, data.email, data.password)
-			.then((userCrendential) => {
-				const user = userCrendential.user;
+			.then((userCredential) => {
+				const user = userCredential.user;
 				router.push("/albums");
 			})
 			.catch((error) => {
@@ -42,8 +42,8 @@ export default function LoginPage() {
 					alert("このメールアドレスはすでに使用されています。");
 				} else {
 					alert(error.message);
-				}
-			});
+				};
+		})
 	};
 
 	return (

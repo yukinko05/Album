@@ -55,16 +55,21 @@ export default function AlbumPhotosPage({
 	};
 
 	useEffect(() => {
-		fetch(`http://localhost:3000/photos?albumId=${params.id}`)
-			.then((res) => res.json())
-			.then((data) => {
+		const fetchData = async () => {
+			try {
+				const response = await fetch(
+					`http://localhost:3000/photos?albumId=${params.id}`,
+				);
+				const data = await response.json();
 				dispatch(setPhotos(data));
 				setLoading(false);
-			})
-			.catch((error) => {
+			} catch (error) {
 				console.log("Fetchに失敗しました: ", error);
 				setLoading(false);
-			});
+			}
+		};
+
+		fetchData();
 	}, []);
 
 	return (
