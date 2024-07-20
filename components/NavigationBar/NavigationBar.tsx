@@ -18,8 +18,8 @@ const NavigationBar = () => {
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
-					<Button as={Link} color="primary" href="/login" variant="flat">
-						Login
+					<Button as={Link} color="primary" href="/signup" variant="flat">
+						新規登録
 					</Button>
 				</NavbarItem>
 			</NavbarContent>
