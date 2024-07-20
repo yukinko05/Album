@@ -22,7 +22,7 @@ const schema = zod.object({
 	password: zod.string().min(8, { message: "8文字以上で入力してください" }),
 });
 
-export default function LoginPage() {
+export default function SignupPage() {
 	const router = useRouter();
 
 	const {
@@ -51,7 +51,7 @@ export default function LoginPage() {
 			<NavigationBar />
 
 			<div className={styles.wrap}>
-				<form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
+				<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
 					<h1 className={styles.title}>ALBUM</h1>
 					<div className={styles.inputWrap}>
 						<label className={styles.label} htmlFor="email">
