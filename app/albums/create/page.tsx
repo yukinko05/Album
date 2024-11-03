@@ -59,7 +59,7 @@ export default function CreatePage() {
 			altText: "",
 		};
 
-		fetch("http://localhost:3000/albums", {
+		fetch("http://localhost:4000/albums", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

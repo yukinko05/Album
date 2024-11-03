@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Album } from "@/types/type";
 
 export default async function Albums() {
-	const albums: Album[] = await fetch("http://localhost:3000/albums")
+	const albums: Album[] = await fetch("http://localhost:4000/albums")
 		.then((res) => res.json())
 		.catch((error) => {
 			console.error("Fetchに失敗しました: ", error);

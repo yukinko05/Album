@@ -5,13 +5,13 @@ const middlewares = jsonServer.defaults();
 
 // 遅延を追加するミドルウェア
 server.use((req, res, next) => {
-	setTimeout(next, 1000); // 1秒の遅延
+  setTimeout(next, 1000); // 1秒の遅延
 });
 
 server.use(middlewares);
 server.use(router);
 
-const PORT = 3000;
+const PORT = 4000;
 server.listen(PORT, () => {
-	console.log(`JSON Server is running on http://localhost:${PORT}`);
+  console.log(`JSON Server is running on http://localhost:${PORT}`);
 });

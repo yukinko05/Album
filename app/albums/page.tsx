@@ -17,7 +17,7 @@ export default function Albums() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch("http://localhost:3000/albums");
+				const response = await fetch("http://localhost:4000/albums");
 				const data = await response.json();
 				dispatch(setAlbums(data));
 				setLoading(false);

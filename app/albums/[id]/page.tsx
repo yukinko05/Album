@@ -43,7 +43,7 @@ export default function AlbumPhotosPage({
 			altText: "",
 		};
 
-		fetch("http://localhost:3000/photos", {
+		fetch("http://localhost:4000/photos", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -58,7 +58,7 @@ export default function AlbumPhotosPage({
 		const fetchData = async () => {
 			try {
 				const response = await fetch(
-					`http://localhost:3000/photos?albumId=${params.id}`,
+					`http://localhost:4000/photos?albumId=${params.id}`,
 				);
 				const data = await response.json();
 				dispatch(setPhotos(data));
