@@ -42,8 +42,8 @@ export default function SignupPage() {
 					alert("このメールアドレスはすでに使用されています。");
 				} else {
 					alert(error.message);
-				};
-		})
+				}
+			});
 	};
 
 	return (
