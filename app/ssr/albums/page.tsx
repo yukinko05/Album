@@ -2,10 +2,12 @@ import styles from "./styles.module.css";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import Link from "next/link";
 import { Album } from "@/types/type";
+import axiosInstance from "@/api/axiosInstance";
 
 export default async function Albums() {
-	const albums: Album[] = await fetch("http://localhost:4000/albums")
-		.then((res) => res.json())
+	const albums: Album[] = await axiosInstance
+		.get("/albums")
+		.then((res) => res.data)
 		.catch((error) => {
 			console.error("Fetchに失敗しました: ", error);
 		});

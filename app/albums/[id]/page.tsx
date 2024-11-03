@@ -7,6 +7,7 @@ import { RootState } from "@/store/store";
 import styles from "./page.module.css";
 import { setPhotos } from "@/features/photos/photosSlice";
 import { Button } from "@nextui-org/react";
+import axiosInstance from "@/api/axiosInstance";
 
 export default function AlbumPhotosPage({
 	params,
@@ -43,13 +44,10 @@ export default function AlbumPhotosPage({
 			altText: "",
 		};
 
-		fetch("http://localhost:4000/photos", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(newPhoto),
-		})
+		axiosInstance
+			.post("/photos", {
+				body: JSON.stringify(newPhoto),
+			})
 			.then(() => setBase64Image(null))
 			.catch((error) => console.log(error));
 	};
@@ -57,10 +55,10 @@ export default function AlbumPhotosPage({
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch(
-					`http://localhost:4000/photos?albumId=${params.id}`,
+				const response = await axiosInstance.get(
+					`/photos?albumId=${params.id}`,
 				);
-				const data = await response.json();
+				const data = await response.data;
 				dispatch(setPhotos(data));
 				setLoading(false);
 			} catch (error) {

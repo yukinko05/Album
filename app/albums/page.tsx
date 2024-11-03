@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAlbums } from "@/features/albums/albumsSlice";
 import { Button } from "@nextui-org/react";
+import axiosInstance from "@/api/axiosInstance";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
@@ -17,8 +18,8 @@ export default function Albums() {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await fetch("http://localhost:4000/albums");
-				const data = await response.json();
+				const response = await axiosInstance.get("/albums");
+				const data = await response.data;
 				dispatch(setAlbums(data));
 				setLoading(false);
 			} catch (error) {

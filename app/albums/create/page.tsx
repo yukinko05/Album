@@ -7,6 +7,7 @@ import * as zod from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@nextui-org/react";
 import { ChangeEvent, useState } from "react";
+import axiosInstance from "@/api/axiosInstance";
 
 type Inputs = {
 	title: string;
@@ -59,13 +60,8 @@ export default function CreatePage() {
 			altText: "",
 		};
 
-		fetch("http://localhost:4000/albums", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(newAlbum),
-		})
+		axiosInstance
+			.post("/albums", newAlbum)
 			.then(() => {
 				setInputCoverImg(null);
 				reset();
