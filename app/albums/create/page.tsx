@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@nextui-org/react";
 import { ChangeEvent, useState } from "react";
 import axiosInstance from "@/api/axiosInstance";
+import { useRouter } from "next/navigation";
 
 type Inputs = {
 	title: string;
@@ -19,13 +20,13 @@ const schema = zod.object({
 
 export default function CreatePage() {
 	const [inputCoverImg, setInputCoverImg] = useState<string | null>(null);
+	const router = useRouter();
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 		getValues,
-		reset,
 	} = useForm<Inputs>({ resolver: zodResolver(schema) });
 
 	const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -60,13 +61,12 @@ export default function CreatePage() {
 			altText: "",
 		};
 
-		axiosInstance
-			.post("/albums", newAlbum)
-			.then(() => {
-				setInputCoverImg(null);
-				reset();
-			})
-			.catch((error) => console.log(error));
+		try {
+			const response = await axiosInstance.post("/albums", newAlbum);
+			router.push("/albums");
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (

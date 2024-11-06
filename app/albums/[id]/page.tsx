@@ -44,12 +44,12 @@ export default function AlbumPhotosPage({
 			altText: "",
 		};
 
-		axiosInstance
-			.post("/photos", {
-				body: JSON.stringify(newPhoto),
-			})
-			.then(() => setBase64Image(null))
-			.catch((error) => console.log(error));
+		try {
+			axiosInstance.post("/photos", newPhoto);
+			setBase64Image(null);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	useEffect(() => {
