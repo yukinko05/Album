@@ -103,7 +103,7 @@ export default function CreatePage() {
 							className={styles.coverImg}
 						/>
 						{inputCoverImg && (
-							<img className={styles.viewImg} src={inputCoverImg} alt="" />
+							<img className={styles.viewImg} src={inputCoverImg} alt="選択中のカバー写真" />
 						)}
 					</div>
 

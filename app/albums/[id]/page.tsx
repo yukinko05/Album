@@ -96,7 +96,7 @@ export default function AlbumPhotosPage({
 					onChange={handleChangeFile}
 					accept="image/*"
 				/>
-				{base64Image && <img src={base64Image} alt="" />}
+				{base64Image && <img src={base64Image} alt="選択中のアルバム写真" />}
 				<Button
 					color="primary"
 					onClick={handleSubmit}
