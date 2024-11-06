@@ -9,6 +9,7 @@ import { Button } from "@nextui-org/react";
 import { ChangeEvent, useState } from "react";
 import axiosInstance from "@/api/axiosInstance";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 type Inputs = {
 	title: string;
@@ -46,9 +47,7 @@ export default function CreatePage() {
 	};
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
-		const date = new Date();
-		const createdAt =
-			date.getFullYear() + "/" + (date.getMonth() + 1) + "/" + date.getDate();
+		const createdAt = dayjs().format("YYYY-MM-DD");
 
 		if (!data.title || inputCoverImg === null) {
 			return;
@@ -103,7 +102,11 @@ export default function CreatePage() {
 							className={styles.coverImg}
 						/>
 						{inputCoverImg && (
-							<img className={styles.viewImg} src={inputCoverImg} alt="選択中のカバー写真" />
+							<img
+								className={styles.viewImg}
+								src={inputCoverImg}
+								alt="選択中のカバー写真"
+							/>
 						)}
 					</div>
 
