@@ -16,3 +16,8 @@ export interface AlbumsProps {
 	albums: Album[];
 	basePath: string;
 }
+
+export interface User {
+	email: string | null;
+	password: string;
+}
