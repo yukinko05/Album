@@ -10,6 +10,7 @@ import { auth } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setData } from "@/features/user/userSlice";
+import { FirebaseError } from "firebase/app";
 
 const userSchema = z.object({
 	email: z
@@ -32,19 +33,27 @@ export default function SignupPage() {
 	} = useForm<UserData>({ resolver: zodResolver(userSchema) });
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
-		await createUserWithEmailAndPassword(auth, data.email, data.password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-				dispatch(setData({ email: user.email, password: data.password }));
-				router.push("/albums");
-			})
-			.catch((error) => {
-				if (error.code === "auth/email-already-in-use") {
-					alert("このメールアドレスはすでに使用されています。");
-				} else {
-					alert(error.message);
-				}
-			});
+		try {
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				data.email,
+				data.password,
+			);
+			const user = userCredential.user;
+			dispatch(setData({ email: user.email, password: data.password }));
+			router.push("/albums");
+		} catch (error) {
+			if (
+				error instanceof FirebaseError &&
+				error.code === "auth/email-already-in-use"
+			) {
+				alert("このメールアドレスはすでに使用されています。");
+			} else if (error instanceof Error) {
+				alert(error.message);
+			} else {
+				console.error("予期しないエラー:", error);
+			}
+		}
 	};
 
 	return (
