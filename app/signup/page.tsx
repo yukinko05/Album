@@ -40,7 +40,7 @@ export default function SignupPage() {
 				data.password,
 			);
 			const user = userCredential.user;
-			dispatch(setData({ email: user.email, password: data.password }));
+			dispatch(setData({ email: user.email }));
 			router.push("/albums");
 		} catch (error) {
 			if (

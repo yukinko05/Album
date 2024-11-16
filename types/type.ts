@@ -1,23 +1,22 @@
 export interface Album {
-	id: string;
-	title: string;
-	createdAt: string;
-	coverImg: string;
-	altText: string;
+  id: string;
+  title: string;
+  createdAt: string;
+  coverImg: string;
+  altText: string;
 }
 export interface Photos {
-	id: string;
-	url: string;
-	albumId: string;
-	altText: string;
+  id: string;
+  url: string;
+  albumId: string;
+  altText: string;
 }
 
 export interface AlbumsProps {
-	albums: Album[];
-	basePath: string;
+  albums: Album[];
+  basePath: string;
 }
 
 export interface User {
-	email: string | null;
-	password: string;
+  email: string | null;
 }

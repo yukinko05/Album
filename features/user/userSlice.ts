@@ -3,21 +3,19 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { User } from "../../types/type";
 
 const initialState: { user: User } = {
-	user: {
-		email: "",
-		password: "",
-	},
+  user: {
+    email: "",
+  },
 };
 
 const userSlice = createSlice({
-	name: "user",
-	initialState,
-	reducers: {
-		setData: (state, action: PayloadAction<User>) => {
-			state.user.email = action.payload.email;
-			state.user.password = action.payload.password;
-		},
-	},
+  name: "user",
+  initialState,
+  reducers: {
+    setData: (state, action: PayloadAction<User>) => {
+      state.user.email = action.payload.email;
+    },
+  },
 });
 
 export const { setData } = userSlice.actions;
