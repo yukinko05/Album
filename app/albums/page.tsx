@@ -34,6 +34,17 @@ export default function Albums() {
 	return (
 		<div>
 			<NavigationBar />
+			<div className={styles.btnWrap}>
+				<Button
+					className={styles.uploadBtn}
+					as={Link}
+					color="primary"
+					variant="flat"
+					href="/albums/create"
+				>
+					アルバム追加
+				</Button>
+			</div>
 			{loading ? (
 				<div className={styles.loading}>
 					<Spinner />
@@ -55,15 +66,7 @@ export default function Albums() {
 					))}
 				</div>
 			)}
-			<Button
-				className={styles.uploadBtn}
-				as={Link}
-				color="primary"
-				variant="flat"
-				href="/albums/create"
-			>
-				アルバム追加
-			</Button>
+
 		</div>
 	);
 }
