@@ -35,7 +35,7 @@ export default function LoginPage() {
 		await signInWithEmailAndPassword(auth, data.email, data.password)
 			.then((userCredential) => {
 				const user = userCredential.user;
-				dispatch(setData({ email: user.email, password: data.password }));
+				dispatch(setData({ email: user.email, uid: user.uid }));
 				router.push("/albums");
 			})
 			.catch((error) => {

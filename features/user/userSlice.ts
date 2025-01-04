@@ -5,6 +5,7 @@ import { User } from "../../types/type";
 const initialState: { user: User } = {
   user: {
     email: "",
+    uid: "",
   },
 };
 
@@ -14,6 +15,7 @@ const userSlice = createSlice({
   reducers: {
     setData: (state, action: PayloadAction<User>) => {
       state.user.email = action.payload.email;
+      state.user.uid = action.payload.uid;
     },
   },
 });

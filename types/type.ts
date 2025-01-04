@@ -19,4 +19,5 @@ export interface AlbumsProps {
 
 export interface User {
   email: string | null;
+  uid: string;
 }
