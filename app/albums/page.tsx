@@ -8,29 +8,57 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAlbums } from "@/features/albums/albumsSlice";
 import { Button } from "@nextui-org/react";
-import axiosInstance from "@/api/axiosInstance";
+import { db } from "@/firebase";
+import { getDocs, collection, query, where } from "@firebase/firestore";
+import dayjs from "dayjs";
+import { Album } from "@/types/type";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
 	const albums = useSelector((state: RootState) => state.albums.albums);
+	const uid = useSelector((state: RootState) => state.user.user.uid);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		const fetchData = async () => {
+		const fetchAlbumsDate = async () => {
 			try {
-				const response = await axiosInstance.get("/albums");
-				const data = await response.data;
-				dispatch(setAlbums(data));
+				const col = collection(db, "albums");
+				const q = query(col, where("userId", "==", uid));
+				const snapshot = await getDocs(q);
+
+				if (snapshot.empty) {
+					console.log("アルバムのデータはありません。");
+					setLoading(false);
+					return [];
+				}
+
+				const albums: Album[] = snapshot.docs.map((doc) => {
+					const data = doc.data();
+					const createdAt =
+						data.createdAt && "toDate" in data.createdAt
+							? data.createdAt.toDate().toISOString()
+							: null;
+					const formattedCreatedAt = createdAt
+						? dayjs(createdAt).format("YYYY-MM-DD")
+						: null;
+					return {
+						...data,
+						id: doc.id,
+						createdAt: formattedCreatedAt,
+					} as Album;
+				});
+
+				dispatch(setAlbums(albums));
 				setLoading(false);
 			} catch (error) {
-				console.error("Fetchに失敗しました: ", error);
+				alert(`アルバムデータ取得に失敗しました:${error}`);
 				setLoading(false);
 			}
 		};
+		fetchAlbumsDate();
+	}, [uid, dispatch]);
 
-		fetchData();
-	}, []);
-
+	console.log(albums);
 	return (
 		<div>
 			<NavigationBar />
@@ -58,15 +86,14 @@ export default function Albums() {
 								<time className={styles.cardDate}>{album.createdAt}</time>
 								<img
 									className={styles.cardImg}
-									src={album.coverImg}
-									alt={album.altText}
+									src={album.photoURL}
+									alt={`${album.title}のアルバムカバー画像`}
 								/>
 							</div>
 						</Link>
 					))}
 				</div>
 			)}
-
 		</div>
 	);
 }
