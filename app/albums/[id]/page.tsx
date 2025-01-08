@@ -41,7 +41,6 @@ export default function AlbumPhotosPage({
 		const newPhoto = {
 			url: base64Image,
 			albumId: params.id,
-			altText: "",
 		};
 
 		try {
@@ -83,7 +82,7 @@ export default function AlbumPhotosPage({
 						<img
 							className={styles.photo}
 							src={photo.url}
-							alt={photo.altText}
+							alt={photo.id}
 							key={photo.id}
 						/>
 					))}

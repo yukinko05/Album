@@ -57,7 +57,6 @@ export default function CreatePage() {
 			title: data.title,
 			createdAt,
 			coverImg: inputCoverImg,
-			altText: "",
 		};
 
 		try {

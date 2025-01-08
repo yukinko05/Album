@@ -9,7 +9,6 @@ export interface Photos {
   id: string;
   url: string;
   albumId: string;
-  altText: string;
 }
 
 export interface AlbumsProps {
