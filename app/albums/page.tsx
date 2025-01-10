@@ -9,7 +9,13 @@ import { RootState } from "@/store/store";
 import { setAlbums } from "@/features/albums/albumsSlice";
 import { Button } from "@nextui-org/react";
 import { db } from "@/firebase";
-import { getDocs, collection, query, where } from "@firebase/firestore";
+import {
+	getDocs,
+	collection,
+	query,
+	where,
+	orderBy,
+} from "@firebase/firestore";
 import dayjs from "dayjs";
 import { Album } from "@/types/type";
 
@@ -23,7 +29,11 @@ export default function Albums() {
 		const fetchAlbumsDate = async () => {
 			try {
 				const col = collection(db, "albums");
-				const q = query(col, where("userId", "==", uid));
+				const q = query(
+					col,
+					where("userId", "==", uid),
+					orderBy("createdAt", "desc"),
+				);
 				const snapshot = await getDocs(q);
 
 				if (snapshot.empty) {
@@ -49,9 +59,11 @@ export default function Albums() {
 				});
 
 				dispatch(setAlbums(albums));
-				setLoading(false);
+
 			} catch (error) {
-				alert(`アルバムデータ取得に失敗しました:${error}`);
+				console.error(error);
+				alert("アルバムデータ取得に失敗しました");
+			} finally {
 				setLoading(false);
 			}
 		};
