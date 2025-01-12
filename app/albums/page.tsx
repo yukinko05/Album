@@ -13,8 +13,8 @@ import {
 	getDocs,
 	collection,
 	query,
-	where,
 	orderBy,
+	limit,
 } from "@firebase/firestore";
 import dayjs from "dayjs";
 import { Album } from "@/types/type";
@@ -28,11 +28,12 @@ export default function Albums() {
 	useEffect(() => {
 		const fetchAlbumsDate = async () => {
 			try {
-				const col = collection(db, "albums");
+				const ALBUMS_PER_PAGE = 10;
+				const col = collection(db, "users", uid, "albums");
 				const q = query(
 					col,
-					where("userId", "==", uid),
 					orderBy("createdAt", "desc"),
+					limit(ALBUMS_PER_PAGE),
 				);
 				const snapshot = await getDocs(q);
 
@@ -59,7 +60,6 @@ export default function Albums() {
 				});
 
 				dispatch(setAlbums(albums));
-
 			} catch (error) {
 				console.error(error);
 				alert("アルバムデータ取得に失敗しました");

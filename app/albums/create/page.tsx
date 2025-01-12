@@ -4,7 +4,7 @@ import { SubmitHandler } from "react-hook-form";
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useRouter } from "next/navigation";
 
@@ -23,14 +23,15 @@ export default function CreatePage() {
 				coverImg: data.coverImg,
 				createdAt: serverTimestamp(),
 				title: data.title,
-				userId: uid,
 			};
 
-			const docRef = await addDoc(collection(db, "albums"), documentData);
+			const albumId = crypto.randomUUID();
+			const albumRef = doc(db, "users", uid, "albums", albumId);
 
+			await setDoc(albumRef, documentData);
 			router.push("/albums");
 		} catch (error) {
-			console.error(error);
+			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");
 		}
 	};
