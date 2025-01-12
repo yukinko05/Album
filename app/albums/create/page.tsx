@@ -18,8 +18,7 @@ export default function CreatePage() {
 	const router = useRouter();
 
 	if (!uid) {
-		alert("ユーザーIDが取得できませんでした。");
-		return;
+		throw new Error("ユーザーIDが取得できませんでした。");
 	}
 
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
