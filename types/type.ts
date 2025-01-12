@@ -25,3 +25,8 @@ export interface User {
 	email: string | null;
 	uid: string;
 }
+
+export interface UserInput {
+	email: string;
+	password: string;
+}

@@ -1,15 +1,14 @@
 "use client";
 
 import styles from "./styles.module.css";
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
-import { signInWithEmailAndPassword } from "@firebase/auth";
+import NavigationBar from "@/components/NavigationBar";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
 import { setData } from "@/features/user/userSlice";
+import { userRepository } from "@/repositories/userRepository";
 
 const userSchema = z.object({
 	email: z
@@ -32,17 +31,15 @@ export default function LoginPage() {
 	} = useForm<UserData>({ resolver: zodResolver(userSchema) });
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
-		await signInWithEmailAndPassword(auth, data.email, data.password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-				dispatch(setData({ email: user.email, uid: user.uid }));
-				router.push("/albums");
-			})
-			.catch((error) => {
-				alert(
-					"入力された情報に誤りがあります。正しいメールアドレスとパスワードを入力してください。",
-				);
-			});
+		try {
+			const user = await userRepository.loginUser(data);
+			dispatch(setData({ email: user.email, uid: user.uid }));
+			router.push("/albums");
+		} catch (error) {
+			alert(
+				error instanceof Error ? error.message : "ログインに失敗しました。",
+			);
+		}
 	};
 
 	return (

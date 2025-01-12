@@ -1,16 +1,15 @@
 "use client";
 
 import styles from "./styles.module.css";
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
+import NavigationBar from "@/components/NavigationBar";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { createUserWithEmailAndPassword } from "@firebase/auth";
-import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setData } from "@/features/user/userSlice";
 import { FirebaseError } from "firebase/app";
+import { userRepository } from "@/repositories/userRepository";
 
 const userSchema = z.object({
 	email: z
@@ -34,13 +33,11 @@ export default function SignupPage() {
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
-			const userCredential = await createUserWithEmailAndPassword(
-				auth,
-				data.email,
-				data.password,
+			const userCredential = await userRepository.signUpUser(data);
+
+			dispatch(
+				setData({ email: userCredential.email, uid: userCredential.uid }),
 			);
-			const user = userCredential.user;
-			dispatch(setData({ email: user.email, uid: user.uid }));
 			router.push("/albums");
 		} catch (error) {
 			if (
