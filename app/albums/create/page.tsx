@@ -27,6 +27,9 @@ export default function CreatePage() {
 
 			const albumId = crypto.randomUUID();
 			const albumRef = doc(db, "users", uid, "albums", albumId);
+			if (!albumId) {
+				throw new Error("アルバムIDの生成に失敗しました");
+			}
 
 			await setDoc(albumRef, documentData);
 			router.push("/albums");
