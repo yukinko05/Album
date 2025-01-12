@@ -17,10 +17,6 @@ export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.user.uid);
 	const router = useRouter();
 
-	if (!uid) {
-		throw new Error("ユーザーIDが取得できませんでした。");
-	}
-
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
 		try {
 			const documentData: any = {
