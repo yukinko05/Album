@@ -4,31 +4,18 @@ import { SubmitHandler } from "react-hook-form";
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-
-type Inputs = {
-	title: string;
-	coverImg: string | null;
-};
+import { albumRepository } from "@/repositories/albumRepository";
+import { AlbumCreateInputs } from "@/types/type";
 
 export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.user.uid);
 	const router = useRouter();
 
-	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+	const onSubmit: SubmitHandler<AlbumCreateInputs> = async (data) => {
 		try {
-			const documentData: any = {
-				coverImg: data.coverImg,
-				createdAt: serverTimestamp(),
-				title: data.title,
-			};
+			albumRepository.createAlbum(data, uid);
 
-			const albumId = crypto.randomUUID();
-			const albumRef = doc(db, "users", uid, "albums", albumId);
-
-			await setDoc(albumRef, documentData);
 			router.push("/albums");
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);

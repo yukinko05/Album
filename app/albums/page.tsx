@@ -8,16 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAlbums } from "@/features/albums/albumsSlice";
 import { Button } from "@nextui-org/react";
-import { db } from "@/lib/firebase";
-import {
-	getDocs,
-	collection,
-	query,
-	orderBy,
-	limit,
-} from "@firebase/firestore";
 import dayjs from "dayjs";
 import { Album } from "@/types/type";
+import { albumRepository } from "@/repositories/albumRepository";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
@@ -28,14 +21,7 @@ export default function Albums() {
 	useEffect(() => {
 		const fetchAlbumsDate = async () => {
 			try {
-				const ALBUMS_PER_PAGE = 10;
-				const col = collection(db, "users", uid, "albums");
-				const q = query(
-					col,
-					orderBy("createdAt", "desc"),
-					limit(ALBUMS_PER_PAGE),
-				);
-				const snapshot = await getDocs(q);
+				const snapshot = await albumRepository.fetchAlbums(uid);
 
 				if (snapshot.empty) {
 					console.log("アルバムのデータはありません。");

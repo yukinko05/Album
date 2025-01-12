@@ -30,7 +30,6 @@ export const albumRepository = {
 
 		const albumId = crypto.randomUUID();
 		const albumRef = doc(db, "users", uid, "albums", albumId);
-
 		const newAlbum = await setDoc(albumRef, documentData);
 
 		return newAlbum;
