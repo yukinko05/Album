@@ -28,12 +28,8 @@ export default function Albums() {
 	useEffect(() => {
 		const fetchAlbumsDate = async () => {
 			try {
-				const col = collection(db, "albums");
-				const q = query(
-					col,
-					where("userId", "==", uid),
-					orderBy("createdAt", "desc"),
-				);
+				const col = collection(db, "users", uid, "albums");
+				const q = query(col, orderBy("createdAt", "desc"));
 				const snapshot = await getDocs(q);
 
 				if (snapshot.empty) {
@@ -59,7 +55,6 @@ export default function Albums() {
 				});
 
 				dispatch(setAlbums(albums));
-
 			} catch (error) {
 				console.error(error);
 				alert("アルバムデータ取得に失敗しました");
