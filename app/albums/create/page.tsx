@@ -17,6 +17,11 @@ export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.user.uid);
 	const router = useRouter();
 
+	if (!uid) {
+		alert("ユーザーIDが取得できませんでした。");
+		return;
+	}
+
 	const onSubmit: SubmitHandler<Inputs> = async (data) => {
 		try {
 			const documentData: any = {
@@ -27,14 +32,11 @@ export default function CreatePage() {
 
 			const albumId = crypto.randomUUID();
 			const albumRef = doc(db, "users", uid, "albums", albumId);
-			if (!albumId) {
-				throw new Error("アルバムIDの生成に失敗しました");
-			}
 
 			await setDoc(albumRef, documentData);
 			router.push("/albums");
 		} catch (error) {
-			console.error(error);
+			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");
 		}
 	};
