@@ -13,8 +13,8 @@ import {
 	getDocs,
 	collection,
 	query,
-	where,
 	orderBy,
+	limit,
 } from "@firebase/firestore";
 import dayjs from "dayjs";
 import { Album } from "@/types/type";
@@ -28,8 +28,13 @@ export default function Albums() {
 	useEffect(() => {
 		const fetchAlbumsDate = async () => {
 			try {
+				const ALBUMS_PER_PAGE = 10;
 				const col = collection(db, "users", uid, "albums");
-				const q = query(col, orderBy("createdAt", "desc"));
+				const q = query(
+					col,
+					orderBy("createdAt", "desc"),
+					limit(ALBUMS_PER_PAGE),
+				);
 				const snapshot = await getDocs(q);
 
 				if (snapshot.empty) {
