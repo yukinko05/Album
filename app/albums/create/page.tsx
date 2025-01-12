@@ -5,7 +5,7 @@ import AlbumForm from "@/components/AlbumForm/AlbumForm";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 
 type Inputs = {

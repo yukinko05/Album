@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 import NavigationBar from "@/components/NavigationBar/NavigationBar";
 import { signInWithEmailAndPassword } from "@firebase/auth";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";

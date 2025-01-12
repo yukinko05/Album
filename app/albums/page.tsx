@@ -2,13 +2,13 @@
 import styles from "./styles.module.css";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
+import NavigationBar from "@/components/NavigationBar";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setAlbums } from "@/features/albums/albumsSlice";
 import { Button } from "@nextui-org/react";
-import { db } from "@/firebase";
+import { db } from "@/lib/firebase";
 import {
 	getDocs,
 	collection,

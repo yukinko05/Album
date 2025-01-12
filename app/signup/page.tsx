@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { createUserWithEmailAndPassword } from "@firebase/auth";
-import { auth } from "@/firebase";
+import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setData } from "@/features/user/userSlice";
