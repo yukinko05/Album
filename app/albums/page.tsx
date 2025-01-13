@@ -15,12 +15,18 @@ import { albumRepository } from "@/repositories/albumRepository";
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
 	const albums = useSelector((state: RootState) => state.albums.albums);
-	const uid = useSelector((state: RootState) => state.user.user.uid);
+	const uid = useSelector((state: RootState) => state.user.data?.uid);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
 		const fetchAlbumsDate = async () => {
 			try {
+				if (!uid) {
+					console.log("ユーザーIDが存在しません");
+					setLoading(false);
+					return;
+				}
+
 				const snapshot = await albumRepository.fetchAlbums(uid);
 
 				if (snapshot.empty) {

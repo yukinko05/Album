@@ -7,9 +7,8 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useDispatch } from "react-redux";
-import { setData } from "@/features/user/userSlice";
-import { userRepository } from "@/repositories/userRepository";
-
+import { AppDispatch } from "@/store/store";
+import { loginUser } from "@/services/userService";
 const userSchema = z.object({
 	email: z
 		.string()
@@ -22,7 +21,7 @@ export type UserData = z.infer<typeof userSchema>;
 
 export default function LoginPage() {
 	const router = useRouter();
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	const {
 		register,
@@ -32,8 +31,7 @@ export default function LoginPage() {
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
-			const user = await userRepository.loginUser(data);
-			dispatch(setData({ email: user.email, uid: user.uid }));
+			await dispatch(loginUser(data));
 			router.push("/albums");
 		} catch (error) {
 			alert(
