@@ -1,24 +1,20 @@
 "use client";
 
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
+import NavigationBar from "@/components/NavigationBar";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as zod from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@nextui-org/react";
 import { ChangeEvent, useState } from "react";
-import styles from "@/app/albums/create/styles.module.css";
+import styles from "./styles.module.css";
+import { AlbumCreateInputs } from "@/types/type";
 
 type AlbumFormProps = {
-	onSubmit: SubmitHandler<Inputs>;
+	onSubmit: SubmitHandler<AlbumCreateInputs>;
 	initialTitle?: string;
 	initialCoverImg?: string | null;
 	formTitle: string;
 	submitButtonText: string;
-};
-
-type Inputs = {
-	title: string;
-	coverImg: string | null;
 };
 
 const schema = zod.object({
@@ -39,7 +35,7 @@ export default function AlbumForm({
 		handleSubmit,
 		formState: { errors },
 		getValues,
-	} = useForm<Inputs>({
+	} = useForm<AlbumCreateInputs>({
 		resolver: zodResolver(schema),
 		defaultValues: { title: initialTitle },
 	});

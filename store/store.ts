@@ -4,11 +4,11 @@ import photosReducer from "@/features/photos/photosSlice";
 import userReducer from "@/features/user/userSlice";
 
 export const store = configureStore({
-	reducer: {
-		albums: albumReducer,
-		photos: photosReducer,
-		user: userReducer,
-	},
+  reducer: {
+    albums: albumReducer,
+    photos: photosReducer,
+    user: userReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
