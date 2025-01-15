@@ -1,15 +1,15 @@
 "use client";
 
-import styles from "./styles.module.css";
 import NavigationBar from "@/components/NavigationBar";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { signUpUser } from "@/services/userService";
+import type { AppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setData } from "@/features/user/userSlice";
 import { FirebaseError } from "firebase/app";
-import { userRepository } from "@/repositories/userRepository";
+import { useRouter } from "next/navigation";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { z } from "zod";
+import styles from "./styles.module.css";
 
 const userSchema = z.object({
 	email: z
@@ -22,8 +22,8 @@ const userSchema = z.object({
 export type UserData = z.infer<typeof userSchema>;
 
 export default function SignupPage() {
+	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
-	const dispatch = useDispatch();
 
 	const {
 		register,
@@ -33,30 +33,26 @@ export default function SignupPage() {
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
-			const userCredential = await userRepository.signUpUser(data);
-
-			dispatch(
-				setData({ email: userCredential.email, uid: userCredential.uid }),
-			);
+			await dispatch(signUpUser(data)).unwrap();
 			router.push("/albums");
 		} catch (error) {
-			if (
-				error instanceof FirebaseError &&
-				error.code === "auth/email-already-in-use"
-			) {
-				alert("このメールアドレスはすでに使用されています。");
-			} else if (error instanceof Error) {
-				alert(error.message);
-			} else {
-				console.error("予期しないエラー:", error);
-			}
+			handleSignUpError(error);
+		}
+	};
+
+	const handleSignUpError = (error: unknown) => {
+		const errorMessage = error as string;
+		console.error("Sign Up Failed:", errorMessage);
+		if (errorMessage === "このメールアドレスは既に使用されています。") {
+			alert("このメールアドレスはすでに使用されています。");
+		} else {
+			alert("新規登録に失敗しました。");
 		}
 	};
 
 	return (
 		<div>
 			<NavigationBar />
-
 			<div className={styles.wrap}>
 				<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
 					<h1 className={styles.title}>ALBUM</h1>
@@ -75,7 +71,6 @@ export default function SignupPage() {
 							</span>
 						)}
 					</div>
-
 					<div className={styles.inputWrap}>
 						<label className={styles.label} htmlFor="password">
 							パスワード
@@ -91,7 +86,6 @@ export default function SignupPage() {
 							</span>
 						)}
 					</div>
-
 					<button className={styles.button}>新規登録する</button>
 				</form>
 			</div>

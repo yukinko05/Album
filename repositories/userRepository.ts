@@ -1,20 +1,25 @@
+import { auth } from "@/lib/firebase";
+import type { UserInput } from "@/types/type";
 import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 } from "@firebase/auth";
-import { auth } from "@/lib/firebase";
-import { UserInput } from "@/types/type";
 
 export const userRepository = {
 	async signUpUser(data: UserInput) {
-		const userCredential = await createUserWithEmailAndPassword(
-			auth,
-			data.email,
-			data.password,
-		);
-		const user = userCredential.user;
+		console.log("Signing up user with :", data);
 
-		return user;
+		try {
+			const userCredential = await createUserWithEmailAndPassword(
+				auth,
+				data.email,
+				data.password,
+			);
+			return userCredential.user;
+		} catch (error) {
+			console.error("Error in signUpUser:", error);
+			return Promise.reject(error);
+		}
 	},
 
 	async loginUser(data: UserInput) {
@@ -24,13 +29,10 @@ export const userRepository = {
 				data.email,
 				data.password,
 			);
-			const user = userCredential.user;
-
-			return user;
+			return userCredential.user;
 		} catch (error) {
-			throw new Error(
-				"入力された情報に誤りがあります。正しいメールアドレスとパスワードを入力してください。",
-			);
+			console.error("Error in userRepository.loginUser:", error);
+			throw error;
 		}
 	},
 };

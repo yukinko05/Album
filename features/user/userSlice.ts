@@ -1,6 +1,6 @@
+import { loginUser, signUpUser } from "@/services/userService";
+import type { User } from "@/types/type";
 import { createSlice } from "@reduxjs/toolkit";
-import { signUpUser, loginUser } from "@/services/userService";
-import { User } from "@/types/type";
 interface UserState {
 	data: User | null;
 	status: "idle" | "loading" | "succeeded" | "failed";
@@ -33,8 +33,18 @@ export const userSlice = createSlice({
 				state.status = "failed";
 				state.error = action.payload;
 			})
+			.addCase(signUpUser.pending, (state) => {
+				state.status = "loading";
+				state.error = null;
+			})
 			.addCase(signUpUser.fulfilled, (state, action) => {
+				state.status = "succeeded";
 				state.data = action.payload;
+			})
+			.addCase(signUpUser.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.payload;
+				console.error("Sign Up Failed:", action.payload);
 			});
 	},
 });
