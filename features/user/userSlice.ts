@@ -44,7 +44,6 @@ export const userSlice = createSlice({
 			.addCase(signUpUser.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.payload;
-				console.error("Sign Up Failed:", action.payload);
 			});
 	},
 });

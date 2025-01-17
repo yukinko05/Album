@@ -1,13 +1,13 @@
 "use client";
 
 import NavigationBar from "@/components/NavigationBar";
+import type { AlbumCreateInputs } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as zod from "zod";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@nextui-org/react";
-import { ChangeEvent, useState } from "react";
+import { type ChangeEvent, useState } from "react";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import * as zod from "zod";
 import styles from "./styles.module.css";
-import { AlbumCreateInputs } from "@/types/type";
 
 type AlbumFormProps = {
 	onSubmit: SubmitHandler<AlbumCreateInputs>;

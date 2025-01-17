@@ -1,15 +1,15 @@
 import { db } from "@/lib/firebase";
+import type { AlbumCreateInputs } from "@/types/type";
 import {
-	getDocs,
 	collection,
-	query,
-	orderBy,
-	limit,
-	serverTimestamp,
 	doc,
+	getDocs,
+	limit,
+	orderBy,
+	query,
+	serverTimestamp,
 	setDoc,
 } from "@firebase/firestore";
-import { AlbumCreateInputs } from "@/types/type";
 
 export const albumRepository = {
 	async fetchAlbums(uid: string) {
@@ -22,7 +22,7 @@ export const albumRepository = {
 	},
 
 	async createAlbum(data: AlbumCreateInputs, uid: string) {
-		const documentData: any = {
+		const documentData = {
 			coverImg: data.coverImg,
 			createdAt: serverTimestamp(),
 			title: data.title,
@@ -30,8 +30,7 @@ export const albumRepository = {
 
 		const albumId = crypto.randomUUID();
 		const albumRef = doc(db, "users", uid, "albums", albumId);
-		const newAlbum = await setDoc(albumRef, documentData);
-
-		return newAlbum;
+		await setDoc(albumRef, documentData);
+		return { id: albumId, ...documentData };
 	},
 };

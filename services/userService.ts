@@ -1,34 +1,33 @@
 import { userRepository } from "@/repositories/userRepository";
-import type { UserInput } from "@/types/type";
+import type { UserInput, User } from "@/types/type";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 
-export const signUpUser = createAsyncThunk(
-	"users/signUpUser",
-	async (data: UserInput, { rejectWithValue }) => {
-		try {
-			const newUser = await userRepository.signUpUser(data);
-			return {
-				uid: newUser.uid,
-				email: newUser.email,
-			};
-		} catch (error) {
-			if (error instanceof FirebaseError) {
-				switch (error.code) {
-					case "auth/email-already-in-use":
-						return rejectWithValue(
-							"このメールアドレスは既に使用されています。",
-						);
-					case "auth/invalid-email":
-						return rejectWithValue("無効なメールアドレスです。");
-					default:
-						return rejectWithValue("新規登録に失敗しました。");
-				}
+export const signUpUser = createAsyncThunk<
+	User,
+	UserInput,
+	{ rejectValue: string }
+>("users/signUpUser", async (data: UserInput, { rejectWithValue }) => {
+	try {
+		const newUser = await userRepository.signUpUser(data);
+		return {
+			uid: newUser.uid,
+			email: newUser.email,
+		};
+	} catch (error) {
+		if (error instanceof FirebaseError) {
+			switch (error.code) {
+				case "auth/email-already-in-use":
+					return rejectWithValue("このメールアドレスは既に使用されています。");
+				case "auth/invalid-email":
+					return rejectWithValue("無効なメールアドレスです。");
+				default:
+					return rejectWithValue("新規登録に失敗しました。");
 			}
-			return rejectWithValue("新規登録に失敗しました。");
 		}
-	},
-);
+		return rejectWithValue("新規登録に失敗しました。");
+	}
+});
 
 export const loginUser = createAsyncThunk(
 	"users/loginUser",

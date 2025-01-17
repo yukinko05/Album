@@ -7,8 +7,6 @@ import {
 
 export const userRepository = {
 	async signUpUser(data: UserInput) {
-		console.log("Signing up user with :", data);
-
 		try {
 			const userCredential = await createUserWithEmailAndPassword(
 				auth,
@@ -17,7 +15,6 @@ export const userRepository = {
 			);
 			return userCredential.user;
 		} catch (error) {
-			console.error("Error in signUpUser:", error);
 			return Promise.reject(error);
 		}
 	},

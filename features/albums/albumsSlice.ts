@@ -1,6 +1,6 @@
+import type { Album } from "@/types/type";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Album } from "@/types/type";
 import { state } from "sucrase/dist/types/parser/traverser/base";
 
 export interface AlbumState {
