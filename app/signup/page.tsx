@@ -4,12 +4,12 @@ import NavigationBar from "@/components/NavigationBar";
 import { signUpUser } from "@/services/userService";
 import type { AppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FirebaseError } from "firebase/app";
 import { useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import styles from "./styles.module.css";
+import type { RootState } from "@/store/store";
 
 const userSchema = z.object({
 	email: z
@@ -24,6 +24,8 @@ export type UserData = z.infer<typeof userSchema>;
 export default function SignupPage() {
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
+	const error = useSelector((state: RootState) => state.user.error);
+	const errorMessage = typeof error === "string" ? error : null;
 
 	const {
 		register,
@@ -36,17 +38,8 @@ export default function SignupPage() {
 			await dispatch(signUpUser(data)).unwrap();
 			router.push("/albums");
 		} catch (error) {
-			handleSignUpError(error);
-		}
-	};
-
-	const handleSignUpError = (error: unknown) => {
-		const errorMessage = error as string;
-		console.error("Sign Up Failed:", errorMessage);
-		if (errorMessage === "このメールアドレスは既に使用されています。") {
-			alert("このメールアドレスはすでに使用されています。");
-		} else {
-			alert("新規登録に失敗しました。");
+			const errorMessage = error as string;
+			console.log(errorMessage);
 		}
 	};
 
@@ -56,6 +49,9 @@ export default function SignupPage() {
 			<div className={styles.wrap}>
 				<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
 					<h1 className={styles.title}>ALBUM</h1>
+					{errorMessage && (
+						<p className={styles.errorMessage}>{errorMessage}</p>
+					)}
 					<div className={styles.inputWrap}>
 						<label className={styles.label} htmlFor="email">
 							メールアドレス
