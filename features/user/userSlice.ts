@@ -5,14 +5,12 @@ interface UserState {
 	data: User | null;
 	status: "idle" | "loading" | "succeeded" | "failed";
 	error: unknown | null;
-	uid: string | null;
 }
 
 const initialState: UserState = {
 	data: null,
 	status: "idle",
 	error: null,
-	uid: null,
 };
 
 export const userSlice = createSlice({
