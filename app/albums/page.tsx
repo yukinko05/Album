@@ -1,57 +1,32 @@
 "use client";
-import styles from "./styles.module.css";
-import React, { useEffect, useState } from "react";
-import { Spinner } from "@nextui-org/spinner";
 import NavigationBar from "@/components/NavigationBar";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { setAlbums } from "@/features/albums/albumsSlice";
+import type { RootState } from "@/store/store";
 import { Button } from "@nextui-org/react";
-import dayjs from "dayjs";
-import { Album } from "@/types/type";
-import { albumRepository } from "@/repositories/albumRepository";
+import { Spinner } from "@nextui-org/spinner";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./styles.module.css";
+import type { AppDispatch } from "@/store/store";
+import { getAlbums } from "@/services/albumService";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
 	const albums = useSelector((state: RootState) => state.albums.albums);
 	const uid = useSelector((state: RootState) => state.user.data?.uid);
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
-		const fetchAlbumsDate = async () => {
+		const fetchAlbumsData = async () => {
 			try {
 				if (!uid) {
 					console.log("ユーザーIDが存在しません");
-					setLoading(false);
 					return;
 				}
+				const albums = await dispatch(getAlbums(uid)).unwrap();
 
-				const snapshot = await albumRepository.fetchAlbums(uid);
+				return albums;
 
-				if (snapshot.empty) {
-					console.log("アルバムのデータはありません。");
-					setLoading(false);
-					return [];
-				}
-
-				const albums: Album[] = snapshot.docs.map((doc) => {
-					const data = doc.data();
-					const createdAt =
-						data.createdAt && "toDate" in data.createdAt
-							? data.createdAt.toDate().toISOString()
-							: null;
-					const formattedCreatedAt = createdAt
-						? dayjs(createdAt).format("YYYY-MM-DD")
-						: null;
-					return {
-						...data,
-						id: doc.id,
-						createdAt: formattedCreatedAt,
-					} as Album;
-				});
-
-				dispatch(setAlbums(albums));
 			} catch (error) {
 				console.error(error);
 				alert("アルバムデータ取得に失敗しました");
@@ -59,10 +34,10 @@ export default function Albums() {
 				setLoading(false);
 			}
 		};
-		fetchAlbumsDate();
+
+		fetchAlbumsData();
 	}, [uid, dispatch]);
 
-	console.log(albums);
 	return (
 		<div>
 			<NavigationBar />

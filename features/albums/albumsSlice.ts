@@ -1,25 +1,43 @@
-import type { Album } from "@/types/type";
+import { getAlbums } from "@/services/albumService";
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { state } from "sucrase/dist/types/parser/traverser/base";
+import type { Album } from "@/types/type";
+import { Timestamp } from "firebase/firestore";
+
+export type AlbumDocument = Omit<Album, "id"> & {
+  createdAt: Timestamp | null;
+};
 
 export interface AlbumState {
-	albums: Album[];
+  albums: ReadonlyArray<Album>;
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: unknown | null;
 }
 
 const initialState: AlbumState = {
-	albums: [],
+  albums: [],
+  status: "idle",
+  error: null,
 };
 
 export const albumsSlice = createSlice({
-	name: "albums",
-	initialState,
-	reducers: {
-		setAlbums: (state, action: PayloadAction<Album[]>) => {
-			state.albums = action.payload;
-		},
-	},
+  name: "albums",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAlbums.pending, (state) => {
+        state.status = "loading";
+        state.error = null;
+      })
+      .addCase(getAlbums.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.albums = action.payload;
+      })
+      .addCase(getAlbums.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
+      });
+  },
 });
 
-export const { setAlbums } = albumsSlice.actions;
 export default albumsSlice.reducer;
