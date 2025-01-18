@@ -38,8 +38,7 @@ export default function SignupPage() {
 			await dispatch(signUpUser(data)).unwrap();
 			router.push("/albums");
 		} catch (error) {
-			const errorMessage = error as string;
-			console.log(errorMessage);
+			console.error("SignUp failed:", error);
 		}
 	};
 
