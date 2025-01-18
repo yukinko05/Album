@@ -6,9 +6,11 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { loginUser } from "@/services/userService";
+import type { RootState } from "@/store/store";
+
 const userSchema = z.object({
 	email: z
 		.string()
@@ -22,6 +24,8 @@ export type UserData = z.infer<typeof userSchema>;
 export default function LoginPage() {
 	const router = useRouter();
 	const dispatch = useDispatch<AppDispatch>();
+	const error = useSelector((state: RootState) => state.user.error);
+	const errorMessage = typeof error === "string" ? error : null;
 
 	const {
 		register,
@@ -31,12 +35,11 @@ export default function LoginPage() {
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
-			await dispatch(loginUser(data));
+			await dispatch(loginUser(data)).unwrap();
 			router.push("/albums");
+
 		} catch (error) {
-			alert(
-				error instanceof Error ? error.message : "ログインに失敗しました。",
-			);
+			console.error("Login failed:", error);
 		}
 	};
 
@@ -46,6 +49,9 @@ export default function LoginPage() {
 			<div className={styles.wrap}>
 				<form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
 					<h1 className={styles.title}>ログイン</h1>
+					{errorMessage && (
+						<p className={styles.errorMessage}>{errorMessage}</p>
+					)}
 					<div className={styles.inputWrap}>
 						<label htmlFor="email" className={styles.label}>
 							メールアドレス
