@@ -1,16 +1,17 @@
 "use client";
 
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
-import { albumRepository } from "@/repositories/albumRepository";
-import type { RootState } from "@/store/store";
+import type { RootState, AppDispatch } from "@/store/store";
 import type { AlbumCreateInputs } from "@/types/type";
 import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { createAlbum } from "@/services/albumService";
 
 export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.data?.uid);
 	const router = useRouter();
+	const dispatch = useDispatch<AppDispatch>();
 
 	if (!uid) {
 		alert("ユーザーIDが取得できません。ログインしてください。");
@@ -19,9 +20,13 @@ export default function CreatePage() {
 
 	const onSubmit: SubmitHandler<AlbumCreateInputs> = async (data) => {
 		try {
-			await albumRepository.createAlbum(data, uid);
-
+			const albumData = {
+				...data,
+				id: null,
+			};
+			await dispatch(createAlbum({ data: albumData, uid })).unwrap();
 			router.push("/albums");
+
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");
