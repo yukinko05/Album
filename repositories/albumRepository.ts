@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import type { Album, CreateAlbumRequest } from "@/types/type";
+import type { Album, CreateAlbumRequest, EditAlbumRequest } from "@/types/type";
 import {
   collection,
   doc,
@@ -11,6 +11,7 @@ import {
   setDoc,
   QuerySnapshot,
   FirestoreDataConverter,
+  updateDoc,
 } from "@firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
 
@@ -52,5 +53,21 @@ export const albumRepository = {
     const albumId = crypto.randomUUID();
     const albumRef = doc(db, "users", uid, "albums", albumId);
     await setDoc(albumRef, documentData);
+  },
+
+  async editAlbum({ data, uid, albumId }: EditAlbumRequest) {
+    const albumRef = doc(db, "users", uid, "albums", albumId);
+    const documentData = {
+      coverImg: data.coverImg,
+      title: data.title,
+    };
+
+    try {
+      await updateDoc(albumRef, documentData);
+      console.log("アルバムが更新されました！");
+    } catch (error) {
+      console.error("アルバムの更新に失敗しました", error);
+      throw new Error("アルバムの更新に失敗しました");
+    }
   },
 };
