@@ -1,10 +1,24 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface Album {
   id: string;
   title: string;
   createdAt: string | null;
   coverImg: string;
-  userId: string;
 }
+
+export interface AlbumCreateInputs {
+  id: string | null;
+  title: string;
+  coverImg: string | null;
+  createdAt: Timestamp;
+}
+
+export interface CreateAlbumRequest {
+  data: AlbumCreateInputs;
+  uid: string;
+}
+
 export interface Photos {
   id: string;
   url: string;
@@ -18,5 +32,10 @@ export interface AlbumsProps {
 
 export interface User {
   email: string | null;
-  uid: string;
+  uid: string | null;
+}
+
+export interface UserInput {
+  email: string;
+  password: string;
 }

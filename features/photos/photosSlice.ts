@@ -1,6 +1,6 @@
+import type { Photos } from "@/types/type";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Photos } from "@/types/type";
 
 export interface PhotoState {
 	photos: Photos[];

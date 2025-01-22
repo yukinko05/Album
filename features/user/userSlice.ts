@@ -1,24 +1,49 @@
+import { loginUser, signUpUser } from "@/services/userService";
+import type { User } from "@/types/type";
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import { User } from "../../types/type";
+interface UserState {
+	data: User | null;
+	status: "idle" | "loading" | "succeeded" | "failed";
+	error: unknown | null;
+}
 
-const initialState: { user: User } = {
-	user: {
-		email: "",
-		uid: "",
-	},
+const initialState: UserState = {
+	data: null,
+	status: "idle",
+	error: null,
 };
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
 	name: "user",
 	initialState,
-	reducers: {
-		setData: (state, action: PayloadAction<User>) => {
-			state.user.email = action.payload.email;
-			state.user.uid = action.payload.uid;
-		},
+	reducers: {},
+	extraReducers: (builder) => {
+		builder
+			.addCase(loginUser.pending, (state) => {
+				state.status = "loading";
+				state.error = null;
+			})
+			.addCase(loginUser.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				state.data = action.payload;
+			})
+			.addCase(loginUser.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.payload;
+			})
+			.addCase(signUpUser.pending, (state) => {
+				state.status = "loading";
+				state.error = null;
+			})
+			.addCase(signUpUser.fulfilled, (state, action) => {
+				state.status = "succeeded";
+				state.data = action.payload;
+			})
+			.addCase(signUpUser.rejected, (state, action) => {
+				state.status = "failed";
+				state.error = action.payload;
+			});
 	},
 });
 
-export const { setData } = userSlice.actions;
 export default userSlice.reducer;

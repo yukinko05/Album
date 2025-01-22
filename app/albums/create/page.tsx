@@ -1,35 +1,32 @@
 "use client";
 
-import { SubmitHandler } from "react-hook-form";
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
-import { db } from "@/firebase";
+import type { RootState, AppDispatch } from "@/store/store";
+import type { AlbumCreateInputs } from "@/types/type";
 import { useRouter } from "next/navigation";
-
-type Inputs = {
-	title: string;
-	coverImg: string | null;
-};
+import type { SubmitHandler } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { createAlbum } from "@/services/albumService";
 
 export default function CreatePage() {
-	const uid = useSelector((state: RootState) => state.user.user.uid);
+	const uid = useSelector((state: RootState) => state.user.data?.uid);
 	const router = useRouter();
+	const dispatch = useDispatch<AppDispatch>();
 
-	const onSubmit: SubmitHandler<Inputs> = async (data) => {
+	if (!uid) {
+		alert("ユーザーIDが取得できません。ログインしてください。");
+		return;
+	}
+
+	const onSubmit: SubmitHandler<AlbumCreateInputs> = async (data) => {
 		try {
-			const documentData: any = {
-				coverImg: data.coverImg,
-				createdAt: serverTimestamp(),
-				title: data.title,
+			const albumData = {
+				...data,
+				id: null,
 			};
-
-			const albumId = crypto.randomUUID();
-			const albumRef = doc(db, "users", uid, "albums", albumId);
-
-			await setDoc(albumRef, documentData);
+			await dispatch(createAlbum({ data: albumData, uid })).unwrap();
 			router.push("/albums");
+
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");

@@ -1,16 +1,15 @@
 "use client";
 
-import styles from "./styles.module.css";
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
-import { SubmitHandler, useForm } from "react-hook-form";
+import NavigationBar from "@/components/NavigationBar";
+import { signUpUser } from "@/services/userService";
+import type { AppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { createUserWithEmailAndPassword } from "@firebase/auth";
-import { auth } from "@/firebase";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { setData } from "@/features/user/userSlice";
-import { FirebaseError } from "firebase/app";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { z } from "zod";
+import styles from "./styles.module.css";
+import type { RootState } from "@/store/store";
 
 const userSchema = z.object({
 	email: z
@@ -23,8 +22,10 @@ const userSchema = z.object({
 export type UserData = z.infer<typeof userSchema>;
 
 export default function SignupPage() {
+	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
-	const dispatch = useDispatch();
+	const error = useSelector((state: RootState) => state.user.error);
+	const errorMessage = typeof error === "string" ? error : null;
 
 	const {
 		register,
@@ -34,35 +35,22 @@ export default function SignupPage() {
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
-			const userCredential = await createUserWithEmailAndPassword(
-				auth,
-				data.email,
-				data.password,
-			);
-			const user = userCredential.user;
-			dispatch(setData({ email: user.email, uid: user.uid }));
+			await dispatch(signUpUser(data)).unwrap();
 			router.push("/albums");
 		} catch (error) {
-			if (
-				error instanceof FirebaseError &&
-				error.code === "auth/email-already-in-use"
-			) {
-				alert("このメールアドレスはすでに使用されています。");
-			} else if (error instanceof Error) {
-				alert(error.message);
-			} else {
-				console.error("予期しないエラー:", error);
-			}
+			console.error("SignUp failed:", error);
 		}
 	};
 
 	return (
 		<div>
 			<NavigationBar />
-
 			<div className={styles.wrap}>
 				<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
 					<h1 className={styles.title}>ALBUM</h1>
+					{errorMessage && (
+						<p className={styles.errorMessage}>{errorMessage}</p>
+					)}
 					<div className={styles.inputWrap}>
 						<label className={styles.label} htmlFor="email">
 							メールアドレス
@@ -78,7 +66,6 @@ export default function SignupPage() {
 							</span>
 						)}
 					</div>
-
 					<div className={styles.inputWrap}>
 						<label className={styles.label} htmlFor="password">
 							パスワード
@@ -94,7 +81,6 @@ export default function SignupPage() {
 							</span>
 						)}
 					</div>
-
 					<button className={styles.button}>新規登録する</button>
 				</form>
 			</div>

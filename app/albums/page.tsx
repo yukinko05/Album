@@ -1,65 +1,32 @@
 "use client";
-import styles from "./styles.module.css";
-import React, { useEffect, useState } from "react";
-import { Spinner } from "@nextui-org/spinner";
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { setAlbums } from "@/features/albums/albumsSlice";
+import NavigationBar from "@/components/NavigationBar";
+import type { RootState } from "@/store/store";
 import { Button } from "@nextui-org/react";
-import { db } from "@/firebase";
-import {
-	getDocs,
-	collection,
-	query,
-	orderBy,
-	limit,
-} from "@firebase/firestore";
-import dayjs from "dayjs";
-import { Album } from "@/types/type";
+import { Spinner } from "@nextui-org/spinner";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./styles.module.css";
+import type { AppDispatch } from "@/store/store";
+import { getAlbums } from "@/services/albumService";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
 	const albums = useSelector((state: RootState) => state.albums.albums);
-	const uid = useSelector((state: RootState) => state.user.user.uid);
-	const dispatch = useDispatch();
+	const uid = useSelector((state: RootState) => state.user.data?.uid);
+	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
-		const fetchAlbumsDate = async () => {
+		const fetchAlbumsData = async () => {
 			try {
-				const ALBUMS_PER_PAGE = 10;
-				const col = collection(db, "users", uid, "albums");
-				const q = query(
-					col,
-					orderBy("createdAt", "desc"),
-					limit(ALBUMS_PER_PAGE),
-				);
-				const snapshot = await getDocs(q);
-
-				if (snapshot.empty) {
-					console.log("アルバムのデータはありません。");
-					setLoading(false);
-					return [];
+				if (!uid) {
+					console.log("ユーザーIDが存在しません");
+					return;
 				}
+				const albums = await dispatch(getAlbums(uid)).unwrap();
 
-				const albums: Album[] = snapshot.docs.map((doc) => {
-					const data = doc.data();
-					const createdAt =
-						data.createdAt && "toDate" in data.createdAt
-							? data.createdAt.toDate().toISOString()
-							: null;
-					const formattedCreatedAt = createdAt
-						? dayjs(createdAt).format("YYYY-MM-DD")
-						: null;
-					return {
-						...data,
-						id: doc.id,
-						createdAt: formattedCreatedAt,
-					} as Album;
-				});
+				return albums;
 
-				dispatch(setAlbums(albums));
 			} catch (error) {
 				console.error(error);
 				alert("アルバムデータ取得に失敗しました");
@@ -67,10 +34,10 @@ export default function Albums() {
 				setLoading(false);
 			}
 		};
-		fetchAlbumsDate();
+
+		fetchAlbumsData();
 	}, [uid, dispatch]);
 
-	console.log(albums);
 	return (
 		<div>
 			<NavigationBar />

@@ -1,15 +1,15 @@
 "use client";
 
 import styles from "./styles.module.css";
-import NavigationBar from "@/components/NavigationBar/NavigationBar";
-import { signInWithEmailAndPassword } from "@firebase/auth";
+import NavigationBar from "@/components/NavigationBar";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { auth } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useDispatch } from "react-redux";
-import { setData } from "@/features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { loginUser } from "@/services/userService";
+import type { RootState } from "@/store/store";
 
 const userSchema = z.object({
 	email: z
@@ -23,7 +23,9 @@ export type UserData = z.infer<typeof userSchema>;
 
 export default function LoginPage() {
 	const router = useRouter();
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
+	const error = useSelector((state: RootState) => state.user.error);
+	const errorMessage = typeof error === "string" ? error : null;
 
 	const {
 		register,
@@ -32,17 +34,13 @@ export default function LoginPage() {
 	} = useForm<UserData>({ resolver: zodResolver(userSchema) });
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
-		await signInWithEmailAndPassword(auth, data.email, data.password)
-			.then((userCredential) => {
-				const user = userCredential.user;
-				dispatch(setData({ email: user.email, uid: user.uid }));
-				router.push("/albums");
-			})
-			.catch((error) => {
-				alert(
-					"入力された情報に誤りがあります。正しいメールアドレスとパスワードを入力してください。",
-				);
-			});
+		try {
+			await dispatch(loginUser(data)).unwrap();
+			router.push("/albums");
+
+		} catch (error) {
+			console.error("Login failed:", error);
+		}
 	};
 
 	return (
@@ -51,6 +49,9 @@ export default function LoginPage() {
 			<div className={styles.wrap}>
 				<form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
 					<h1 className={styles.title}>ログイン</h1>
+					{errorMessage && (
+						<p className={styles.errorMessage}>{errorMessage}</p>
+					)}
 					<div className={styles.inputWrap}>
 						<label htmlFor="email" className={styles.label}>
 							メールアドレス
