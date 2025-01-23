@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import type { Album, CreateAlbumRequest, EditAlbumRequest } from "@/types/type";
+import type { Album, CreateAlbumRequest, AlbumRequest } from "@/types/type";
 import {
   collection,
   doc,
@@ -55,8 +55,10 @@ export const albumRepository = {
     await setDoc(albumRef, documentData);
   },
 
-  async editAlbum({ data, uid, albumId }: EditAlbumRequest) {
-    const albumRef = doc(db, "users", uid, "albums", albumId);
+  async updateAlbum({ data, uid, id }: AlbumRequest) {
+    if (!id) throw new Error("アルバムIDが指定されていません");
+
+    const albumRef = doc(db, "users", uid, "albums", id);
     const documentData = {
       coverImg: data.coverImg,
       title: data.title,

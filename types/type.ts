@@ -19,6 +19,18 @@ export interface CreateAlbumRequest {
   uid: string;
 }
 
+export interface CreateAlbumData {
+  title: string;
+  coverImg?: string | null;
+}
+export interface AlbumRequest {
+  data: {
+    title: string;
+    coverImg: string | null;
+  };
+  uid: string;
+  id?: string;
+}
 export interface Photos {
   id: string;
   url: string;
