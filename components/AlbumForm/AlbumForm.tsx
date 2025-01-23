@@ -107,7 +107,7 @@ export default function AlbumForm({
 
           <Button
             type="submit"
-            isDisabled={!getValues("title") && !coverImg}
+            isDisabled={!getValues("title") || (!coverImg && !initialCoverImg)}
             className={styles.button}
           >
             {submitButtonText}
