@@ -1,20 +1,40 @@
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
-import { RootState } from "@/store/store";
-import { useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import type { AlbumRequest } from "@/types/type"
+import { updateAlbum } from "@/services/albumService";
+import { useRouter } from "next/navigation";
 
 export default function EditAlbumPage({ params,
 }: { params: { id: string } }) {
   const uid = useSelector((state: RootState) => state.user.data?.uid);
-  const album = useSelector((state: RootState) => state.albums.albums);
-  const albumId = params.id;
+  const albums = useSelector((state: RootState) => state.albums.albums);
+  const id = params.id;
+  const album = albums.find((album) => album.id === id);
+  const dispatch = useDispatch<AppDispatch>();
+  const router = useRouter();
+
+  console.log(album);
 
   if (!uid) {
     alert("ユーザーIDが取得できません。ログインしてください。");
     return;
   };
 
-  const onSubmit = async () => {
-    // TODO:データを更新するを呼び出す
+  const onSubmit = async (data: AlbumRequest["data"]) => {
+    try {
+      const requestData = {
+        data: {
+          title: data.title,
+          coverImg: data.coverImg || null,
+        },
+        uid,
+      };
+      await dispatch(updateAlbum({ data: requestData.data, uid, id })).unwrap();
+      router.push("/albums");
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -23,6 +43,8 @@ export default function EditAlbumPage({ params,
         onSubmit={onSubmit}
         formTitle="アルバム編集"
         submitButtonText="更新"
+        initialTitle={album?.title}
+        initialCoverImg={album?.coverImg}
       />
     </div>
   )
