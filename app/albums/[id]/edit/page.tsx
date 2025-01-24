@@ -18,7 +18,8 @@ export default function EditAlbumPage({ params,
 
   if (!uid) {
     alert("ユーザーIDが取得できません。ログインしてください。");
-    return;
+    router.push("/login")
+    return null;
   };
 
   const onSubmit = async (data: AlbumRequest["data"]) => {
