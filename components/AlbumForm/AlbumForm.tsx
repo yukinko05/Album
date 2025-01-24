@@ -15,6 +15,7 @@ type AlbumFormProps = {
   initialCoverImg?: string | null;
   formTitle: string;
   submitButtonText: string;
+  defaultValues?: Partial<AlbumCreateInputs>;
 };
 
 const schema = zod.object({
@@ -28,7 +29,7 @@ export default function AlbumForm({
   formTitle,
   submitButtonText,
 }: AlbumFormProps) {
-  const [coverImg, setCoverImg] = useState<string | null>(null);
+  const [coverImg, setCoverImg] = useState<string | null>(initialCoverImg);
 
   const {
     register,
@@ -37,7 +38,10 @@ export default function AlbumForm({
     getValues,
   } = useForm<AlbumCreateInputs>({
     resolver: zodResolver(schema),
-    defaultValues: { title: initialTitle, coverImg: initialCoverImg },
+    defaultValues: {
+      title: initialTitle || "",
+      coverImg: initialCoverImg || null,
+    },
   });
 
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -103,7 +107,7 @@ export default function AlbumForm({
 
           <Button
             type="submit"
-            isDisabled={!getValues("title") && !coverImg}
+            isDisabled={!getValues("title") || (!coverImg && !initialCoverImg)}
             className={styles.button}
           >
             {submitButtonText}

@@ -65,7 +65,7 @@ export default function Albums() {
 								<time className={styles.cardDate}>{album.createdAt}</time>
 								<img
 									className={styles.cardImg}
-									src={album.coverImg}
+									src={album.coverImg ?? undefined}
 									alt={`${album.title}のアルバムカバー画像`}
 								/>
 							</div>
