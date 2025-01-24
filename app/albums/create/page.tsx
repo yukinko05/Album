@@ -7,16 +7,19 @@ import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createAlbum } from "@/services/albumService";
+import { useEffect } from "react";
 
 export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.data?.uid);
 	const router = useRouter();
 	const dispatch = useDispatch<AppDispatch>();
 
-	if (!uid) {
-		alert("ユーザーIDが取得できません。ログインしてください。");
-		return;
-	}
+	useEffect(() => {
+		if (!uid) {
+			alert("ユーザーIDが取得できません。ログインしてください。");
+			router.push('/login');
+		}
+	}, [uid, router]);
 
 	const onSubmit: SubmitHandler<AlbumCreateInputs> = async (data) => {
 		try {
@@ -24,7 +27,7 @@ export default function CreatePage() {
 				...data,
 				id: null,
 			};
-			await dispatch(createAlbum({ data: albumData, uid })).unwrap();
+			await dispatch(createAlbum({ data: albumData, uid: uid as string })).unwrap();
 			router.push("/albums");
 
 		} catch (error) {

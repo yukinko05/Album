@@ -1,9 +1,12 @@
+"use client";
+
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
 import { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 import type { AlbumRequest } from "@/types/type"
 import { updateAlbum } from "@/services/albumService";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function EditAlbumPage({ params,
 }: { params: { id: string } }) {
@@ -14,13 +17,13 @@ export default function EditAlbumPage({ params,
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
-  console.log(album);
 
-  if (!uid) {
-    alert("ユーザーIDが取得できません。ログインしてください。");
-    router.push("/login")
-    return null;
-  };
+  useEffect(() => {
+    if (!uid) {
+      alert("ユーザーIDが取得できません。ログインしてください。");
+      router.push('/login');
+    }
+  }, [uid, router]);
 
   const onSubmit = async (data: AlbumRequest["data"]) => {
     try {
@@ -31,7 +34,7 @@ export default function EditAlbumPage({ params,
         },
         uid,
       };
-      await dispatch(updateAlbum({ data: requestData.data, uid, id })).unwrap();
+      await dispatch(updateAlbum({ data: requestData.data, uid: uid as string, id })).unwrap();
       router.push("/albums");
     } catch (error) {
       console.error(error);
