@@ -35,7 +35,7 @@ export const albumsSlice = createSlice({
       })
       .addCase(getAlbums.rejected, (state, action) => {
         state.status = "failed";
-        state.error = action.payload;
+        state.error = action.error.message;
       });
   },
 });
