@@ -162,6 +162,13 @@ export default function SignupPage() {
 							accept=".jpg, .jpeg, .png"
 							onChange={handleChangeFile}
 						/>
+						{iconImg && (
+							<img
+								className={styles.viewImg}
+								src={iconImg}
+								alt="選択中のカバー写真"
+							/>
+						)}
 					</div>
 					<button className={styles.button}>新規登録する</button>
 				</form>
