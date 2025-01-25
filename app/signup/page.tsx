@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
 import styles from "./styles.module.css";
 import type { RootState } from "@/store/store";
+import Compressor from 'compressorjs';
+import { useState } from 'react';
 
 const userSchema = z.object({
 	name: z.string().min(1, "ニックネームは必須です"),
@@ -32,12 +34,47 @@ export default function SignupPage() {
 	const router = useRouter();
 	const error = useSelector((state: RootState) => state.user.error);
 	const errorMessage = typeof error === "string" ? error : null;
+	const [iconImg, setIconImg] = useState<string | null>(null);
 
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
 	} = useForm<UserData>({ resolver: zodResolver(userSchema) });
+
+	const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+
+		if (e.target.files === null || !file) {
+			return;
+		}
+
+		let quality;
+
+		if (file.size > 5 * 1024 * 1024) {
+			quality = 0.4;
+		} else if (file.size < 2 * 1024 * 1024) {
+			quality = 0.6;
+		} else {
+			quality = 0.8;
+		}
+
+		new Compressor(file, {
+			quality,
+			success: (compressedFile) => {
+				const reader = new FileReader();
+				reader.readAsDataURL(compressedFile);
+
+				reader.onloadend = (evt) => {
+					if (evt.target !== null) {
+						setIconImg(evt.target.result as string);
+					}
+				};
+			}, error: (error) => {
+				console.error(error.message);
+			}
+		})
+	};
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
@@ -114,6 +151,17 @@ export default function SignupPage() {
 								{errors.passwordConfirmation.message}
 							</span>
 						)}
+					</div>
+					<div className={styles.inputWrap}>
+						<label htmlFor="iconImg" className={styles.label}>
+							プロフィール写真をアップロード
+						</label>
+						<input type="file"
+							id="iconImg"
+							name="iconImg"
+							accept=".jpg, .jpeg, .png"
+							onChange={handleChangeFile}
+						/>
 					</div>
 					<button className={styles.button}>新規登録する</button>
 				</form>
