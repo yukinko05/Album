@@ -14,7 +14,7 @@ import Compressor from 'compressorjs';
 import { useState } from 'react';
 
 const userSchema = z.object({
-	name: z.string().min(1, "ニックネームは必須です"),
+	userName: z.string().min(1, "ニックネームは必須です"),
 	email: z
 		.string()
 		.min(1, { message: "メールアドレスは必須です" })
@@ -77,8 +77,12 @@ export default function SignupPage() {
 	};
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
+		const userInputData = {
+			...data,
+			iconImg
+		}
 		try {
-			await dispatch(signUpUser(data)).unwrap();
+			await dispatch(signUpUser(userInputData)).unwrap();
 			router.push("/albums");
 		} catch (error) {
 			console.error("SignUp failed:", error);
@@ -99,13 +103,13 @@ export default function SignupPage() {
 							ニックネーム
 						</label>
 						<input
-							{...register("name")}
-							className={errors.name ? styles.inputError : styles.input}
+							{...register("userName")}
+							className={errors.userName ? styles.inputError : styles.input}
 							type="text"
 						/>
-						{errors.name && (
+						{errors.userName && (
 							<span className={styles.errorMessage}>
-								{errors.name.message}
+								{errors.userName.message}
 							</span>
 						)}
 					</div>
