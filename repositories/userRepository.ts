@@ -1,7 +1,7 @@
 import { db, storage } from "@/lib/firebase";
 import { doc, setDoc } from "@firebase/firestore";
 import { auth } from "@/lib/firebase";
-import type { UserInput } from "@/types/userTypes";
+import type { NewUserInput, LoginUserInput } from "@/types/userTypes";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -9,7 +9,7 @@ import {
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 export const userRepository = {
-  async signUpUser(userInputData: UserInput) {
+  async signUpUser(userInputData: NewUserInput) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -56,7 +56,7 @@ export const userRepository = {
     }
   },
 
-  async loginUser(data: UserInput) {
+  async loginUser(data: LoginUserInput) {
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
