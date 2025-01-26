@@ -41,13 +41,3 @@ export interface AlbumsProps {
   albums: Album[];
   basePath: string;
 }
-
-export interface User {
-  email: string | null;
-  uid: string | null;
-}
-
-export interface UserInput {
-  email: string;
-  password: string;
-}
