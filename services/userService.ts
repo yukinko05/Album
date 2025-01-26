@@ -1,5 +1,5 @@
 import { userRepository } from "@/repositories/userRepository";
-import type { UserInput, User } from "@/types/type";
+import type { UserInput, User } from "@/types/userTypes";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { FirebaseError } from "firebase/app";
 
@@ -7,12 +7,16 @@ export const signUpUser = createAsyncThunk<
   User,
   UserInput,
   { rejectValue: string }
->("users/signUpUser", async (data: UserInput, { rejectWithValue }) => {
+>("users/signUpUser", async (userInputData: UserInput, { rejectWithValue }) => {
   try {
-    const newUser = await userRepository.signUpUser(data);
+    const newUser = await userRepository.signUpUser(userInputData);
+
     return {
       uid: newUser.uid,
       email: newUser.email,
+      userName: newUser.userName,
+      iconImg: newUser.iconImg,
+      createdAt: newUser.createdAt,
     };
   } catch (error) {
     if (error instanceof FirebaseError) {
