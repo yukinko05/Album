@@ -4,13 +4,13 @@ import NavigationBar from "@/components/NavigationBar";
 import type { AlbumCreateInputs } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
-import { type ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
 import styles from "./styles.module.css";
 
 type AlbumFormProps = {
-  onSubmit: SubmitHandler<AlbumCreateInputs>;
+  onSubmit: SubmitHandler<any>;
   initialTitle?: string;
   initialCoverImg?: string | null;
   formTitle: string;
@@ -20,7 +20,10 @@ type AlbumFormProps = {
 
 const schema = zod.object({
   title: zod.string().min(1, { message: "タイトルを入力してください" }),
+  file: zod.custom<FileList>().refine(value => value.length > 0, "ファイルを選択してください。"),
 });
+
+export type FormFields = zod.infer<typeof schema>;
 
 export default function AlbumForm({
   initialTitle = "",
@@ -35,37 +38,19 @@ export default function AlbumForm({
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
-  } = useForm<AlbumCreateInputs>({
+  } = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: initialTitle || "",
-      coverImg: initialCoverImg || null,
     },
   });
-
-  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files === null) {
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onloadend = (evt) => {
-      if (evt.target !== null) {
-        setCoverImg(evt.target.result as string);
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
-  };
 
   return (
     <div>
       <NavigationBar />
       <div className={styles.wrap}>
         <form
-          onSubmit={handleSubmit((data) => onSubmit({ ...data, coverImg }))}
+          onSubmit={handleSubmit((data) => onSubmit(data))}
           className={styles.createForm}
         >
           <h1 className={styles.title}>{formTitle}</h1>
@@ -92,9 +77,10 @@ export default function AlbumForm({
             <input
               type="file"
               id="photo"
-              onChange={handleChangeFile}
+              {...register("file")}
               accept="image/*"
               className={styles.coverImg}
+              multiple
             />
             {coverImg && (
               <img
@@ -107,7 +93,6 @@ export default function AlbumForm({
 
           <Button
             type="submit"
-            isDisabled={!getValues("title") || (!coverImg && !initialCoverImg)}
             className={styles.button}
           >
             {submitButtonText}
