@@ -72,8 +72,8 @@ export default function CreatePage() {
 			);
 
 			const albumData = {
-				title: formData.get("title"),
-				photos: compressedFiles,
+				title: formData.get("title") as string,
+				photos: compressedFiles as string[],
 			};
 
 			await dispatch(createAlbum({ albumData, uid: uid as string })).unwrap();

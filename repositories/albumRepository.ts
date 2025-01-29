@@ -1,5 +1,9 @@
 import { db } from "@/lib/firebase";
-import type { Album, CreateAlbumRequest, AlbumRequest } from "@/types/type";
+import type {
+  Album,
+  AlbumCreateInputs,
+  AlbumUpdataRequest,
+} from "@/types/albumTypes";
 import {
   collection,
   doc,
@@ -26,7 +30,9 @@ const albumConverter: FirestoreDataConverter<AlbumDocument> = {
     return {
       title: data.title,
       createdAt: data.createdAt,
-      coverImg: data.coverImg,
+      coverPhotoUrl: data.coverPhotoUrl,
+      userId: data.userId,
+      sharedWith: data.sharedWith,
     } as AlbumDocument;
   },
 };
@@ -43,24 +49,29 @@ export const albumRepository = {
     return albumsSnapshot;
   },
 
-  async createAlbum({ data, uid }: CreateAlbumRequest) {
+  async createAlbum({ albumData, uid }: AlbumCreateInputs) {
+    console.log("createAlbum 関数が呼び出されました");
+
     const documentData = {
-      coverImg: data.coverImg,
+      title: albumData.title,
       createdAt: serverTimestamp(),
-      title: data.title,
+      coverPhotoUrl: albumData.photos[0],
+      userId: uid,
+      sharedWith: null,
     };
 
+    console.log(albumData.photos[0]);
     const albumId = crypto.randomUUID();
-    const albumRef = doc(db, "users", uid, "albums", albumId);
+    const albumRef = doc(db, "albums", albumId);
     await setDoc(albumRef, documentData);
   },
 
-  async updateAlbum({ data, uid, id }: AlbumRequest) {
+  async updateAlbum({ data, uid, id }: AlbumUpdataRequest) {
     if (!id) throw new Error("アルバムIDが指定されていません");
 
     const albumRef = doc(db, "users", uid, "albums", id);
     const documentData = {
-      coverImg: data.coverImg,
+      coverPhotoUrl: data.coverPhotoUrl,
       title: data.title,
     };
 

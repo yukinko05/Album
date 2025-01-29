@@ -1,6 +1,10 @@
 import { albumRepository } from "@/repositories/albumRepository";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { Album, AlbumRequest, CreateAlbumRequest } from "@/types/type";
+import type {
+  Album,
+  AlbumCreateInputs,
+  AlbumUpdataRequest,
+} from "@/types/albumTypes";
 import dayjs from "dayjs";
 
 export const getAlbums = createAsyncThunk<Album[], string>(
@@ -11,14 +15,13 @@ export const getAlbums = createAsyncThunk<Album[], string>(
       return albumsSnapshot.docs.map((doc) => {
         const data = doc.data();
 
-        const createdAt =
-          data.createdAt !== null
-            ? data.createdAt.toDate().toISOString()
-            : null;
+        const createdAt = data.createdAt.toDate().toISOString();
 
         const formattedCreatedAt = createdAt
           ? dayjs(createdAt).format("YYYY-MM-DD")
           : null;
+
+        if (!data.createdAt || !formattedCreatedAt) return;
 
         return { id: doc.id, ...data, createdAt: formattedCreatedAt };
       });
@@ -31,9 +34,9 @@ export const getAlbums = createAsyncThunk<Album[], string>(
 
 export const createAlbum = createAsyncThunk(
   "albums/createAlbum",
-  async ({ data, uid }: CreateAlbumRequest) => {
+  async ({ albumData, uid }: AlbumCreateInputs) => {
     try {
-      await albumRepository.createAlbum({ data, uid });
+      await albumRepository.createAlbum({ albumData, uid });
     } catch (error) {
       console.error(error);
       throw error;
@@ -43,7 +46,7 @@ export const createAlbum = createAsyncThunk(
 
 export const updateAlbum = createAsyncThunk(
   "albums/editAlbum",
-  async ({ data, uid, id }: AlbumRequest) => {
+  async ({ data, uid, id }: AlbumUpdataRequest) => {
     try {
       await albumRepository.updateAlbum({ data, uid, id });
     } catch (error) {

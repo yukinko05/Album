@@ -1,6 +1,6 @@
 import { getAlbums } from "@/services/albumService";
 import { createSlice } from "@reduxjs/toolkit";
-import type { Album } from "@/types/type";
+import type { Album } from "@/types/albumTypes";
 import { Timestamp } from "firebase/firestore";
 
 export type AlbumDocument = Omit<Album, "id"> & {
