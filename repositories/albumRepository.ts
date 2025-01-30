@@ -1,4 +1,4 @@
-import { db } from "@/lib/firebase";
+import { db, storage } from "@/lib/firebase";
 import type {
   Album,
   AlbumCreateInputs,
@@ -16,8 +16,10 @@ import {
   QuerySnapshot,
   FirestoreDataConverter,
   updateDoc,
+  where,
 } from "@firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
 
 export type AlbumDocument = Omit<Album, "id"> & {
   createdAt: Timestamp | null;
@@ -40,30 +42,45 @@ const albumConverter: FirestoreDataConverter<AlbumDocument> = {
 export const albumRepository = {
   async fetchAlbums(uid: string): Promise<QuerySnapshot<AlbumDocument>> {
     const ALBUMS_PER_PAGE = 10;
-    const col = collection(db, "users", uid, "albums").withConverter(
-      albumConverter
+    const col = collection(db, "albums").withConverter(albumConverter);
+    const q = query(
+      col,
+      where("userId", "==", uid),
+      orderBy("createdAt", "desc"),
+      limit(ALBUMS_PER_PAGE)
     );
-    const q = query(col, orderBy("createdAt", "desc"), limit(ALBUMS_PER_PAGE));
-    const albumsSnapshot = await getDocs(q);
 
+    const albumsSnapshot = await getDocs(q);
     return albumsSnapshot;
   },
 
   async createAlbum({ albumData, uid }: AlbumCreateInputs) {
-    console.log("createAlbum 関数が呼び出されました");
-
-    const documentData = {
-      title: albumData.title,
-      createdAt: serverTimestamp(),
-      coverPhotoUrl: albumData.photos[0],
-      userId: uid,
-      sharedWith: null,
-    };
-
-    console.log(albumData.photos[0]);
     const albumId = crypto.randomUUID();
-    const albumRef = doc(db, "albums", albumId);
-    await setDoc(albumRef, documentData);
+    let photos: string[] = [];
+    if (albumData.photos) {
+      photos = await Promise.all(
+        albumData.photos.map(async (photo) => {
+          const storageRef = ref(storage, `photos/${albumId}`);
+          const photosSnapshot = await uploadString(
+            storageRef,
+            photo,
+            "data_url"
+          );
+          return await getDownloadURL(photosSnapshot.ref);
+        })
+      );
+
+      const documentData = {
+        title: albumData.title,
+        createdAt: serverTimestamp(),
+        coverPhotoUrl: photos[0],
+        userId: uid,
+        sharedWith: null,
+      };
+
+      const albumRef = doc(db, "albums", albumId);
+      await setDoc(albumRef, documentData);
+    }
   },
 
   async updateAlbum({ data, uid, id }: AlbumUpdataRequest) {
