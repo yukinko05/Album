@@ -9,22 +9,28 @@ import dayjs from "dayjs";
 
 export const getAlbums = createAsyncThunk<Album[], string>(
   "albums/getAlbums",
-  async (uid: string) => {
+  async (uid) => {
     try {
       const albumsSnapshot = await albumRepository.fetchAlbums(uid);
-      return albumsSnapshot.docs.map((doc) => {
-        const data = doc.data();
+      return albumsSnapshot.docs
+        .map((doc) => {
+          const data = doc.data();
 
-        const createdAt = data.createdAt.toDate().toISOString();
+          const createdAt = data.createdAt.toDate().toISOString();
 
-        const formattedCreatedAt = createdAt
-          ? dayjs(createdAt).format("YYYY-MM-DD")
-          : null;
+          const formattedCreatedAt = createdAt
+            ? dayjs(createdAt).format("YYYY-MM-DD")
+            : null;
 
-        if (!data.createdAt || !formattedCreatedAt) return;
+          if (!data.createdAt || !formattedCreatedAt) return;
 
-        return { id: doc.id, ...data, createdAt: formattedCreatedAt };
-      });
+          return {
+            ...data,
+            createdAt: formattedCreatedAt,
+            albumId: doc.id,
+          };
+        })
+        .filter((album): album is Album => album !== undefined);
     } catch (error) {
       console.error(error);
       throw error;

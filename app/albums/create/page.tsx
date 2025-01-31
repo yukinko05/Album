@@ -24,8 +24,6 @@ export default function CreatePage() {
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		try {
-			const formData = new FormData();
-			formData.set("title", data.title);
 
 			const fileList = data.file;
 			const files = Array.from(fileList);
@@ -72,7 +70,7 @@ export default function CreatePage() {
 			);
 
 			const albumData = {
-				title: formData.get("title") as string,
+				title: data.title,
 				photos: compressedFiles as string[],
 			};
 

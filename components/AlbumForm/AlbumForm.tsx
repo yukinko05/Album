@@ -1,7 +1,7 @@
 "use client";
 
 import NavigationBar from "@/components/NavigationBar";
-import type { AlbumCreateInputs } from "@/types/type";
+import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
@@ -10,9 +10,9 @@ import * as zod from "zod";
 import styles from "./styles.module.css";
 
 type AlbumFormProps = {
-  onSubmit: SubmitHandler<any>;
+  onSubmit: SubmitHandler<FormFields>;
   initialTitle?: string;
-  initialCoverImg?: string | null;
+  initialCoverPhotoUrl?: string;
   formTitle: string;
   submitButtonText: string;
   defaultValues?: Partial<AlbumCreateInputs>;
@@ -27,12 +27,12 @@ export type FormFields = zod.infer<typeof schema>;
 
 export default function AlbumForm({
   initialTitle = "",
-  initialCoverImg = null,
+  initialCoverPhotoUrl = "",
   onSubmit,
   formTitle,
   submitButtonText,
 }: AlbumFormProps) {
-  const [coverImg, setCoverImg] = useState<string | null>(initialCoverImg);
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(initialCoverPhotoUrl);
 
   const {
     register,
@@ -79,13 +79,13 @@ export default function AlbumForm({
               id="photo"
               {...register("file")}
               accept="image/*"
-              className={styles.coverImg}
+              className={styles.coverPhotoUrl}
               multiple
             />
-            {coverImg && (
+            {coverPhotoUrl && (
               <img
                 className={styles.viewImg}
-                src={coverImg}
+                src={coverPhotoUrl}
                 alt="選択中のカバー写真"
               />
             )}
