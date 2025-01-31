@@ -17,6 +17,7 @@ import {
   FirestoreDataConverter,
   updateDoc,
   where,
+  addDoc,
 } from "@firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -57,10 +58,15 @@ export const albumRepository = {
   async createAlbum({ albumData, uid }: AlbumCreateInputs) {
     const albumId = crypto.randomUUID();
     let photos: string[] = [];
+    console.log(albumData.photos);
     if (albumData.photos) {
       photos = await Promise.all(
         albumData.photos.map(async (photo) => {
-          const storageRef = ref(storage, `photos/${albumId}`);
+          const photoId = crypto.randomUUID();
+          const storageRef = ref(
+            storage,
+            `photos/${uid}/${albumId}/${photoId}`
+          );
           const photosSnapshot = await uploadString(
             storageRef,
             photo,
@@ -70,7 +76,7 @@ export const albumRepository = {
         })
       );
 
-      const documentData = {
+      const albumDocumentData = {
         title: albumData.title,
         createdAt: serverTimestamp(),
         coverPhotoUrl: photos[0],
@@ -79,7 +85,21 @@ export const albumRepository = {
       };
 
       const albumRef = doc(db, "albums", albumId);
-      await setDoc(albumRef, documentData);
+      await setDoc(albumRef, albumDocumentData);
+
+      await Promise.all(
+        photos.map(async (photoUrl) => {
+          const photosDocumentData = {
+            albumId: albumRef.id,
+            userId: uid,
+            photoUrl: photoUrl,
+            createdAt: serverTimestamp(),
+          };
+
+          await addDoc(collection(db, "photos"), photosDocumentData);
+          console.log(photoUrl);
+        })
+      );
     }
   },
 
