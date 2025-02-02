@@ -1,18 +1,18 @@
 "use client";
 
 import NavigationBar from "@/components/NavigationBar";
-import type { AlbumCreateInputs } from "@/types/type";
+import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
-import { type ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
 import styles from "./styles.module.css";
 
 type AlbumFormProps = {
-  onSubmit: SubmitHandler<AlbumCreateInputs>;
+  onSubmit: SubmitHandler<FormFields>;
   initialTitle?: string;
-  initialCoverImg?: string | null;
+  initialCoverPhotoUrl?: string;
   formTitle: string;
   submitButtonText: string;
   defaultValues?: Partial<AlbumCreateInputs>;
@@ -20,52 +20,37 @@ type AlbumFormProps = {
 
 const schema = zod.object({
   title: zod.string().min(1, { message: "タイトルを入力してください" }),
+  file: zod.custom<FileList>().refine(value => value.length > 0, "ファイルを選択してください。"),
 });
+
+export type FormFields = zod.infer<typeof schema>;
 
 export default function AlbumForm({
   initialTitle = "",
-  initialCoverImg = null,
+  initialCoverPhotoUrl = "",
   onSubmit,
   formTitle,
   submitButtonText,
 }: AlbumFormProps) {
-  const [coverImg, setCoverImg] = useState<string | null>(initialCoverImg);
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(initialCoverPhotoUrl);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
-  } = useForm<AlbumCreateInputs>({
+  } = useForm<FormFields>({
     resolver: zodResolver(schema),
     defaultValues: {
       title: initialTitle || "",
-      coverImg: initialCoverImg || null,
     },
   });
-
-  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files === null) {
-      return;
-    }
-
-    const reader = new FileReader();
-
-    reader.onloadend = (evt) => {
-      if (evt.target !== null) {
-        setCoverImg(evt.target.result as string);
-      }
-    };
-
-    reader.readAsDataURL(e.target.files[0]);
-  };
 
   return (
     <div>
       <NavigationBar />
       <div className={styles.wrap}>
         <form
-          onSubmit={handleSubmit((data) => onSubmit({ ...data, coverImg }))}
+          onSubmit={handleSubmit((data) => onSubmit(data))}
           className={styles.createForm}
         >
           <h1 className={styles.title}>{formTitle}</h1>
@@ -92,14 +77,15 @@ export default function AlbumForm({
             <input
               type="file"
               id="photo"
-              onChange={handleChangeFile}
+              {...register("file")}
               accept="image/*"
-              className={styles.coverImg}
+              className={styles.coverPhotoUrl}
+              multiple
             />
-            {coverImg && (
+            {coverPhotoUrl && (
               <img
                 className={styles.viewImg}
-                src={coverImg}
+                src={coverPhotoUrl}
                 alt="選択中のカバー写真"
               />
             )}
@@ -107,7 +93,6 @@ export default function AlbumForm({
 
           <Button
             type="submit"
-            isDisabled={!getValues("title") || (!coverImg && !initialCoverImg)}
             className={styles.button}
           >
             {submitButtonText}

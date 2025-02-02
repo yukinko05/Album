@@ -2,12 +2,13 @@
 
 import AlbumForm from "@/components/AlbumForm/AlbumForm";
 import type { RootState, AppDispatch } from "@/store/store";
-import type { AlbumCreateInputs } from "@/types/type";
 import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createAlbum } from "@/services/albumService";
 import { useEffect } from "react";
+import { FormFields } from "@/components/AlbumForm/AlbumForm"
+import Compressor from 'compressorjs';
 
 export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.data?.uid);
@@ -21,13 +22,59 @@ export default function CreatePage() {
 		}
 	}, [uid, router]);
 
-	const onSubmit: SubmitHandler<AlbumCreateInputs> = async (data) => {
+	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		try {
+
+			const fileList = data.file;
+			const files = Array.from(fileList);
+
+			if (!files || files.length === 0) return;
+
+			const compressedFiles = await Promise.all(
+				files.map((file) => {
+					if (file instanceof File) {
+						return new Promise<string | null>((resolve, reject) => {
+							let quality;
+							if (file.size > 5 * 1024 * 1024) {
+								quality = 0.4;
+							} else if (file.size < 2 * 1024 * 1024) {
+								quality = 0.6;
+							} else {
+								quality = 0.8;
+							}
+
+							new Compressor(file, {
+								quality,
+								success: (compressedFile) => {
+									const reader = new FileReader();
+									reader.readAsDataURL(compressedFile);
+
+									reader.onloadend = (evt) => {
+										if (evt.target !== null) {
+											resolve(evt.target.result as string);
+										} else {
+											resolve(null);
+										}
+									};
+								},
+								error: (err) => {
+									console.error("Compression failed:", err);
+									reject(err);
+								},
+							});
+						});
+					} else {
+						return Promise.resolve(null);
+					}
+				})
+			);
+
 			const albumData = {
-				...data,
-				id: null,
+				title: data.title,
+				photos: compressedFiles as string[],
 			};
-			await dispatch(createAlbum({ data: albumData, uid: uid as string })).unwrap();
+
+			await dispatch(createAlbum({ albumData, uid: uid as string })).unwrap();
 			router.push("/albums");
 
 		} catch (error) {

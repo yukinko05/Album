@@ -59,13 +59,13 @@ export default function Albums() {
 			) : (
 				<div className={styles.wrap}>
 					{albums.map((album) => (
-						<Link href={`/albums/${album.id}`} key={album.id}>
+						<Link href={`/albums/${album.albumId}`} key={album.albumId}>
 							<div className={styles.card}>
 								<h2 className={styles.cardTitle}>{album.title}</h2>
 								<time className={styles.cardDate}>{album.createdAt}</time>
 								<img
 									className={styles.cardImg}
-									src={album.coverImg ?? undefined}
+									src={album.coverPhotoUrl ?? undefined}
 									alt={`${album.title}のアルバムカバー画像`}
 								/>
 							</div>
