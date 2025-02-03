@@ -1,3 +1,4 @@
+import SignOut from "@/app/signout/signout";
 import {
 	Button,
 	Navbar,
@@ -6,9 +7,13 @@ import {
 	NavbarItem,
 } from "@nextui-org/react";
 import Link from "next/link";
-import React from "react";
+import { useContext } from "react";
+
+import { authContext } from "@/features/auth/AuthProvider";
 
 const NavigationBar = () => {
+	const { currentUser } = useContext(authContext);
+	const uid = currentUser?.uid;
 	return (
 		<Navbar position="static" isBordered maxWidth="full">
 			<NavbarBrand>
@@ -18,9 +23,10 @@ const NavigationBar = () => {
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
-					<Button as={Link} color="primary" href="/signup" variant="flat">
+					{!uid && <Button as={Link} color="primary" href="/signup" variant="flat">
 						新規登録
-					</Button>
+					</Button>}
+					<SignOut />
 				</NavbarItem>
 			</NavbarContent>
 		</Navbar>
