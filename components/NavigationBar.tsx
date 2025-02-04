@@ -14,6 +14,7 @@ import { authContext } from "@/features/auth/AuthProvider";
 const NavigationBar = () => {
 	const { currentUser } = useContext(authContext);
 	const uid = currentUser?.uid;
+
 	return (
 		<Navbar position="static" isBordered maxWidth="full">
 			<NavbarBrand>
@@ -23,10 +24,13 @@ const NavigationBar = () => {
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
-					{!uid && <Button as={Link} color="primary" href="/signup" variant="flat">
-						新規登録
-					</Button>}
-					<SignOut />
+					{uid ? (
+						<SignOut />
+					) : (
+						<Button as={Link} color="primary" href="/login" variant="flat">
+							ログイン
+						</Button>
+					)}
 				</NavbarItem>
 			</NavbarContent>
 		</Navbar>

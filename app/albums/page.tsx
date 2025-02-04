@@ -21,17 +21,23 @@ export default function Albums() {
 	useEffect(() => {
 		if (!uid) {
 			setLoading(false);
-			return
-		};
+			console.log("ユーザーが未認証です");
+			return;
+		}
 
 		const fetchAlbumsData = async () => {
 			try {
 				const albums = await dispatch(getAlbums(uid)).unwrap();
 				return albums;
-
 			} catch (error) {
 				console.error(error);
-				alert("アルバムデータ取得に失敗しました");
+				if (error instanceof Error) {
+					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
+				} else {
+					alert(
+						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
+					);
+				}
 			} finally {
 				setLoading(false);
 			}

@@ -37,7 +37,6 @@ export default function LoginPage() {
 		try {
 			await dispatch(loginUser(data)).unwrap();
 			router.push("/albums");
-
 		} catch (error) {
 			console.error("Login failed:", error);
 		}

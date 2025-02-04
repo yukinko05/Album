@@ -9,9 +9,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 	return (
 		<NextUIProvider>
 			<Provider store={store}>
-				<AuthProvider>
-					{children}
-				</AuthProvider>
+				<AuthProvider>{children}</AuthProvider>
 			</Provider>
 		</NextUIProvider>
 	);
