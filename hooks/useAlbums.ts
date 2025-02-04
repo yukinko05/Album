@@ -3,12 +3,12 @@ import type { AppDispatch, RootState } from "@/store/store";
 import { useDispatch, useSelector } from "react-redux";
 
 export const useAlbums = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const albums = useSelector((state: RootState) => state.albums.albums);
-  const status = useSelector((state: RootState) => state.albums.status);
+	const dispatch = useDispatch<AppDispatch>();
+	const albums = useSelector((state: RootState) => state.albums.albums);
+	const status = useSelector((state: RootState) => state.albums.status);
 
-  const getAlbumsAction = (data: { uid: string }) =>
-    dispatch(getAlbums(data.uid));
+	const getAlbumsAction = (data: { uid: string }) =>
+		dispatch(getAlbums(data.uid));
 
-  return { albums, status, getAlbumsAction };
+	return { albums, status, getAlbumsAction };
 };

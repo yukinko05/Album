@@ -1,3 +1,5 @@
+"use client";
+
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";

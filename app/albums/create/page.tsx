@@ -7,8 +7,8 @@ import type { SubmitHandler } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createAlbum } from "@/services/albumService";
 import { useEffect } from "react";
-import { FormFields } from "@/components/AlbumForm/AlbumForm"
-import Compressor from 'compressorjs';
+import { FormFields } from "@/components/AlbumForm/AlbumForm";
+import Compressor from "compressorjs";
 
 export default function CreatePage() {
 	const uid = useSelector((state: RootState) => state.user.data?.uid);
@@ -18,13 +18,12 @@ export default function CreatePage() {
 	useEffect(() => {
 		if (!uid) {
 			alert("ユーザーIDが取得できません。ログインしてください。");
-			router.push('/login');
+			router.push("/login");
 		}
 	}, [uid, router]);
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		try {
-
 			const fileList = data.file;
 			const files = Array.from(fileList);
 
@@ -66,7 +65,7 @@ export default function CreatePage() {
 					} else {
 						return Promise.resolve(null);
 					}
-				})
+				}),
 			);
 
 			const albumData = {
@@ -76,7 +75,6 @@ export default function CreatePage() {
 
 			await dispatch(createAlbum({ albumData, uid: uid as string })).unwrap();
 			router.push("/albums");
-
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");
