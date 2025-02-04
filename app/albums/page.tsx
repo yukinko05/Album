@@ -4,32 +4,40 @@ import type { RootState } from "@/store/store";
 import { Button } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/spinner";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styles from "./styles.module.css";
 import type { AppDispatch } from "@/store/store";
 import { getAlbums } from "@/services/albumService";
+import { authContext } from "@/features/auth/AuthProvider";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
 	const albums = useSelector((state: RootState) => state.albums.albums);
-	const uid = useSelector((state: RootState) => state.user.data?.uid);
+	const { currentUser } = useContext(authContext);
+	const uid = currentUser?.uid;
 	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
+		if (!uid) {
+			setLoading(false);
+			console.log("ユーザーが未認証です");
+			return;
+		}
+
 		const fetchAlbumsData = async () => {
 			try {
-				if (!uid) {
-					console.log("ユーザーIDが存在しません");
-					return;
-				}
 				const albums = await dispatch(getAlbums(uid)).unwrap();
-
 				return albums;
-
 			} catch (error) {
 				console.error(error);
-				alert("アルバムデータ取得に失敗しました");
+				if (error instanceof Error) {
+					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
+				} else {
+					alert(
+						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
+					);
+				}
 			} finally {
 				setLoading(false);
 			}

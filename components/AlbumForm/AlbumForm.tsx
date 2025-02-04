@@ -10,95 +10,96 @@ import * as zod from "zod";
 import styles from "./styles.module.css";
 
 type AlbumFormProps = {
-  onSubmit: SubmitHandler<FormFields>;
-  initialTitle?: string;
-  initialCoverPhotoUrl?: string;
-  formTitle: string;
-  submitButtonText: string;
-  defaultValues?: Partial<AlbumCreateInputs>;
+	onSubmit: SubmitHandler<FormFields>;
+	initialTitle?: string;
+	initialCoverPhotoUrl?: string;
+	formTitle: string;
+	submitButtonText: string;
+	defaultValues?: Partial<AlbumCreateInputs>;
 };
 
 const schema = zod.object({
-  title: zod.string().min(1, { message: "タイトルを入力してください" }),
-  file: zod.custom<FileList>().refine(value => value.length > 0, "ファイルを選択してください。"),
+	title: zod.string().min(1, { message: "タイトルを入力してください" }),
+	file: zod
+		.custom<FileList>()
+		.refine((value) => value.length > 0, "ファイルを選択してください。"),
 });
 
 export type FormFields = zod.infer<typeof schema>;
 
 export default function AlbumForm({
-  initialTitle = "",
-  initialCoverPhotoUrl = "",
-  onSubmit,
-  formTitle,
-  submitButtonText,
+	initialTitle = "",
+	initialCoverPhotoUrl = "",
+	onSubmit,
+	formTitle,
+	submitButtonText,
 }: AlbumFormProps) {
-  const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(initialCoverPhotoUrl);
+	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(
+		initialCoverPhotoUrl,
+	);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<FormFields>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      title: initialTitle || "",
-    },
-  });
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm<FormFields>({
+		resolver: zodResolver(schema),
+		defaultValues: {
+			title: initialTitle || "",
+		},
+	});
 
-  return (
-    <div>
-      <NavigationBar />
-      <div className={styles.wrap}>
-        <form
-          onSubmit={handleSubmit((data) => onSubmit(data))}
-          className={styles.createForm}
-        >
-          <h1 className={styles.title}>{formTitle}</h1>
-          <div className={styles.inputWrap}>
-            <label className={styles.label} htmlFor="title">
-              アルバム名
-            </label>
-            <input
-              {...register("title")}
-              className={errors.title ? styles.inputError : styles.input}
-              type="text"
-            />
-            {errors.title && (
-              <span className={styles.errorMessage}>
-                {errors.title.message}
-              </span>
-            )}
-          </div>
+	return (
+		<div>
+			<NavigationBar />
+			<div className={styles.wrap}>
+				<form
+					onSubmit={handleSubmit((data) => onSubmit(data))}
+					className={styles.createForm}
+				>
+					<h1 className={styles.title}>{formTitle}</h1>
+					<div className={styles.inputWrap}>
+						<label className={styles.label} htmlFor="title">
+							アルバム名
+						</label>
+						<input
+							{...register("title")}
+							className={errors.title ? styles.inputError : styles.input}
+							type="text"
+						/>
+						{errors.title && (
+							<span className={styles.errorMessage}>
+								{errors.title.message}
+							</span>
+						)}
+					</div>
 
-          <div className={styles.inputWrap}>
-            <label className={styles.label} htmlFor="photo">
-              アルバム画像
-            </label>
-            <input
-              type="file"
-              id="photo"
-              {...register("file")}
-              accept="image/*"
-              className={styles.coverPhotoUrl}
-              multiple
-            />
-            {coverPhotoUrl && (
-              <img
-                className={styles.viewImg}
-                src={coverPhotoUrl}
-                alt="選択中のカバー写真"
-              />
-            )}
-          </div>
+					<div className={styles.inputWrap}>
+						<label className={styles.label} htmlFor="photo">
+							アルバム画像
+						</label>
+						<input
+							type="file"
+							id="photo"
+							{...register("file")}
+							accept="image/*"
+							className={styles.coverPhotoUrl}
+							multiple
+						/>
+						{coverPhotoUrl && (
+							<img
+								className={styles.viewImg}
+								src={coverPhotoUrl}
+								alt="選択中のカバー写真"
+							/>
+						)}
+					</div>
 
-          <Button
-            type="submit"
-            className={styles.button}
-          >
-            {submitButtonText}
-          </Button>
-        </form>
-      </div>
-    </div>
-  );
+					<Button type="submit" className={styles.button}>
+						{submitButtonText}
+					</Button>
+				</form>
+			</div>
+		</div>
+	);
 }
