@@ -21,9 +21,9 @@ export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
 			try {
 				const response = await getPhotos(albumId);
 				setPhotos(response);
-				setLoading(false);
 			} catch (error) {
 				console.log("写真の取得に失敗しました: ", error);
+			} finally {
 				setLoading(false);
 			}
 		};
