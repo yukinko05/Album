@@ -5,13 +5,16 @@ import { Spinner } from "@nextui-org/spinner";
 import styles from "./page.module.css";
 import { getPhotos } from "@/services/photoService";
 import { Photo } from "@/types/photoTypes";
+import { useSearchParams } from "next/navigation";
 
 export default function AlbumPhotosPage({
 	params,
 }: { params: { id: string } }) {
+	const searchParams = useSearchParams();
 	const albumId = params.id;
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
+	const albumTitle = searchParams.get("albumTitle");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -37,14 +40,19 @@ export default function AlbumPhotosPage({
 				</div>
 			) : (
 				<div className={styles.warp}>
-					{photos.map((photo) => (
-						<img
-							key={photo.photoId}
-							className={styles.cardImg}
-							src={photo.photoUrl}
-							alt={`アルバム内の写真${photo.photoId}`}
-						/>
-					))}
+					<div>
+						<h1>{albumTitle}</h1>
+					</div>
+					<div>
+						{photos.map((photo) => (
+							<img
+								key={photo.photoId}
+								className={styles.cardImg}
+								src={photo.photoUrl}
+								alt={`アルバム内の写真${photo.photoId}`}
+							/>
+						))}
+					</div>
 				</div>
 			)}
 		</div>
