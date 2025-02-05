@@ -14,13 +14,11 @@ export const getPhotos = async (albumId: string) => {
 					return null;
 				}
 
-				const createdAt = photoData.createdAt.toDate().toISOString();
-				const formattedCreatedAt = createdAt
-					? dayjs(createdAt).format("YYYY-MM-DD")
-					: null;
-
-				if (!formattedCreatedAt) {
-					console.warn(`Invalid date format: ${doc.id}`);
+				const formattedCreatedAt = dayjs(photoData.createdAt.toDate()).format(
+					"YYYY-MM-DD",
+				);
+				if (!dayjs(formattedCreatedAt).isValid()) {
+					console.warn(`不正な日付フォーマット: ${doc.id}`);
 					return null;
 				}
 
