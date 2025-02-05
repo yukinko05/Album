@@ -4,17 +4,17 @@ import React, { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import styles from "./page.module.css";
 import { getPhotos } from "@/services/photoService";
-import { Photo } from "@/types/photoTypes";
-import { useSearchParams } from "next/navigation";
+import type { Photo } from "@/types/photoTypes";
 
-export default function AlbumPhotosPage({
-	params,
-}: { params: { id: string } }) {
-	const searchParams = useSearchParams();
+type PageProps = {
+	params: { id: string };
+	searchParams: { albumTitle: string };
+};
+
+export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
 	const albumId = params.id;
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
-	const albumTitle = searchParams.get("albumTitle");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -41,7 +41,7 @@ export default function AlbumPhotosPage({
 			) : (
 				<div className={styles.warp}>
 					<div>
-						<h1>{albumTitle}</h1>
+						<h1>{searchParams.albumTitle}</h1>
 					</div>
 					<div>
 						{photos.map((photo) => (
