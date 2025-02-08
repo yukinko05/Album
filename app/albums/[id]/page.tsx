@@ -5,14 +5,15 @@ import { Spinner } from "@nextui-org/spinner";
 import styles from "./page.module.css";
 import { getPhotos } from "@/services/photoService";
 import type { Photo } from "@/types/photoTypes";
+import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import EditLinkButton from "@/app/albums/[id]/edit/albumEditButton";
 
-type PageProps = {
-	params: { id: string };
-	searchParams: { albumTitle: string };
-};
-
-export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
-	const albumId = params.id;
+export default function AlbumPhotosPage() {
+	const params = useParams();
+	const albumId = String(params.id);
+	const searchParams = useSearchParams();
+	const albumTitle = searchParams.get("albumTitle");
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
 
@@ -41,8 +42,9 @@ export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
 			) : (
 				<div className={styles.warp}>
 					<div>
-						<h1>{searchParams.albumTitle}</h1>
+						<h1>{albumTitle}</h1>
 					</div>
+					<EditLinkButton albumId={albumId} />
 					<div>
 						{photos.map((photo) => (
 							<img
