@@ -39,7 +39,7 @@ export const getAlbums = createAsyncThunk<Album[], string>(
 );
 
 export const createAlbum = createAsyncThunk(
-	"albums/createAlbum",
+	"album/createAlbum",
 	async ({ albumData, uid }: AlbumCreateInputs) => {
 		try {
 			await albumRepository.createAlbum({ albumData, uid });
@@ -51,10 +51,22 @@ export const createAlbum = createAsyncThunk(
 );
 
 export const updateAlbum = createAsyncThunk(
-	"albums/editAlbum",
+	"album/editAlbum",
 	async ({ data, id }: AlbumUpdataRequest) => {
 		try {
 			await albumRepository.updateAlbum({ data, id });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);
+
+export const deleteAlbum = createAsyncThunk(
+	"album/deleteAlbum",
+	async (albumId: string) => {
+		try {
+			await albumRepository.deleteAlbum(albumId);
 		} catch (error) {
 			console.error(error);
 			throw error;

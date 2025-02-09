@@ -18,6 +18,7 @@ import {
 	updateDoc,
 	where,
 	addDoc,
+	deleteDoc,
 } from "@firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
@@ -119,6 +120,15 @@ export const albumRepository = {
 		} catch (error) {
 			console.error("アルバムの更新に失敗しました", error);
 			throw new Error("アルバムの更新に失敗しました");
+		}
+	},
+
+	async deleteAlbum(albumId: string) {
+		try {
+			deleteDoc(doc(db, "albums", albumId));
+		} catch (error) {
+			console.error("アルバムの削除に失敗しました", error);
+			throw new Error("アルバムの削除に失敗しました");
 		}
 	},
 };
