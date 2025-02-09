@@ -23,6 +23,11 @@ export interface AlbumUpdataRequest {
 	id: string;
 }
 
+export interface EditAlbumTitleRequest {
+	title: string;
+	albumId: string;
+}
+
 export interface CreateAlbumRequest {
 	id: string | null;
 	title: string;
