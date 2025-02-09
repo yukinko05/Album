@@ -4,6 +4,7 @@ import type {
 	AlbumCreateInputs,
 	AlbumUpdataRequest,
 	EditAlbumTitleRequest,
+	EditAlbumCoverPhotoRequest,
 } from "@/types/albumTypes";
 import {
 	collection,
@@ -145,6 +146,21 @@ export const albumRepository = {
 		} catch (error) {
 			console.error("アルバムの更新に失敗しました", error);
 			throw new Error("アルバムの更新に失敗しました");
+		}
+	},
+
+	async editAlbumCover({ coverPhotoUrl, albumId }: EditAlbumCoverPhotoRequest) {
+		const albumRef = doc(db, "albums", albumId);
+		const documentData = {
+			coverPhotoUrl: coverPhotoUrl,
+			updatedAt: serverTimestamp(),
+		};
+
+		try {
+			await updateDoc(albumRef, documentData);
+		} catch (error) {
+			console.error("カバー写真の更新に失敗しました", error);
+			throw new Error("カバー写真の更新に失敗しました");
 		}
 	},
 
