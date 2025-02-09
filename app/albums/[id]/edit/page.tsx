@@ -17,7 +17,6 @@ import styles from "./page.module.css";
 import { Spinner } from "@nextui-org/spinner";
 import Compressor from "compressorjs";
 import { updateAlbum } from "@/services/albumService";
-import AlbumDeleteButton from "@/components/albumDeleteButton";
 
 const schema = zod.object({
 	title: zod.string().min(1, { message: "タイトルを入力してください" }),
@@ -203,7 +202,6 @@ export default function EditAlbumPage() {
 					</div>
 				)
 			)}
-			<AlbumDeleteButton albumId={albumId} />
 		</div>
 	);
 }

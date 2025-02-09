@@ -8,6 +8,7 @@ import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import EditLinkButton from "@/app/albums/[id]/edit/albumEditButton";
+import AlbumDeleteButton from "@/components/DeleteAlbumButton";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -44,6 +45,7 @@ export default function AlbumPhotosPage() {
 					<div>
 						<h1>{albumTitle}</h1>
 					</div>
+					<AlbumDeleteButton albumId={albumId} />
 					<EditLinkButton albumId={albumId} />
 					<div>
 						{photos.map((photo) => (
