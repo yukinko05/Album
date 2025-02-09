@@ -12,11 +12,12 @@ import { useParams } from "next/navigation";
 import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
 import { AppDispatch } from "@/store/store";
-import type { Album } from "@/types/albumTypes";
+import type { Album, AlbumUpdataRequest } from "@/types/albumTypes";
 import styles from "./page.module.css";
 import { Spinner } from "@nextui-org/spinner";
 import Compressor from "compressorjs";
 import { updateAlbum } from "@/services/albumService";
+import AlbumDeleteButton from "@/components/albumDeleteButton";
 
 const schema = zod.object({
 	title: zod.string().min(1, { message: "タイトルを入力してください" }),
@@ -124,16 +125,19 @@ export default function EditAlbumPage() {
 		if (albumData?.albumId === undefined) return;
 
 		try {
-			const requestData = {
+			const requestData: AlbumUpdataRequest = {
 				data: {
 					title: data.title,
 					coverPhotoUrl: coverPhotoUrl,
 				},
-				uid,
+				id: albumData.albumId,
 			};
 
 			await dispatch(
-				updateAlbum({ data: requestData.data, id: albumData.albumId }),
+				updateAlbum({
+					data: requestData.data,
+					id: albumData.albumId,
+				}),
 			).unwrap();
 			router.push("/albums");
 		} catch (error) {
@@ -199,6 +203,7 @@ export default function EditAlbumPage() {
 					</div>
 				)
 			)}
+			<AlbumDeleteButton albumId={albumId} />
 		</div>
 	);
 }

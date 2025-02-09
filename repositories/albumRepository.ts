@@ -103,13 +103,14 @@ export const albumRepository = {
 		}
 	},
 
-	async updateAlbum({ data, uid, id }: AlbumUpdataRequest) {
+	async updateAlbum({ data, id }: AlbumUpdataRequest) {
 		if (!id) throw new Error("アルバムIDが指定されていません");
 
-		const albumRef = doc(db, "users", uid, "albums", id);
+		const albumRef = doc(db, "albums", id);
 		const documentData = {
-			coverPhotoUrl: data.coverPhotoUrl,
 			title: data.title,
+			coverPhotoUrl: data.coverPhotoUrl,
+			updatedAt: serverTimestamp(),
 		};
 
 		try {
