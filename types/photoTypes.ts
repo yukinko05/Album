@@ -10,3 +10,9 @@ export interface PhotosProps {
 	albumId: string;
 	photos: Photo[];
 }
+
+export interface AddPhotosRequest {
+	albumId: string;
+	photosList: string[];
+	uid: string;
+}

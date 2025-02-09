@@ -1,6 +1,7 @@
 import { photoRepository } from "@/repositories/photoRepository";
-import type { Photo } from "@/types/photoTypes";
+import type { Photo, AddPhotosRequest } from "@/types/photoTypes";
 import dayjs from "dayjs";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getPhotos = async (albumId: string) => {
 	try {
@@ -40,3 +41,15 @@ export const getPhotos = async (albumId: string) => {
 		throw new Error(`予期せぬエラーが発生しました`);
 	}
 };
+
+export const addPhotos = createAsyncThunk(
+	"album/addPhotos",
+	async ({ photosList, albumId, uid }: AddPhotosRequest) => {
+		try {
+			await photoRepository.addPhotos({ photosList, albumId, uid });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);

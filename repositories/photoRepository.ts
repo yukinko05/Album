@@ -1,5 +1,15 @@
-import { db } from "@/lib/firebase";
-import { collection, getDocs, limit, query, where } from "@firebase/firestore";
+import { db, storage } from "@/lib/firebase";
+import {
+	collection,
+	getDocs,
+	limit,
+	query,
+	where,
+	serverTimestamp,
+	addDoc,
+} from "@firebase/firestore";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import type { AddPhotosRequest } from "@/types/photoTypes";
 
 export const photoRepository = {
 	async fetchPhotos(albumId: string) {
@@ -15,5 +25,41 @@ export const photoRepository = {
 
 		const photosSnapshot = await getDocs(q);
 		return photosSnapshot;
+	},
+
+	async addPhotos({ photosList, albumId, uid }: AddPhotosRequest) {
+		let photos: string[] = [];
+
+		if (photosList) {
+			photos = await Promise.all(
+				photosList.map(async (photo) => {
+					const photoId = crypto.randomUUID();
+					const storageRef = ref(
+						storage,
+						`photos/${uid}/${albumId}/${photoId}`,
+					);
+					const photosSnapshot = await uploadString(
+						storageRef,
+						photo,
+						"data_url",
+					);
+					return await getDownloadURL(photosSnapshot.ref);
+				}),
+			);
+
+			await Promise.all(
+				photos.map(async (photoUrl) => {
+					const photosDocumentData = {
+						albumId: albumId,
+						userId: uid,
+						photoUrl: photoUrl,
+						createdAt: serverTimestamp(),
+					};
+
+					await addDoc(collection(db, "photos"), photosDocumentData);
+					console.log(photoUrl);
+				}),
+			);
+		}
 	},
 };
