@@ -28,6 +28,11 @@ export interface EditAlbumTitleRequest {
 	albumId: string;
 }
 
+export interface EditAlbumCoverPhotoRequest {
+	coverPhotoUrl: string;
+	albumId: string;
+}
+
 export interface CreateAlbumRequest {
 	id: string | null;
 	title: string;
