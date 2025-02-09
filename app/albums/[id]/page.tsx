@@ -45,7 +45,7 @@ export default function AlbumPhotosPage() {
 					<div>
 						<h1>{albumTitle}</h1>
 					</div>
-					<AlbumDeleteButton albumId={albumId} />
+					<AlbumDeleteButton albumId={albumId} photos={photos} />
 					<EditLinkButton albumId={albumId} />
 					<div>
 						{photos.map((photo) => (

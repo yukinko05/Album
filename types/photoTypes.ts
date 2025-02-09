@@ -5,3 +5,8 @@ export interface Photo {
 	photoUrl: string;
 	userId: string;
 }
+
+export interface PhotosProps {
+	albumId: string;
+	photos: Photo[];
+}
