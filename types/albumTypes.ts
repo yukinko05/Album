@@ -20,8 +20,7 @@ export interface AlbumUpdataRequest {
 		title: string;
 		coverPhotoUrl: string;
 	};
-	uid: string;
-	id?: string;
+	id: string;
 }
 
 export interface CreateAlbumRequest {
