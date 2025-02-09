@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { Photo } from "@/types/photoTypes";
+import { useDispatch } from "react-redux";
+import type { AppDispatch } from "@/store/store";
+import { getAlbums } from "@/services/albumService";
+import { authContext } from "@/features/auth/AuthProvider";
 
 type Props = {
 	albumId: string;
@@ -9,7 +13,40 @@ type Props = {
 };
 
 export default function ChangeCoverPhoto({ albumId, photos }: Props) {
-	const [selectedPhoto, setSelectedPhoto] = useState(photos[0]?.photoUrl || "");
+	const [selectedPhoto, setSelectedPhoto] = useState("");
+	const dispatch = useDispatch<AppDispatch>();
+	const { currentUser } = useContext(authContext);
+	const uid = currentUser?.uid;
+
+	useEffect(() => {
+		if (!albumId) {
+			console.log("ユーザーが未認証です");
+			return;
+		}
+
+		const fetchAlbumsData = async () => {
+			if (!uid) return;
+			try {
+				const albums = await dispatch(getAlbums(uid)).unwrap();
+				const albumData = albums.find((album) => album.albumId === albumId);
+				if (albumData) {
+					setSelectedPhoto(albumData?.coverPhotoUrl);
+				}
+				return albums;
+			} catch (error) {
+				console.error(error);
+				if (error instanceof Error) {
+					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
+				} else {
+					alert(
+						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
+					);
+				}
+			}
+		};
+
+		fetchAlbumsData();
+	}, [albumId, dispatch]);
 
 	const handleUpdate = async () => {
 		try {
