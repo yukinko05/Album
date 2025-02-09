@@ -52,9 +52,9 @@ export const createAlbum = createAsyncThunk(
 
 export const updateAlbum = createAsyncThunk(
 	"albums/editAlbum",
-	async ({ data, uid, id }: AlbumUpdataRequest) => {
+	async ({ data, id }: AlbumUpdataRequest) => {
 		try {
-			await albumRepository.updateAlbum({ data, uid, id });
+			await albumRepository.updateAlbum({ data, id });
 		} catch (error) {
 			console.error(error);
 			throw error;
