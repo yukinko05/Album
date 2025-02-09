@@ -3,6 +3,7 @@ import type {
 	Album,
 	AlbumCreateInputs,
 	AlbumUpdataRequest,
+	EditAlbumTitleRequest,
 } from "@/types/albumTypes";
 import {
 	collection,
@@ -117,6 +118,24 @@ export const albumRepository = {
 		const documentData = {
 			title: data.title,
 			coverPhotoUrl: data.coverPhotoUrl,
+			updatedAt: serverTimestamp(),
+		};
+
+		try {
+			await updateDoc(albumRef, documentData);
+			console.log("アルバムが更新されました！");
+		} catch (error) {
+			console.error("アルバムの更新に失敗しました", error);
+			throw new Error("アルバムの更新に失敗しました");
+		}
+	},
+
+	async editAlbumTitle({ title, albumId }: EditAlbumTitleRequest) {
+		if (!albumId) throw new Error("アルバムIDが指定されていません");
+
+		const albumRef = doc(db, "albums", albumId);
+		const documentData = {
+			title: title,
 			updatedAt: serverTimestamp(),
 		};
 

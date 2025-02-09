@@ -4,6 +4,7 @@ import type {
 	Album,
 	AlbumCreateInputs,
 	AlbumUpdataRequest,
+	EditAlbumTitleRequest,
 } from "@/types/albumTypes";
 import dayjs from "dayjs";
 import type { PhotosProps } from "@/types/photoTypes";
@@ -44,6 +45,18 @@ export const createAlbum = createAsyncThunk(
 	async ({ albumData, uid }: AlbumCreateInputs) => {
 		try {
 			await albumRepository.createAlbum({ albumData, uid });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);
+
+export const editAlbumTitle = createAsyncThunk(
+	"album/editAlbumTitle",
+	async ({ title, albumId }: EditAlbumTitleRequest) => {
+		try {
+			await albumRepository.editAlbumTitle({ title, albumId });
 		} catch (error) {
 			console.error(error);
 			throw error;
