@@ -21,7 +21,13 @@ import {
 	deleteDoc,
 } from "@firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import {
+	ref,
+	uploadString,
+	getDownloadURL,
+	deleteObject,
+} from "firebase/storage";
+import type { PhotosProps } from "@/types/photoTypes";
 
 export type AlbumDocument = Omit<Album, "id"> & {
 	createdAt: Timestamp | null;
@@ -59,7 +65,7 @@ export const albumRepository = {
 	async createAlbum({ albumData, uid }: AlbumCreateInputs) {
 		const albumId = crypto.randomUUID();
 		let photos: string[] = [];
-		console.log(albumData.photos);
+
 		if (albumData.photos) {
 			photos = await Promise.all(
 				albumData.photos.map(async (photo) => {
@@ -123,9 +129,16 @@ export const albumRepository = {
 		}
 	},
 
-	async deleteAlbum(albumId: string) {
+	async deleteAlbum({ albumId, photos }: PhotosProps) {
 		try {
-			deleteDoc(doc(db, "albums", albumId));
+			await deleteDoc(doc(db, "albums", albumId));
+			const deletePhotoTasks = photos.map(async (photo) => {
+				await deleteDoc(doc(db, "photos", photo.photoId));
+
+				const photoRef = ref(storage, photo.photoUrl);
+				await deleteObject(photoRef);
+			});
+			await Promise.all(deletePhotoTasks);
 		} catch (error) {
 			console.error("アルバムの削除に失敗しました", error);
 			throw new Error("アルバムの削除に失敗しました");
