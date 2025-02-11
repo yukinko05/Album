@@ -43,10 +43,22 @@ export const getPhotos = async (albumId: string) => {
 };
 
 export const addPhotos = createAsyncThunk(
-	"album/addPhotos",
+	"photo/addPhotos",
 	async ({ photosList, albumId, uid }: AddPhotosRequest) => {
 		try {
 			await photoRepository.addPhotos({ photosList, albumId, uid });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);
+
+export const photoSelectDelete = createAsyncThunk(
+	"photo/photoSelectDelete",
+	async (photosToDelete: Photo[]) => {
+		try {
+			await photoRepository.photoSelectDelete(photosToDelete);
 		} catch (error) {
 			console.error(error);
 			throw error;

@@ -7,9 +7,16 @@ import {
 	where,
 	serverTimestamp,
 	addDoc,
+	deleteDoc,
+	doc,
 } from "@firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import type { AddPhotosRequest } from "@/types/photoTypes";
+import {
+	ref,
+	uploadString,
+	getDownloadURL,
+	deleteObject,
+} from "firebase/storage";
+import type { AddPhotosRequest, Photo } from "@/types/photoTypes";
 
 export const photoRepository = {
 	async fetchPhotos(albumId: string) {
@@ -57,9 +64,25 @@ export const photoRepository = {
 					};
 
 					await addDoc(collection(db, "photos"), photosDocumentData);
-					console.log(photoUrl);
 				}),
 			);
+		}
+	},
+
+	async photoSelectDelete(photosToDelete: Photo[]) {
+		try {
+			const deleteTasks = photosToDelete.map(async (photo) => {
+				await deleteDoc(doc(db, "photos", photo.photoId));
+
+				const photoRef = ref(storage, photo.photoUrl);
+				await deleteObject(photoRef);
+			});
+
+			await Promise.all(deleteTasks);
+			console.log("写真の削除に成功しました");
+		} catch (error) {
+			console.error("写真の削除に失敗しました", error);
+			throw new Error("写真の削除に失敗しました");
 		}
 	},
 };
