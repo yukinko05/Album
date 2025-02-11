@@ -8,7 +8,11 @@ import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import EditLinkButton from "@/app/albums/[id]/edit/albumEditButton";
-import AlbumDeleteButton from "@/components/DeleteAlbumButton";
+import AlbumDeleteButton from "@/components/AlbumEdit/DeleteAlbumButton";
+import EditAlbumTitle from "@/components/AlbumEdit/EditAlbumTitle";
+import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
+import AddPhoto from "@/components/AlbumEdit/AddPhoto";
+import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -31,7 +35,9 @@ export default function AlbumPhotosPage() {
 		};
 
 		fetchData();
-	}, [albumId]);
+	}, [albumId, params]);
+
+	if (albumTitle === null) return;
 
 	return (
 		<div>
@@ -45,15 +51,26 @@ export default function AlbumPhotosPage() {
 					<div>
 						<h1>{albumTitle}</h1>
 					</div>
+					<EditAlbumTitle albumId={albumId} currentTitle={albumTitle} />
 					<AlbumDeleteButton albumId={albumId} photos={photos} />
 					<EditLinkButton albumId={albumId} />
+					<ChangeCoverPhoto albumId={albumId} photos={photos} />
+					<AddPhoto albumId={albumId} />
+					<PhotoSelectDelete albumId={albumId} photos={photos} />
 					<div>
 						{photos.map((photo) => (
 							<img
 								key={photo.photoId}
 								className={styles.cardImg}
 								src={photo.photoUrl}
-								alt={`アルバム内の写真${photo.photoId}`}
+								alt={`${albumTitle}のアルバム内の写真`}
+								width={100}
+								onError={(e) => {
+									e.currentTarget.src = "/placeholder.png";
+									console.error(
+										`画像の読み込みに失敗しました: ${photo.photoUrl}`,
+									);
+								}}
 							/>
 						))}
 					</div>

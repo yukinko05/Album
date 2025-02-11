@@ -2,7 +2,7 @@ import { db, storage } from "@/lib/firebase";
 import type {
 	Album,
 	AlbumCreateInputs,
-	AlbumUpdataRequest,
+	AlbumUpdateRequest,
 	EditAlbumTitleRequest,
 	EditAlbumCoverPhotoRequest,
 } from "@/types/albumTypes";
@@ -112,7 +112,7 @@ export const albumRepository = {
 		}
 	},
 
-	async updateAlbum({ data, id }: AlbumUpdataRequest) {
+	async updateAlbum({ data, id }: AlbumUpdateRequest) {
 		if (!id) throw new Error("アルバムIDが指定されていません");
 
 		const albumRef = doc(db, "albums", id);
@@ -127,7 +127,11 @@ export const albumRepository = {
 			console.log("アルバムが更新されました！");
 		} catch (error) {
 			console.error("アルバムの更新に失敗しました", error);
-			throw new Error("アルバムの更新に失敗しました");
+			throw new Error(
+				`アルバムの更新に失敗しました - アルバムID: ${id}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
 		}
 	},
 
@@ -145,7 +149,11 @@ export const albumRepository = {
 			console.log("アルバムが更新されました！");
 		} catch (error) {
 			console.error("アルバムの更新に失敗しました", error);
-			throw new Error("アルバムの更新に失敗しました");
+			throw new Error(
+				`アルバムの更新に失敗しました - アルバムID: ${albumId}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
 		}
 	},
 
@@ -160,7 +168,11 @@ export const albumRepository = {
 			await updateDoc(albumRef, documentData);
 		} catch (error) {
 			console.error("カバー写真の更新に失敗しました", error);
-			throw new Error("カバー写真の更新に失敗しました");
+			throw new Error(
+				`カバー写真の更新に失敗しました - アルバムID: ${albumId}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
 		}
 	},
 
@@ -176,7 +188,11 @@ export const albumRepository = {
 			await Promise.all(deletePhotoTasks);
 		} catch (error) {
 			console.error("アルバムの削除に失敗しました", error);
-			throw new Error("アルバムの削除に失敗しました");
+			throw new Error(
+				`アルバムの削除に失敗しました - アルバムID: ${albumId}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
 		}
 	},
 };

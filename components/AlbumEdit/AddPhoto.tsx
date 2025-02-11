@@ -29,7 +29,7 @@ export default function AddPhotos({ albumId }: Props) {
 			files.map((file) => {
 				if (file instanceof File) {
 					return new Promise<string | null>((resolve, reject) => {
-						let quality;
+						let quality: number;
 						if (file.size > 5 * 1024 * 1024) {
 							quality = 0.4;
 						} else if (file.size < 2 * 1024 * 1024) {

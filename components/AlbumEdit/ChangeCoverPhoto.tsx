@@ -59,21 +59,30 @@ export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 	};
 
 	return (
-		<div>
+		<div role="region" aria-label="カバー写真選択">
 			<h2>カバー写真を選択</h2>
-			{photos.map((photo) => (
-				<label key={photo.photoId}>
-					<input
-						type="radio"
-						name="coverPhoto"
-						value={photo.photoUrl}
-						checked={selectedPhoto === photo.photoUrl}
-						onChange={() => setSelectedPhoto(photo.photoUrl)}
-					/>
-					<img src={photo.photoUrl} alt="カバー写真候補" width={100} />
-				</label>
-			))}
-			<button onClick={handleUpdate}>変更</button>
+			<fieldset>
+				<legend>利用可能な写真</legend>
+				{photos.map((photo) => (
+					<label key={photo.photoId}>
+						<input
+							type="radio"
+							name="coverPhoto"
+							value={photo.photoUrl}
+							checked={selectedPhoto === photo.photoUrl}
+							onChange={() => setSelectedPhoto(photo.photoUrl)}
+						/>
+						<img
+							src={photo.photoUrl}
+							alt={`カバー写真候補 - ${photo.photoId}`}
+							width={100}
+						/>
+					</label>
+				))}
+			</fieldset>
+			<button onClick={handleUpdate} aria-label="カバー写真を更新">
+				変更
+			</button>
 		</div>
 	);
 }

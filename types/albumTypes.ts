@@ -9,13 +9,7 @@ export interface Album {
 	sharedWith: Array<string>;
 }
 
-export interface AlbumUpdateInput {
-	data: {
-		title: string;
-		coverPhotoUrl: string;
-	};
-}
-export interface AlbumUpdataRequest {
+export interface AlbumUpdateRequest {
 	data: {
 		title: string;
 		coverPhotoUrl: string;

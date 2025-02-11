@@ -12,7 +12,9 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 	if (!albumId) return null;
 
 	const handleClick = async () => {
-		const isConfirmed = window.confirm("このアルバムを削除してもよろしいですか？");
+		const isConfirmed = window.confirm(
+			"このアルバムを削除してもよろしいですか？",
+		);
 		if (!isConfirmed) return;
 
 		try {
@@ -25,7 +27,7 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 	};
 
 	return (
-		<button type="submit" onClick={handleClick}>
+		<button type="submit" onClick={handleClick} aria-label="アルバムを削除">
 			アルバム削除
 		</button>
 	);
