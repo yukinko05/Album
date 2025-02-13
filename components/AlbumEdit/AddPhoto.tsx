@@ -25,17 +25,29 @@ export default function AddPhotos({ albumId }: Props) {
 
 		if (!files || files.length === 0) return;
 
+		const FILE_SIZE = {
+			LARGE: 5 * 1024 * 1024, // 5MB
+			SMALL: 2 * 1024 * 1024, // 2MB
+		};
+
+		const COMPRESSION_QUALITY = {
+			HIGH: 0.8,
+			MEDIUM: 0.6,
+			LOW: 0.4,
+		};
+
 		const compressedFiles = await Promise.all(
 			files.map((file) => {
 				if (file instanceof File) {
 					return new Promise<string | null>((resolve, reject) => {
 						let quality: number;
-						if (file.size > 5 * 1024 * 1024) {
-							quality = 0.4;
-						} else if (file.size < 2 * 1024 * 1024) {
-							quality = 0.6;
+
+						if (file.size > FILE_SIZE.LARGE) {
+							quality = COMPRESSION_QUALITY.LOW;
+						} else if (file.size < FILE_SIZE.SMALL) {
+							quality = COMPRESSION_QUALITY.MEDIUM;
 						} else {
-							quality = 0.8;
+							quality = COMPRESSION_QUALITY.HIGH;
 						}
 
 						new Compressor(file, {

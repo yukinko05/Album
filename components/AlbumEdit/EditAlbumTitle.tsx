@@ -13,9 +13,11 @@ type Props = {
 export default function EditAlbumTitle({ albumId, currentTitle }: Props) {
 	const dispatch = useDispatch<AppDispatch>();
 	const [newTitle, setNewTitle] = useState<string>(currentTitle);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleUpdate = async () => {
 		try {
+			setIsLoading(true);
 			await dispatch(
 				editAlbumTitle({
 					title: newTitle,
@@ -24,6 +26,8 @@ export default function EditAlbumTitle({ albumId, currentTitle }: Props) {
 			);
 		} catch (error) {
 			console.error(error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 	return (
@@ -39,8 +43,13 @@ export default function EditAlbumTitle({ albumId, currentTitle }: Props) {
 				id="albumTitle"
 				value={newTitle}
 				onChange={(e) => setNewTitle(e.target.value)}
+				required
+				maxLength={100}
+				disabled={isLoading}
 			/>
-			<button type="submit">送信</button>
+			<button type="submit" disabled={isLoading}>
+				{isLoading ? "更新中..." : "送信"}
+			</button>
 		</form>
 	);
 }

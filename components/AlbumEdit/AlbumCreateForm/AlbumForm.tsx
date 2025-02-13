@@ -31,8 +31,7 @@ export default function AlbumForm({
 	formTitle,
 	submitButtonText,
 }: AlbumFormProps) {
-	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>();
-
+	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(null);
 	const {
 		register,
 		handleSubmit,

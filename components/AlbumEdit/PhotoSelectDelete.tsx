@@ -12,8 +12,8 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const { currentUser } = useContext(authContext);
 	const uid = currentUser?.uid;
+	const [isLoading, setIsLoading] = useState(false);
 
-	console.log(photos);
 	useEffect(() => {
 		if (!albumId) {
 			console.log("ユーザーが未認証です");
@@ -23,6 +23,7 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 		const fetchAlbumsData = async () => {
 			if (!uid) return;
 			try {
+				setIsLoading(true);
 				const albums = await dispatch(getAlbums(uid)).unwrap();
 				albums.find((album) => album.albumId === albumId);
 				return albums;
@@ -39,7 +40,7 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 		};
 
 		fetchAlbumsData();
-	}, [albumId, dispatch]);
+	}, [albumId, dispatch, uid]);
 
 	const handleCheckboxChange = (photoUrl: string) => {
 		setSelectedPhoto((prevSelected) =>
@@ -54,7 +55,6 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 			selectedPhoto.includes(photo.photoUrl),
 		);
 
-		console.log(photoSelectDelete);
 		if (photosToDelete.length === 0) {
 			console.error("削除対象の写真が見つかりません");
 			return;
@@ -63,7 +63,12 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 		try {
 			await dispatch(photoSelectDelete(photosToDelete));
 		} catch (error) {
-			console.error("カバー写真の更新に失敗しました:", error);
+			alert(
+				"アルバムの削除中にエラーが発生しました。" +
+					"ネットワーク接続を確認して再度お試しください。",
+			);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
@@ -81,7 +86,14 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 					<img src={photo.photoUrl} alt="削除する写真" width={100} />
 				</label>
 			))}
-			<button onClick={handleUpdate}>削除</button>
+			<button
+				type="button"
+				onClick={handleUpdate}
+				aria-label="アルバムを削除"
+				disabled={isLoading}
+			>
+				{isLoading ? "削除中..." : "アルバム削除"}
+			</button>
 		</div>
 	);
 }
