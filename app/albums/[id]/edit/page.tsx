@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
 import { AppDispatch } from "@/store/store";
-import type { Album, AlbumUpdataRequest } from "@/types/albumTypes";
+import type { Album, AlbumUpdateRequest } from "@/types/albumTypes";
 import styles from "./page.module.css";
 import { Spinner } from "@nextui-org/spinner";
 import Compressor from "compressorjs";
@@ -124,7 +124,7 @@ export default function EditAlbumPage() {
 		if (albumData?.albumId === undefined) return;
 
 		try {
-			const requestData: AlbumUpdataRequest = {
+			const requestData: AlbumUpdateRequest = {
 				data: {
 					title: data.title,
 					coverPhotoUrl: coverPhotoUrl,
