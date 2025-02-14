@@ -48,7 +48,6 @@ export const addPhotos = createAsyncThunk(
 		try {
 			await photoRepository.addPhotos({ photosList, albumId, uid });
 		} catch (error) {
-			console.error(error);
 			if (error instanceof Error) {
 				console.error(`写真の追加中にエラーが発生しました: ${error.message}`);
 				throw new Error(

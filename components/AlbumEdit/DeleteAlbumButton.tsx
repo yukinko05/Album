@@ -25,12 +25,17 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 			router.push("/albums");
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
-			alert(
-				"アルバムの削除中にエラーが発生しました。" +
-					"ネットワーク接続を確認して再度お試しください。",
-			);
-		} finally {
-			setIsLoading(false);
+			let errorMessage = "アルバムの削除中にエラーが発生しました。";
+			if (error instanceof TypeError) {
+				errorMessage =
+					"ネットワークエラーが発生しました。接続を確認してください。";
+			} else if (
+				error instanceof Error &&
+				error.message.includes("permission")
+			) {
+				errorMessage = "権限がありません。管理者に確認してください。";
+			}
+			alert(errorMessage);
 		}
 	};
 

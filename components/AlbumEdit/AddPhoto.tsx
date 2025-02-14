@@ -65,7 +65,10 @@ export default function AddPhotos({ albumId }: Props) {
 								};
 							},
 							error: (err) => {
-								console.error("Compression failed:", err);
+								console.error("画像の圧縮に失敗しました:", err);
+								alert(
+									"画像の圧縮に失敗しました。別の画像を試すか、サイズの小さい画像を選択してください。",
+								);
 								reject(err);
 							},
 						});
@@ -81,11 +84,17 @@ export default function AddPhotos({ albumId }: Props) {
 
 	const handleUpload = async () => {
 		if (uid === undefined) return;
+		const [isLoading, setIsLoading] = useState(false);
 
 		try {
+			setIsLoading(true);
 			await dispatch(addPhotos({ photosList: photoData, albumId, uid }));
+			alert("写真のアップロードが完了しました");
 		} catch (error) {
 			console.error("写真の追加に失敗しました:", error);
+			alert("写真のアップロードに失敗しました。もう一度お試しください。");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
