@@ -8,7 +8,7 @@ import type {
 	EditAlbumCoverPhotoRequest,
 } from "@/types/albumTypes";
 import dayjs from "dayjs";
-import type { PhotosProps } from "@/types/photoTypes";
+import type { DeleteAlbumRequest } from "@/types/albumTypes";
 
 export const getAlbums = createAsyncThunk<Album[], string>(
 	"albums/getAlbums",
@@ -91,7 +91,7 @@ export const updateAlbum = createAsyncThunk(
 
 export const deleteAlbum = createAsyncThunk(
 	"album/deleteAlbum",
-	async ({ albumId, photos }: PhotosProps) => {
+	async ({ albumId, photos }: DeleteAlbumRequest) => {
 		try {
 			await albumRepository.deleteAlbum({ albumId, photos });
 		} catch (error) {

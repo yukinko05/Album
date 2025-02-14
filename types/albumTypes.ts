@@ -48,8 +48,11 @@ export interface AlbumFormProps {
 	title: string;
 	file: FileList[];
 }
-export interface Photos {
-	id: string;
-	url: string;
+
+export interface DeleteAlbumRequest {
 	albumId: string;
+	photos: {
+		photoId: string;
+		photoUrl: string;
+	}[];
 }

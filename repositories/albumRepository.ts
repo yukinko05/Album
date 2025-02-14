@@ -29,7 +29,7 @@ import {
 	getDownloadURL,
 	deleteObject,
 } from "firebase/storage";
-import type { PhotosProps } from "@/types/photoTypes";
+import type { DeleteAlbumRequest } from "@/types/albumTypes";
 
 export type AlbumDocument = Omit<Album, "id"> & {
 	createdAt: Timestamp | null;
@@ -176,7 +176,7 @@ export const albumRepository = {
 		}
 	},
 
-	async deleteAlbum({ albumId, photos }: PhotosProps) {
+	async deleteAlbum({ albumId, photos }: DeleteAlbumRequest) {
 		try {
 			await deleteDoc(doc(db, "albums", albumId));
 			const deletePhotoTasks = photos.map(async (photo) => {
