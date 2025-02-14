@@ -5,14 +5,20 @@ import { Spinner } from "@nextui-org/spinner";
 import styles from "./page.module.css";
 import { getPhotos } from "@/services/photoService";
 import type { Photo } from "@/types/photoTypes";
+import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import EditLinkButton from "@/app/albums/[id]/edit/albumEditButton";
+import AlbumDeleteButton from "@/components/AlbumEdit/DeleteAlbumButton";
+import EditAlbumTitle from "@/components/AlbumEdit/EditAlbumTitle";
+import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
+import AddPhoto from "@/components/AlbumEdit/AddPhoto";
+import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 
-type PageProps = {
-	params: { id: string };
-	searchParams: { albumTitle: string };
-};
-
-export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
-	const albumId = params.id;
+export default function AlbumPhotosPage() {
+	const params = useParams();
+	const albumId = String(params.id);
+	const searchParams = useSearchParams();
+	const albumTitle = searchParams.get("albumTitle");
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
 
@@ -29,7 +35,9 @@ export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
 		};
 
 		fetchData();
-	}, [albumId]);
+	}, [albumId, params]);
+
+	if (albumTitle === null) return;
 
 	return (
 		<div>
@@ -41,15 +49,28 @@ export default function AlbumPhotosPage({ params, searchParams }: PageProps) {
 			) : (
 				<div className={styles.warp}>
 					<div>
-						<h1>{searchParams.albumTitle}</h1>
+						<h1>{albumTitle}</h1>
 					</div>
+					<EditAlbumTitle albumId={albumId} currentTitle={albumTitle} />
+					<AlbumDeleteButton albumId={albumId} photos={photos} />
+					<EditLinkButton albumId={albumId} />
+					<ChangeCoverPhoto albumId={albumId} photos={photos} />
+					<AddPhoto albumId={albumId} />
+					<PhotoSelectDelete albumId={albumId} photos={photos} />
 					<div>
 						{photos.map((photo) => (
 							<img
 								key={photo.photoId}
 								className={styles.cardImg}
 								src={photo.photoUrl}
-								alt={`アルバム内の写真${photo.photoId}`}
+								alt={`${albumTitle}のアルバム内の写真`}
+								width={100}
+								onError={(e) => {
+									e.currentTarget.src = "/placeholder.png";
+									console.error(
+										`画像の読み込みに失敗しました: ${photo.photoUrl}`,
+									);
+								}}
 							/>
 						))}
 					</div>

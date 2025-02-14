@@ -1,0 +1,74 @@
+.wrap {
+  height: calc(100vh - 65px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.69);
+}
+
+.editForm {
+  width: 560px;
+  border-radius: 16px;
+  padding: 64px 120px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inputWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 12px;
+  color: #363636;
+  margin-top: 8px;
+}
+
+.input {
+  background-color: rgba(128, 128, 128, 0.21);
+  border-radius: 16px;
+  height: 42px;
+  padding: 0 12px;
+  outline-color: #111111;
+}
+
+.inputError {
+  background-color: rgba(128, 128, 128, 0.21);
+  border-radius: 16px;
+  height: 48px;
+  padding: 0 12px;
+  outline-color: #ff4040;
+}
+
+.errorMessage {
+  color: #ff4040;
+  font-size: 12px;
+}
+
+.coverImg {
+  font-size: 12px;
+}
+
+.viewImg {
+  height: 100px;
+  width: 100px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.button {
+  background-color: #111;
+  color: white;
+  border-radius: 16px;
+  padding: 8px 0;
+  margin-top: 4px;
+  height: 48px;
+}

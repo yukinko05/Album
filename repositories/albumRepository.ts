@@ -2,7 +2,9 @@ import { db, storage } from "@/lib/firebase";
 import type {
 	Album,
 	AlbumCreateInputs,
-	AlbumUpdataRequest,
+	AlbumUpdateRequest,
+	EditAlbumTitleRequest,
+	EditAlbumCoverPhotoRequest,
 } from "@/types/albumTypes";
 import {
 	collection,
@@ -18,9 +20,16 @@ import {
 	updateDoc,
 	where,
 	addDoc,
+	deleteDoc,
 } from "@firebase/firestore";
 import type { Timestamp } from "firebase/firestore";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import {
+	ref,
+	uploadString,
+	getDownloadURL,
+	deleteObject,
+} from "firebase/storage";
+import type { DeleteAlbumRequest } from "@/types/albumTypes";
 
 export type AlbumDocument = Omit<Album, "id"> & {
 	createdAt: Timestamp | null;
@@ -58,7 +67,7 @@ export const albumRepository = {
 	async createAlbum({ albumData, uid }: AlbumCreateInputs) {
 		const albumId = crypto.randomUUID();
 		let photos: string[] = [];
-		console.log(albumData.photos);
+
 		if (albumData.photos) {
 			photos = await Promise.all(
 				albumData.photos.map(async (photo) => {
@@ -103,13 +112,14 @@ export const albumRepository = {
 		}
 	},
 
-	async updateAlbum({ data, uid, id }: AlbumUpdataRequest) {
+	async updateAlbum({ data, id }: AlbumUpdateRequest) {
 		if (!id) throw new Error("アルバムIDが指定されていません");
 
-		const albumRef = doc(db, "users", uid, "albums", id);
+		const albumRef = doc(db, "albums", id);
 		const documentData = {
-			coverPhotoUrl: data.coverPhotoUrl,
 			title: data.title,
+			coverPhotoUrl: data.coverPhotoUrl,
+			updatedAt: serverTimestamp(),
 		};
 
 		try {
@@ -117,7 +127,72 @@ export const albumRepository = {
 			console.log("アルバムが更新されました！");
 		} catch (error) {
 			console.error("アルバムの更新に失敗しました", error);
-			throw new Error("アルバムの更新に失敗しました");
+			throw new Error(
+				`アルバムの更新に失敗しました - アルバムID: ${id}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
+		}
+	},
+
+	async editAlbumTitle({ title, albumId }: EditAlbumTitleRequest) {
+		if (!albumId) throw new Error("アルバムIDが指定されていません");
+
+		const albumRef = doc(db, "albums", albumId);
+		const documentData = {
+			title: title,
+			updatedAt: serverTimestamp(),
+		};
+
+		try {
+			await updateDoc(albumRef, documentData);
+			console.log("アルバムが更新されました！");
+		} catch (error) {
+			console.error("アルバムの更新に失敗しました", error);
+			throw new Error(
+				`アルバムの更新に失敗しました - アルバムID: ${albumId}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
+		}
+	},
+
+	async editAlbumCover({ coverPhotoUrl, albumId }: EditAlbumCoverPhotoRequest) {
+		const albumRef = doc(db, "albums", albumId);
+		const documentData = {
+			coverPhotoUrl: coverPhotoUrl,
+			updatedAt: serverTimestamp(),
+		};
+
+		try {
+			await updateDoc(albumRef, documentData);
+		} catch (error) {
+			console.error("カバー写真の更新に失敗しました", error);
+			throw new Error(
+				`カバー写真の更新に失敗しました - アルバムID: ${albumId}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
+		}
+	},
+
+	async deleteAlbum({ albumId, photos }: DeleteAlbumRequest) {
+		try {
+			await deleteDoc(doc(db, "albums", albumId));
+			const deletePhotoTasks = photos.map(async (photo) => {
+				await deleteDoc(doc(db, "photos", photo.photoId));
+
+				const photoRef = ref(storage, photo.photoUrl);
+				await deleteObject(photoRef);
+			});
+			await Promise.all(deletePhotoTasks);
+		} catch (error) {
+			console.error("アルバムの削除に失敗しました", error);
+			throw new Error(
+				`アルバムの削除に失敗しました - アルバムID: ${albumId}, エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
 		}
 	},
 };

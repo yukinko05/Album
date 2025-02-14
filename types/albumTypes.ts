@@ -9,19 +9,22 @@ export interface Album {
 	sharedWith: Array<string>;
 }
 
-export interface AlbumUpdateInput {
+export interface AlbumUpdateRequest {
 	data: {
 		title: string;
 		coverPhotoUrl: string;
 	};
+	id: string;
 }
-export interface AlbumUpdataRequest {
-	data: {
-		title: string;
-		coverPhotoUrl: string;
-	};
-	uid: string;
-	id?: string;
+
+export interface EditAlbumTitleRequest {
+	title: string;
+	albumId: string;
+}
+
+export interface EditAlbumCoverPhotoRequest {
+	coverPhotoUrl: string;
+	albumId: string;
 }
 
 export interface CreateAlbumRequest {
@@ -45,8 +48,11 @@ export interface AlbumFormProps {
 	title: string;
 	file: FileList[];
 }
-export interface Photos {
-	id: string;
-	url: string;
+
+export interface DeleteAlbumRequest {
 	albumId: string;
+	photos: {
+		photoId: string;
+		photoUrl: string;
+	}[];
 }

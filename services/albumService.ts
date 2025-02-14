@@ -3,9 +3,12 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import type {
 	Album,
 	AlbumCreateInputs,
-	AlbumUpdataRequest,
+	AlbumUpdateRequest,
+	EditAlbumTitleRequest,
+	EditAlbumCoverPhotoRequest,
 } from "@/types/albumTypes";
 import dayjs from "dayjs";
+import type { DeleteAlbumRequest } from "@/types/albumTypes";
 
 export const getAlbums = createAsyncThunk<Album[], string>(
 	"albums/getAlbums",
@@ -39,7 +42,7 @@ export const getAlbums = createAsyncThunk<Album[], string>(
 );
 
 export const createAlbum = createAsyncThunk(
-	"albums/createAlbum",
+	"album/createAlbum",
 	async ({ albumData, uid }: AlbumCreateInputs) => {
 		try {
 			await albumRepository.createAlbum({ albumData, uid });
@@ -50,11 +53,47 @@ export const createAlbum = createAsyncThunk(
 	},
 );
 
-export const updateAlbum = createAsyncThunk(
-	"albums/editAlbum",
-	async ({ data, uid, id }: AlbumUpdataRequest) => {
+export const editAlbumTitle = createAsyncThunk(
+	"album/editAlbumTitle",
+	async ({ title, albumId }: EditAlbumTitleRequest) => {
 		try {
-			await albumRepository.updateAlbum({ data, uid, id });
+			await albumRepository.editAlbumTitle({ title, albumId });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);
+
+export const editAlbumCover = createAsyncThunk(
+	"album/editAlbumCover",
+	async ({ coverPhotoUrl, albumId }: EditAlbumCoverPhotoRequest) => {
+		try {
+			await albumRepository.editAlbumCover({ coverPhotoUrl, albumId });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);
+
+export const updateAlbum = createAsyncThunk(
+	"album/editAlbum",
+	async ({ data, id }: AlbumUpdateRequest) => {
+		try {
+			await albumRepository.updateAlbum({ data, id });
+		} catch (error) {
+			console.error(error);
+			throw error;
+		}
+	},
+);
+
+export const deleteAlbum = createAsyncThunk(
+	"album/deleteAlbum",
+	async ({ albumId, photos }: DeleteAlbumRequest) => {
+		try {
+			await albumRepository.deleteAlbum({ albumId, photos });
 		} catch (error) {
 			console.error(error);
 			throw error;

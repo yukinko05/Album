@@ -11,8 +11,7 @@ import styles from "./styles.module.css";
 
 type AlbumFormProps = {
 	onSubmit: SubmitHandler<FormFields>;
-	initialTitle?: string;
-	initialCoverPhotoUrl?: string;
+
 	formTitle: string;
 	submitButtonText: string;
 	defaultValues?: Partial<AlbumCreateInputs>;
@@ -28,16 +27,11 @@ const schema = zod.object({
 export type FormFields = zod.infer<typeof schema>;
 
 export default function AlbumForm({
-	initialTitle = "",
-	initialCoverPhotoUrl = "",
 	onSubmit,
 	formTitle,
 	submitButtonText,
 }: AlbumFormProps) {
-	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(
-		initialCoverPhotoUrl,
-	);
-
+	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(null);
 	const {
 		register,
 		handleSubmit,
@@ -45,7 +39,8 @@ export default function AlbumForm({
 	} = useForm<FormFields>({
 		resolver: zodResolver(schema),
 		defaultValues: {
-			title: initialTitle || "",
+			title: "",
+			file: undefined,
 		},
 	});
 

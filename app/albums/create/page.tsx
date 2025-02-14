@@ -1,26 +1,30 @@
 "use client";
 
-import AlbumForm from "@/components/AlbumForm/AlbumForm";
-import type { RootState, AppDispatch } from "@/store/store";
+import AlbumForm from "@/components/AlbumEdit/AlbumCreateForm/AlbumForm";
+import type { AppDispatch } from "@/store/store";
 import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createAlbum } from "@/services/albumService";
-import { useEffect } from "react";
-import { FormFields } from "@/components/AlbumForm/AlbumForm";
+import { useEffect, useContext, useState } from "react";
+import { FormFields } from "@/components/AlbumEdit/AlbumCreateForm/AlbumForm";
 import Compressor from "compressorjs";
+import { authContext } from "@/features/auth/AuthProvider";
+import { Spinner } from "@nextui-org/spinner";
 
 export default function CreatePage() {
-	const uid = useSelector((state: RootState) => state.user.data?.uid);
-	const router = useRouter();
+	const { currentUser } = useContext(authContext);
+	const uid = currentUser?.uid;
 	const dispatch = useDispatch<AppDispatch>();
+	const router = useRouter();
+	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		if (!uid) {
-			alert("ユーザーIDが取得できません。ログインしてください。");
-			router.push("/login");
+		if (uid) {
+			setLoading(false);
+			return;
 		}
-	}, [uid, router]);
+	}, []);
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		try {
@@ -83,11 +87,17 @@ export default function CreatePage() {
 
 	return (
 		<div>
-			<AlbumForm
-				onSubmit={onSubmit}
-				formTitle="アルバム作成"
-				submitButtonText="作成"
-			/>
+			{loading ? (
+				<div>
+					<Spinner />
+				</div>
+			) : (
+				<AlbumForm
+					onSubmit={onSubmit}
+					formTitle="アルバム作成"
+					submitButtonText="作成"
+				/>
+			)}
 		</div>
 	);
 }
