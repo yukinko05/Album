@@ -1,12 +1,12 @@
-import { shareIdRepository } from "@/repositories/shareIDRepository";
+import { shareRepository } from "@/repositories/shareRepository";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { ShareIDGenerateRequest } from "@/types/shareTypes";
+import type { CreateShareRoomRequest } from "@/types/shareTypes";
 
-export const generateShareId = createAsyncThunk(
-	"share/generateShareID",
-	async ({ userId, sharedRoomTitle }: ShareIDGenerateRequest) => {
+export const createShareRoom = createAsyncThunk(
+	"share/createShareRoom",
+	async ({ userId, sharedRoomTitle }: CreateShareRoomRequest) => {
 		try {
-			const shareIdSnapshot = await shareIdRepository.generateShareId({
+			const shareIdSnapshot = await shareRepository.createShareRoom({
 				userId,
 				sharedRoomTitle,
 			});

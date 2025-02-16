@@ -1,4 +1,4 @@
-export interface ShareIDGenerateRequest {
+export interface CreateShareRoomRequest {
 	userId: string;
 	sharedRoomTitle: string;
 }
