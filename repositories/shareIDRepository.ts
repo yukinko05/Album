@@ -1,11 +1,13 @@
 import { db } from "@/lib/firebase";
 import { collection, serverTimestamp, addDoc } from "@firebase/firestore";
+import type { ShareIDGenerateRequest } from "@/types/shareTypes";
 
 export const shareIDRepository = {
-	async generateShareID(userId: string) {
+	async generateShareID({ userId, sharedRoomTitle }: ShareIDGenerateRequest) {
 		try {
 			const shareIDCollection = collection(db, "shareID");
 			const shareIDRef = await addDoc(shareIDCollection, {
+				sharedRoomTitle,
 				users: [userId],
 				createdAt: serverTimestamp(),
 				updatedAt: null,
