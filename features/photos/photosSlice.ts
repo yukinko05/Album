@@ -1,9 +1,9 @@
-import type { Photos } from "@/types/albumTypes";
+import type { Photo } from "@/types/photoTypes";
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 export interface PhotoState {
-	photos: Photos[];
+	photos: Photo[];
 }
 
 const initialState: PhotoState = {
@@ -14,7 +14,7 @@ export const photoSlice = createSlice({
 	name: "photos",
 	initialState,
 	reducers: {
-		setPhotos: (state, action: PayloadAction<Photos[]>) => {
+		setPhotos: (state, action: PayloadAction<Photo[]>) => {
 			state.photos = action.payload;
 		},
 	},
