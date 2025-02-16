@@ -6,6 +6,11 @@ export interface Photo {
 	userId: string;
 }
 
+export interface Photos {
+	id: string;
+	url: string;
+	albumId: string;
+}
 export interface PhotosProps {
 	albumId: string;
 	photos: Photo[];

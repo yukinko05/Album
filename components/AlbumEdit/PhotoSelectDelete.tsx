@@ -89,7 +89,7 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 			<button
 				type="button"
 				onClick={handleUpdate}
-				aria-label="アルバムを削除"
+				aria-label="選択した写真を削除"
 				disabled={isLoading}
 			>
 				{isLoading ? "削除中..." : "アルバム削除"}
