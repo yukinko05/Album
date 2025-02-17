@@ -1,6 +1,9 @@
-// export default function AlbumShareIDForm() {
+import CreateShareRoomForm from "@/app/albums/albumShareRoom/handleCreateShareForm";
 
-// 	return (
-
-// 	);
-// }
+export default function AlbumShareFormPage() {
+  return (
+    <div>
+      <CreateShareRoomForm />
+    </div>
+  );
+}
