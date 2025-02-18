@@ -28,6 +28,10 @@ export default function CreateShareRoomForm() {
 	const { currentUser } = useContext(authContext);
 	const userId = currentUser?.uid;
 
+	if (!userId) {
+		return <div>ログインが必要です</div>;
+	}
+
 	const {
 		register,
 		handleSubmit,
@@ -48,6 +52,9 @@ export default function CreateShareRoomForm() {
 			);
 		} catch (error) {
 			console.error("共有ルームの作成に失敗しました:", error);
+			throw new Error(
+				"共有ルームの作成に失敗しました。もう一度お試しください。",
+			);
 		}
 	};
 

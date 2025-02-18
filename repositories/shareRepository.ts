@@ -15,11 +15,11 @@ export const shareRepository = {
 
 			return { shareId: shareIdRef.id, sharedRoomTitle };
 		} catch (error) {
-			console.error("シェアIDの発行に失敗しました", error);
+			const errorMessage =
+				error instanceof Error ? error.message : "不明なエラー";
+			console.error(`シェアIDの発行に失敗しました: ${errorMessage}`);
 			throw new Error(
-				`シェアIDの発行に失敗しました: ${
-					error instanceof Error ? error.message : "不明なエラー"
-				}`,
+				`シェアIDの発行に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, title: ${sharedRoomTitle} }`,
 			);
 		}
 	},
