@@ -1,4 +1,4 @@
-import CreateShareRoomForm from "@/app/albums/albumShareRoom/CreateShareForm";
+import CreateShareRoomForm from "@/app/albums/albumShareRoom/createShareForm";
 
 export default function AlbumShareFormPage() {
 	return (

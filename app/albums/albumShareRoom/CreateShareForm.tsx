@@ -9,6 +9,7 @@ import { authContext } from "@/features/auth/AuthProvider";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { createShareRoom } from "@/services/shareService";
+import { useRouter } from "next/navigation";
 
 const FORM_VALIDATION = {
 	MIN_LENGTH: 1,
@@ -27,6 +28,7 @@ export default function CreateShareRoomForm() {
 	const dispatch = useDispatch<AppDispatch>();
 	const { currentUser } = useContext(authContext);
 	const userId = currentUser?.uid;
+	const router = useRouter();
 
 	if (!userId) {
 		return <div>ログインが必要です</div>;
@@ -50,6 +52,7 @@ export default function CreateShareRoomForm() {
 					sharedRoomTitle: data.sharedRoomTitle,
 				}),
 			);
+			router.push("/albums");
 		} catch (error) {
 			console.error("共有ルームの作成に失敗しました:", error);
 			throw new Error(
