@@ -1,6 +1,17 @@
 import { db } from "@/lib/firebase";
-import { collection, serverTimestamp, addDoc } from "@firebase/firestore";
-import type { CreateShareRoomRequest } from "@/types/shareTypes";
+import {
+	collection,
+	serverTimestamp,
+	addDoc,
+	doc,
+	getDoc,
+	updateDoc,
+	arrayUnion,
+} from "@firebase/firestore";
+import type {
+	CreateShareRoomRequest,
+	ShareRoomJoinRequest,
+} from "@/types/shareTypes";
 
 export const shareRepository = {
 	async createShareRoom({ userId, sharedRoomTitle }: CreateShareRoomRequest) {
@@ -20,6 +31,36 @@ export const shareRepository = {
 			console.error(`シェアIDの発行に失敗しました: ${errorMessage}`);
 			throw new Error(
 				`シェアIDの発行に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, title: ${sharedRoomTitle} }`,
+			);
+		}
+	},
+
+	async shareRoomJoin({ userId, sharedRoomId }: ShareRoomJoinRequest) {
+		try {
+			const shareRef = doc(db, "shareID", sharedRoomId);
+			const shareDoc = await getDoc(shareRef);
+
+			if (!shareDoc.exists()) {
+				throw new Error("指定されたシェアルームが見つかりません。");
+			}
+
+			const shareData = shareDoc.data();
+			const users = shareData.users || [];
+
+			if (users.includes(userId)) {
+				throw new Error("既にこのシェアルームに参加しています。");
+			}
+
+			await updateDoc(shareRef, {
+				users: arrayUnion(userId),
+				updatedAt: serverTimestamp(),
+			});
+		} catch (error) {
+			const errorMessage =
+				error instanceof Error ? error.message : "不明なエラー";
+			console.error(`シェアルームの参加に失敗しました: ${errorMessage}`);
+			throw new Error(
+				`シェアルームの参加に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, sharedRoomId: ${sharedRoomId} }`,
 			);
 		}
 	},
