@@ -68,7 +68,7 @@ export default function ShareRoomJoinForm() {
 					{errors.sharedRoomId && <span>{errors.sharedRoomId.message}</span>}
 				</div>
 				<Button type="submit" color="primary">
-					作成する
+					参加する
 				</Button>
 			</form>
 		</div>
