@@ -7,6 +7,9 @@ import {
 	getDoc,
 	updateDoc,
 	arrayUnion,
+	query,
+	where,
+	getDocs,
 } from "@firebase/firestore";
 import type {
 	CreateShareRoomRequest,
@@ -14,6 +17,22 @@ import type {
 } from "@/types/shareTypes";
 
 export const shareRepository = {
+	async fetchShareRooms(userId: string) {
+		try {
+			const col = collection(db, "shareID");
+			const q = query(col, where("users", "array-contains", userId));
+
+			const shareRoomSnapshot = await getDocs(q);
+			return shareRoomSnapshot;
+		} catch (error) {
+			const errorMessage =
+				error instanceof Error ? error.message : "不明なエラー";
+			console.error(`ルームデータ取得に失敗しました: ${errorMessage}`);
+			throw new Error(
+				`ルームデータ取得に失敗しました。詳細: ${errorMessage}。}`,
+			);
+		}
+	},
 	async createShareRoom({ userId, sharedRoomTitle }: CreateShareRoomRequest) {
 		try {
 			const shareIDCollection = collection(db, "shareID");
