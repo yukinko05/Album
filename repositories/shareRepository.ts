@@ -45,7 +45,7 @@ export const shareRepository = {
 				sharedRoomTitle,
 				users: [userId],
 				createdAt: serverTimestamp(),
-				updatedAt: null,
+				updatedAt: serverTimestamp(),
 			});
 
 			return { shareId: shareIdRef.id, sharedRoomTitle };
