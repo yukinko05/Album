@@ -39,7 +39,7 @@ export default function ShareRoomSidebarList() {
 				<Link
 					key={room.shareRoomId}
 					href={{
-						pathname: `room/${room.shareRoomId}`,
+						pathname: `/albumShareRoom/${room.shareRoomId}`,
 						query: { sharedRoomTitle: room.sharedRoomTitle },
 					}}
 				>
