@@ -34,7 +34,7 @@ export default function AlbumShareRoomPage() {
 
 		const fetchAlbumsData = async () => {
 			try {
-				const albums = await dispatch(getAlbums(userId)).unwrap();
+				const albums = await dispatch(getAlbums(shareRoomId)).unwrap();
 				return setAlbums(albums);
 			} catch (error) {
 				console.error(error);
