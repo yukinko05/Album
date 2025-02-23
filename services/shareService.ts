@@ -7,16 +7,21 @@ import type {
 } from "@/types/shareTypes";
 import dayjs from "dayjs";
 
-export const getShareRooms = createAsyncThunk(
+export const getShareRooms = createAsyncThunk<ShareRooms[], string>(
 	"share/getShareRooms",
 	async (userId: string) => {
 		try {
 			const shareRoomsSnapshot = await shareRepository.fetchShareRooms(userId);
+
+			if (shareRoomsSnapshot.empty) {
+				return [];
+			}
+
 			return shareRoomsSnapshot.docs
 				.map((doc) => {
 					const roomData = doc.data();
 
-					if (!roomData?.createdAt) {
+					if (!roomData?.createdAt || !roomData?.updatedAt) {
 						console.warn(`Invalid room data found: ${doc.id}`);
 						return null;
 					}
@@ -24,15 +29,25 @@ export const getShareRooms = createAsyncThunk(
 					const formattedCreatedAt = dayjs(roomData.createdAt.toDate()).format(
 						"YYYY-MM-DD",
 					);
-					if (!dayjs(formattedCreatedAt).isValid()) {
+
+					const formattedUpdatedAt = dayjs(roomData.updatedAt.toDate()).format(
+						"YYYY-MM-DD",
+					);
+
+					if (
+						!dayjs(formattedCreatedAt).isValid() ||
+						!dayjs(formattedUpdatedAt).isValid()
+					) {
 						console.warn(`不正な日付フォーマット: ${doc.id}`);
 						return null;
 					}
 
+					console.log(formattedUpdatedAt);
 					return {
 						shareRoomId: doc.id,
 						...roomData,
 						createdAt: formattedCreatedAt,
+						updatedAt: formattedUpdatedAt,
 					};
 				})
 				.filter((room): room is ShareRooms => room !== null);
