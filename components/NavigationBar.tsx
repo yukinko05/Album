@@ -8,10 +8,10 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { useContext } from "react";
-
 import { authContext } from "@/features/auth/AuthProvider";
+import type { ReactNode } from "react";
 
-const NavigationBar = () => {
+const NavigationBar = ({ children }: { children?: ReactNode }) => {
 	const { currentUser } = useContext(authContext);
 	const uid = currentUser?.uid;
 
@@ -21,6 +21,7 @@ const NavigationBar = () => {
 				<Link className="font-bold text-inherit" href="/albums">
 					ALBUM
 				</Link>
+				{children && <h1>{children}</h1>}
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
