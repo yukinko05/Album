@@ -13,7 +13,7 @@ import type { ReactNode } from "react";
 
 const NavigationBar = ({ children }: { children?: ReactNode }) => {
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 
 	return (
 		<Navbar position="static" isBordered maxWidth="full">
@@ -25,7 +25,7 @@ const NavigationBar = ({ children }: { children?: ReactNode }) => {
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
-					{uid ? (
+					{userId ? (
 						<SignOut />
 					) : (
 						<Button as={Link} color="primary" href="/login" variant="flat">
