@@ -25,9 +25,7 @@ const NavigationBar = ({ children }: { children?: ReactNode }) => {
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
-					{userId ? (
-						<SignOut />
-					) : (
+					{!userId && (
 						<Button as={Link} color="primary" href="/login" variant="flat">
 							ログイン
 						</Button>
