@@ -42,7 +42,6 @@ export const getShareRooms = createAsyncThunk<ShareRooms[], string>(
 						return null;
 					}
 
-					console.log(formattedUpdatedAt);
 					return {
 						shareRoomId: doc.id,
 						...roomData,

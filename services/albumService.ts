@@ -27,9 +27,18 @@ export const getAlbums = createAsyncThunk<Album[], string>(
 
 					if (!data.createdAt || !formattedCreatedAt) return;
 
+					const updatedAt = data.updatedAt.toDate().toISOString();
+
+					const formattedUpdatedAt = updatedAt
+						? dayjs(updatedAt).format("YYYY-MM-DD")
+						: null;
+
+					if (!data.updatedAt || !formattedUpdatedAt) return;
+
 					return {
 						...data,
 						createdAt: formattedCreatedAt,
+						updatedAt: formattedUpdatedAt,
 						albumId: doc.id,
 					};
 				})

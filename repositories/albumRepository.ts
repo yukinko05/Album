@@ -66,6 +66,7 @@ export const albumRepository = {
 			const albumDocumentData = {
 				title: albumData.title,
 				createdAt: serverTimestamp(),
+				updatedAt: serverTimestamp(),
 				coverPhotoUrl: photos[0],
 				userId,
 				shareRoomId,
@@ -85,7 +86,6 @@ export const albumRepository = {
 					};
 
 					await addDoc(collection(db, "photos"), photosDocumentData);
-					console.log(photoUrl);
 				}),
 			);
 		}

@@ -1,48 +1,49 @@
 export interface Album {
-  albumId: string;
-  title: string;
-  createdAt: string;
-  coverPhotoUrl: string;
-  userId: string;
-  shareRoomId: string;
+	albumId: string;
+	title: string;
+	createdAt: string;
+	updatedAt: string;
+	coverPhotoUrl: string;
+	userId: string;
+	shareRoomId: string;
 }
 
 export interface AlbumUpdateRequest {
-  data: {
-    title: string;
-    coverPhotoUrl: string;
-  };
-  albumId: string;
+	data: {
+		title: string;
+		coverPhotoUrl: string;
+	};
+	albumId: string;
 }
 
 export interface EditAlbumTitleRequest {
-  title: string;
-  albumId: string;
+	title: string;
+	albumId: string;
 }
 
 export interface EditAlbumCoverPhotoRequest {
-  coverPhotoUrl: string;
-  albumId: string;
+	coverPhotoUrl: string;
+	albumId: string;
 }
 
 export interface AlbumCreateInputs {
-  albumData: {
-    title: string;
-    photos: string[];
-  };
-  userId: string;
-  shareRoomId: string;
+	albumData: {
+		title: string;
+		photos: string[];
+	};
+	userId: string;
+	shareRoomId: string;
 }
 
 export interface AlbumFormProps {
-  title: string;
-  file: FileList[];
+	title: string;
+	file: FileList[];
 }
 
 export interface DeleteAlbumRequest {
-  albumId: string;
-  photos: {
-    photoId: string;
-    photoUrl: string;
-  }[];
+	albumId: string;
+	photos: {
+		photoId: string;
+		photoUrl: string;
+	}[];
 }
