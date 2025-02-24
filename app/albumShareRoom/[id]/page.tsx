@@ -60,7 +60,10 @@ export default function AlbumShareRoomPage() {
 				<Link
 					href={{
 						pathname: "/albums/create",
-						query: { shareRoomId: shareRoomId },
+						query: {
+							sharedRoomTitle: sharedRoomTitle,
+							shareRoomId: shareRoomId,
+						},
 					}}
 				>
 					アルバム作成

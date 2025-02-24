@@ -19,6 +19,7 @@ export default function CreatePage() {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const shareRoomId = searchParams.get("shareRoomId");
+	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
 
 	useEffect(() => {
 		if (!userId) {
@@ -82,7 +83,9 @@ export default function CreatePage() {
 			};
 
 			await dispatch(createAlbum({ albumData, userId, shareRoomId })).unwrap();
-			router.push("/albums");
+			router.push(
+				`/albumShareRoom/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`,
+			);
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");
