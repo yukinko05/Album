@@ -12,6 +12,7 @@ import type { Album } from "@/types/albumTypes";
 import styles from "./styles.module.css";
 import Link from "next/link";
 import { Spinner } from "@nextui-org/spinner";
+import SideBar from "@/components/SideBar";
 
 export default function AlbumShareRoomPage() {
 	const params = useParams();
@@ -55,7 +56,7 @@ export default function AlbumShareRoomPage() {
 	return (
 		<div>
 			<NavigationBar>{sharedRoomTitle}</NavigationBar>
-			<ShareRoomSidebarList />
+			<SideBar />
 			<div className={styles.btnWrap}>
 				<Link
 					href={{
