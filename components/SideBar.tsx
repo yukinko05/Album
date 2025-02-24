@@ -26,6 +26,13 @@ export default function SideBar() {
 			>
 				ルーム作成
 			</Link>
+			<Link
+				href={{
+					pathname: "/shareRoomJoinForm",
+				}}
+			>
+				ルーム参加
+			</Link>
 			{/* TODO：ユーザー情報 */}
 			{userId && <SignOut />}
 		</>
