@@ -15,11 +15,11 @@ export default function Albums() {
 	const [loading, setLoading] = useState(true);
 	const albums = useSelector((state: RootState) => state.albums.albums);
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 	const dispatch = useDispatch<AppDispatch>();
 
 	useEffect(() => {
-		if (!uid) {
+		if (!userId) {
 			setLoading(false);
 			console.log("ユーザーが未認証です");
 			return;
@@ -27,7 +27,7 @@ export default function Albums() {
 
 		const fetchAlbumsData = async () => {
 			try {
-				const albums = await dispatch(getAlbums(uid)).unwrap();
+				const albums = await dispatch(getAlbums(userId)).unwrap();
 				return albums;
 			} catch (error) {
 				console.error(error);
@@ -44,7 +44,7 @@ export default function Albums() {
 		};
 
 		fetchAlbumsData();
-	}, [uid, dispatch]);
+	}, [userId, dispatch]);
 
 	return (
 		<div>
