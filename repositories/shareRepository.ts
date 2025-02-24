@@ -71,6 +71,15 @@ export const shareRepository = {
 			const shareData = shareDoc.data();
 			const users = shareData.users || [];
 
+			const MAX_USERS = 50;
+			if (users.length >= MAX_USERS) {
+				throw new Error("シェアルームの参加人数が上限に達しています。");
+			}
+
+			if (shareData.status === "closed") {
+				throw new Error("このシェアルームは現在クローズされています。");
+			}
+
 			if (users.includes(userId)) {
 				throw new Error("既にこのシェアルームに参加しています。");
 			}
