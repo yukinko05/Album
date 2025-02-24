@@ -9,6 +9,7 @@ import { authContext } from "@/features/auth/AuthProvider";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store/store";
 import { shareRoomJoin } from "@/services/shareService";
+import { useRouter } from "next/navigation";
 
 const FORM_VALIDATION = {
 	MIN_LENGTH: 1,
@@ -27,6 +28,7 @@ export default function ShareRoomJoinForm() {
 	const dispatch = useDispatch<AppDispatch>();
 	const { currentUser } = useContext(authContext);
 	const userId = currentUser?.uid;
+	const router = useRouter();
 
 	if (!userId) {
 		return <div>ログインが必要です</div>;
@@ -44,11 +46,15 @@ export default function ShareRoomJoinForm() {
 		if (!data || !userId) return;
 
 		try {
-			await dispatch(
+			const response = await dispatch(
 				shareRoomJoin({
 					userId,
 					sharedRoomId: data.sharedRoomId,
 				}),
+			).unwrap();
+
+			router.push(
+				`/albumShareRoom/${response.shareId}?sharedRoomTitle=${response.sharedRoomTitle}`,
 			);
 		} catch (error) {
 			console.error("ルームの参加に失敗しました:", error);

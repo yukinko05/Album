@@ -88,6 +88,11 @@ export const shareRepository = {
 				users: arrayUnion(userId),
 				updatedAt: serverTimestamp(),
 			});
+
+			return {
+				shareId: shareRef.id,
+				sharedRoomTitle: shareData.sharedRoomTitle,
+			};
 		} catch (error) {
 			const errorMessage =
 				error instanceof Error ? error.message : "不明なエラー";

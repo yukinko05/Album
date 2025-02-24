@@ -90,7 +90,11 @@ export const shareRoomJoin = createAsyncThunk(
 	"share/shareRoomJoin",
 	async ({ userId, sharedRoomId }: ShareRoomJoinRequest) => {
 		try {
-			await shareRepository.shareRoomJoin({ userId, sharedRoomId });
+			const shareSnapshot = await shareRepository.shareRoomJoin({
+				userId,
+				sharedRoomId,
+			});
+			return shareSnapshot;
 		} catch (error) {
 			if (error instanceof Error) {
 				console.error(`ルームの参加に失敗しました: ${error.message}`);
