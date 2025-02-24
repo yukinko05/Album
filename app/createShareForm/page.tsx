@@ -7,7 +7,7 @@ import * as zod from "zod";
 import { useContext } from "react";
 import { authContext } from "@/features/auth/AuthProvider";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import type { AppDispatch } from "@/store/store";
 import { createShareRoom } from "@/services/shareService";
 import { useRouter } from "next/navigation";
 
@@ -46,13 +46,17 @@ export default function CreateShareRoomForm() {
 		if (!data || !userId) return;
 
 		try {
-			await dispatch(
+			const response = await dispatch(
 				createShareRoom({
 					userId,
 					sharedRoomTitle: data.sharedRoomTitle,
 				}),
+			).unwrap();
+
+			const shareRoomId = response.shareId;
+			router.push(
+				`/albumShareRoom/${shareRoomId}?sharedRoomTitle=${data.sharedRoomTitle}`,
 			);
-			router.push("/albums");
 		} catch (error) {
 			console.error("共有ルームの作成に失敗しました:", error);
 			throw new Error(
