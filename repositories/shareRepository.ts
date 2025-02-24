@@ -11,6 +11,7 @@ import {
 	where,
 	getDocs,
 	orderBy,
+	limit,
 } from "@firebase/firestore";
 import type {
 	CreateShareRoomRequest,
@@ -19,12 +20,15 @@ import type {
 
 export const shareRepository = {
 	async fetchShareRooms(userId: string) {
+		const ROOMS_PER_PAGE = 10;
+
 		try {
 			const col = collection(db, "shareID");
 			const q = query(
 				col,
 				where("users", "array-contains", userId),
 				orderBy("createdAt", "desc"),
+				limit(ROOMS_PER_PAGE),
 			);
 
 			const shareRoomSnapshot = await getDocs(q);
