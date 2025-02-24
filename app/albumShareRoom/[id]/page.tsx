@@ -8,7 +8,6 @@ import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
 import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
-import { Button } from "@nextui-org/react";
 import type { Album } from "@/types/albumTypes";
 import styles from "./styles.module.css";
 import Link from "next/link";
@@ -58,15 +57,14 @@ export default function AlbumShareRoomPage() {
 			<NavigationBar>{sharedRoomTitle}</NavigationBar>
 			<ShareRoomSidebarList />
 			<div className={styles.btnWrap}>
-				<Button
-					className={styles.uploadBtn}
-					as={Link}
-					color="primary"
-					variant="flat"
-					href="/albums/create"
+				<Link
+					href={{
+						pathname: "/albums/create",
+						query: { shareRoomId: shareRoomId },
+					}}
 				>
-					アルバム追加
-				</Button>
+					アルバム作成
+				</Link>
 			</div>
 			{loading ? (
 				<div className={styles.loading}>
