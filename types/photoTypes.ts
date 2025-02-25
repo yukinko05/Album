@@ -7,7 +7,7 @@ export interface Photo {
 }
 
 export interface Photos {
-	id: string;
+	photoId: string;
 	url: string;
 	albumId: string;
 }
@@ -19,5 +19,5 @@ export interface PhotosProps {
 export interface AddPhotosRequest {
 	albumId: string;
 	photosList: string[];
-	uid: string;
+	userId: string;
 }

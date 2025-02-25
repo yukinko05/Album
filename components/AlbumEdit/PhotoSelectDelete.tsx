@@ -11,7 +11,7 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 	const [selectedPhoto, setSelectedPhoto] = useState<string[]>([]);
 	const dispatch = useDispatch<AppDispatch>();
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
@@ -21,10 +21,9 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 		}
 
 		const fetchAlbumsData = async () => {
-			if (!uid) return;
+			if (!userId) return;
 			try {
-				setIsLoading(true);
-				const albums = await dispatch(getAlbums(uid)).unwrap();
+				const albums = await dispatch(getAlbums(userId)).unwrap();
 				albums.find((album) => album.albumId === albumId);
 				return albums;
 			} catch (error) {
@@ -40,7 +39,7 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 		};
 
 		fetchAlbumsData();
-	}, [albumId, dispatch, uid]);
+	}, [albumId, dispatch, userId]);
 
 	const handleCheckboxChange = (photoUrl: string) => {
 		setSelectedPhoto((prevSelected) =>
@@ -51,6 +50,7 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 	};
 
 	const handleUpdate = async () => {
+		setIsLoading(true);
 		const photosToDelete: Photo[] = photos.filter((photo) =>
 			selectedPhoto.includes(photo.photoUrl),
 		);

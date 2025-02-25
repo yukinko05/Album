@@ -29,7 +29,7 @@ export default function EditAlbumPage() {
 	const params = useParams();
 	const albumId = params.id;
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
@@ -39,12 +39,12 @@ export default function EditAlbumPage() {
 		albumData?.coverPhotoUrl,
 	);
 
-	if (!uid) return;
+	if (!userId) return;
 
 	useEffect(() => {
 		const fetchAlbumsData = async () => {
 			try {
-				const albums = await dispatch(getAlbums(uid)).unwrap();
+				const albums = await dispatch(getAlbums(userId)).unwrap();
 				const albumData = albums.find((album) => album.albumId === albumId);
 				setAlbumData(albumData);
 				setCoverPhotoUrl(albumData?.coverPhotoUrl);
@@ -68,7 +68,7 @@ export default function EditAlbumPage() {
 		};
 
 		fetchAlbumsData();
-	}, [uid, albumId]);
+	}, [userId, albumId]);
 
 	useEffect(() => {
 		if (albumData?.coverPhotoUrl) {
@@ -129,13 +129,13 @@ export default function EditAlbumPage() {
 					title: data.title,
 					coverPhotoUrl: coverPhotoUrl,
 				},
-				id: albumData.albumId,
+				albumId: albumData.albumId,
 			};
 
 			await dispatch(
 				updateAlbum({
 					data: requestData.data,
-					id: albumData.albumId,
+					albumId: albumData.albumId,
 				}),
 			).unwrap();
 			router.push("/albums");

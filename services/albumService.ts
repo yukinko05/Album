@@ -12,9 +12,9 @@ import type { DeleteAlbumRequest } from "@/types/albumTypes";
 
 export const getAlbums = createAsyncThunk<Album[], string>(
 	"albums/getAlbums",
-	async (uid) => {
+	async (shareRoomId) => {
 		try {
-			const albumsSnapshot = await albumRepository.fetchAlbums(uid);
+			const albumsSnapshot = await albumRepository.fetchAlbums(shareRoomId);
 			return albumsSnapshot.docs
 				.map((doc) => {
 					const data = doc.data();
@@ -27,9 +27,18 @@ export const getAlbums = createAsyncThunk<Album[], string>(
 
 					if (!data.createdAt || !formattedCreatedAt) return;
 
+					const updatedAt = data.updatedAt.toDate().toISOString();
+
+					const formattedUpdatedAt = updatedAt
+						? dayjs(updatedAt).format("YYYY-MM-DD")
+						: null;
+
+					if (!data.updatedAt || !formattedUpdatedAt) return;
+
 					return {
 						...data,
 						createdAt: formattedCreatedAt,
+						updatedAt: formattedUpdatedAt,
 						albumId: doc.id,
 					};
 				})
@@ -43,9 +52,9 @@ export const getAlbums = createAsyncThunk<Album[], string>(
 
 export const createAlbum = createAsyncThunk(
 	"album/createAlbum",
-	async ({ albumData, uid }: AlbumCreateInputs) => {
+	async ({ albumData, userId, shareRoomId }: AlbumCreateInputs) => {
 		try {
-			await albumRepository.createAlbum({ albumData, uid });
+			await albumRepository.createAlbum({ albumData, userId, shareRoomId });
 		} catch (error) {
 			console.error(error);
 			throw error;
@@ -79,9 +88,9 @@ export const editAlbumCover = createAsyncThunk(
 
 export const updateAlbum = createAsyncThunk(
 	"album/editAlbum",
-	async ({ data, id }: AlbumUpdateRequest) => {
+	async ({ data, albumId }: AlbumUpdateRequest) => {
 		try {
-			await albumRepository.updateAlbum({ data, id });
+			await albumRepository.updateAlbum({ data, albumId });
 		} catch (error) {
 			console.error(error);
 			throw error;

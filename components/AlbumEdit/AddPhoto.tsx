@@ -11,7 +11,7 @@ type Props = {
 
 export default function AddPhotos({ albumId }: Props) {
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 	const [photoData, setPhotoData] = useState<string[]>([]);
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -83,12 +83,12 @@ export default function AddPhotos({ albumId }: Props) {
 	};
 
 	const handleUpload = async () => {
-		if (uid === undefined) return;
+		if (userId === undefined) return;
 		const [isLoading, setIsLoading] = useState(false);
 
 		try {
 			setIsLoading(true);
-			await dispatch(addPhotos({ photosList: photoData, albumId, uid }));
+			await dispatch(addPhotos({ photosList: photoData, albumId, userId }));
 			alert("写真のアップロードが完了しました");
 		} catch (error) {
 			console.error("写真の追加に失敗しました:", error);

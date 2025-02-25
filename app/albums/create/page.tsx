@@ -6,28 +6,33 @@ import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { createAlbum } from "@/services/albumService";
-import { useEffect, useContext, useState } from "react";
+import { useEffect, useContext } from "react";
 import { FormFields } from "@/components/AlbumEdit/AlbumCreateForm/AlbumForm";
 import Compressor from "compressorjs";
 import { authContext } from "@/features/auth/AuthProvider";
-import { Spinner } from "@nextui-org/spinner";
+import { useSearchParams } from "next/navigation";
 
 export default function CreatePage() {
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
-	const [loading, setLoading] = useState(true);
+	const searchParams = useSearchParams();
+	const shareRoomId = searchParams.get("shareRoomId");
+	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
 
 	useEffect(() => {
-		if (uid) {
-			setLoading(false);
+		if (!userId) {
 			return;
 		}
 	}, []);
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		try {
+			if (!userId || shareRoomId === null) {
+				throw new Error("ユーザーIDまたはルームが見つかりません");
+			}
+
 			const fileList = data.file;
 			const files = Array.from(fileList);
 
@@ -77,8 +82,10 @@ export default function CreatePage() {
 				photos: compressedFiles as string[],
 			};
 
-			await dispatch(createAlbum({ albumData, uid: uid as string })).unwrap();
-			router.push("/albums");
+			await dispatch(createAlbum({ albumData, userId, shareRoomId })).unwrap();
+			router.push(
+				`/albumShareRoom/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`,
+			);
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");
@@ -87,17 +94,11 @@ export default function CreatePage() {
 
 	return (
 		<div>
-			{loading ? (
-				<div>
-					<Spinner />
-				</div>
-			) : (
-				<AlbumForm
-					onSubmit={onSubmit}
-					formTitle="アルバム作成"
-					submitButtonText="作成"
-				/>
-			)}
+			<AlbumForm
+				onSubmit={onSubmit}
+				formTitle="アルバム作成"
+				submitButtonText="作成"
+			/>
 		</div>
 	);
 }
