@@ -7,7 +7,7 @@ import * as zod from "zod";
 import { useContext } from "react";
 import { authContext } from "@/features/auth/AuthProvider";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import type { AppDispatch } from "@/store/store";
 import { shareRoomJoin } from "@/services/shareService";
 import { useRouter } from "next/navigation";
 
@@ -66,12 +66,17 @@ export default function ShareRoomJoinForm() {
 
 	return (
 		<div>
-			<form onSubmit={handleSubmit(handleShareRoomJoin)}>
-				<h1>シェアルームに参加</h1>
+			<form
+				onSubmit={handleSubmit(handleShareRoomJoin)}
+				aria-labelledby="form-title"
+			>
+				<h1 id="form-title">シェアルームに参加</h1>
 				<div>
 					<label htmlFor="sharedRoomId">シェアルームID</label>
 					<input id="sharedRoomId" {...register("sharedRoomId")} type="text" />
-					{errors.sharedRoomId && <span>{errors.sharedRoomId.message}</span>}
+					{errors.sharedRoomId && (
+						<span role="alert">{errors.sharedRoomId.message}</span>
+					)}
 				</div>
 				<Button type="submit" color="primary">
 					参加する

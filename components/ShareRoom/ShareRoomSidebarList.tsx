@@ -42,6 +42,7 @@ export default function ShareRoomSidebarList() {
 						pathname: `/albumShareRoom/${room.shareRoomId}`,
 						query: { sharedRoomTitle: room.sharedRoomTitle },
 					}}
+					aria-label={`シェアルーム: ${room.sharedRoomTitle}`}
 				>
 					{room.sharedRoomTitle}
 				</Link>

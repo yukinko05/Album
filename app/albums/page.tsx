@@ -10,6 +10,7 @@ import styles from "./styles.module.css";
 import type { AppDispatch } from "@/store/store";
 import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
+import SideBar from "@/components/SideBar";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
@@ -49,44 +50,7 @@ export default function Albums() {
 	return (
 		<div>
 			<NavigationBar />
-			<div className={styles.btnWrap}>
-				<Button
-					className={styles.uploadBtn}
-					as={Link}
-					color="primary"
-					variant="flat"
-					href="/albums/create"
-				>
-					アルバム追加
-				</Button>
-			</div>
-			{loading ? (
-				<div className={styles.loading}>
-					<Spinner />
-				</div>
-			) : (
-				<div className={styles.wrap}>
-					{albums.map((album) => (
-						<Link
-							href={{
-								pathname: `/albums/${album.albumId}`,
-								query: { albumTitle: album.title },
-							}}
-							key={album.albumId}
-						>
-							<div className={styles.card}>
-								<h2 className={styles.cardTitle}>{album.title}</h2>
-								<time className={styles.cardDate}>{album.createdAt}</time>
-								<img
-									className={styles.cardImg}
-									src={album.coverPhotoUrl ?? undefined}
-									alt={`${album.title} のアルバムカバー画像`}
-								/>
-							</div>
-						</Link>
-					))}
-				</div>
-			)}
+			<SideBar />
 		</div>
 	);
 }

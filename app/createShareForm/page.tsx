@@ -75,9 +75,10 @@ export default function CreateShareRoomForm() {
 						id="sharedRoomTitle"
 						{...register("sharedRoomTitle")}
 						type="text"
+						aria-describedby="sharedRoomTitle-error"
 					/>
 					{errors.sharedRoomTitle && (
-						<span>{errors.sharedRoomTitle.message}</span>
+						<span id="sharedRoomTitle-error">{errors.sharedRoomTitle.message}</span>
 					)}
 				</div>
 				<Button type="submit" color="primary">

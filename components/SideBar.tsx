@@ -23,6 +23,7 @@ export default function SideBar() {
 				href={{
 					pathname: "/createShareForm",
 				}}
+				aria-label="新しい共有ルームを作成"
 			>
 				ルーム作成
 			</Link>

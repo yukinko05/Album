@@ -1,7 +1,6 @@
 "use client";
 
 import NavigationBar from "@/components/NavigationBar";
-import ShareRoomSidebarList from "@/components/ShareRoom/ShareRoomSidebarList";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -13,6 +12,7 @@ import styles from "./styles.module.css";
 import Link from "next/link";
 import { Spinner } from "@nextui-org/spinner";
 import SideBar from "@/components/SideBar";
+import Image from "next/image";
 
 export default function AlbumShareRoomPage() {
 	const params = useParams();
@@ -87,10 +87,13 @@ export default function AlbumShareRoomPage() {
 							<div className={styles.card}>
 								<h2 className={styles.cardTitle}>{album.title}</h2>
 								<time className={styles.cardDate}>{album.createdAt}</time>
-								<img
+								<Image
 									className={styles.cardImg}
 									src={album.coverPhotoUrl ?? undefined}
 									alt={`${album.title} のアルバムカバー画像`}
+									width={300}
+									height={200}
+									priority={true}
 								/>
 							</div>
 						</Link>
