@@ -34,14 +34,6 @@ export const getShareRooms = createAsyncThunk<ShareRooms[], string>(
 						"YYYY-MM-DD",
 					);
 
-					if (
-						!dayjs(formattedCreatedAt).isValid() ||
-						!dayjs(formattedUpdatedAt).isValid()
-					) {
-						console.warn(`不正な日付フォーマット: ${doc.id}`);
-						return null;
-					}
-
 					return {
 						shareRoomId: doc.id,
 						...roomData,
