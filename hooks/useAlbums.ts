@@ -7,8 +7,8 @@ export const useAlbums = () => {
 	const albums = useSelector((state: RootState) => state.albums.albums);
 	const status = useSelector((state: RootState) => state.albums.status);
 
-	const getAlbumsAction = (data: { uid: string }) =>
-		dispatch(getAlbums(data.uid));
+	const getAlbumsAction = (data: { userId: string }) =>
+		dispatch(getAlbums(data.userId));
 
 	return { albums, status, getAlbumsAction };
 };

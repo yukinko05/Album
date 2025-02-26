@@ -8,12 +8,12 @@ import {
 } from "@nextui-org/react";
 import Link from "next/link";
 import { useContext } from "react";
-
 import { authContext } from "@/features/auth/AuthProvider";
+import type { ReactNode } from "react";
 
-const NavigationBar = () => {
+const NavigationBar = ({ children }: { children?: ReactNode }) => {
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 
 	return (
 		<Navbar position="static" isBordered maxWidth="full">
@@ -21,12 +21,11 @@ const NavigationBar = () => {
 				<Link className="font-bold text-inherit" href="/albums">
 					ALBUM
 				</Link>
+				{children && <h1>{children}</h1>}
 			</NavbarBrand>
 			<NavbarContent justify="end">
 				<NavbarItem>
-					{uid ? (
-						<SignOut />
-					) : (
+					{!userId && (
 						<Button as={Link} color="primary" href="/login" variant="flat">
 							ログイン
 						</Button>

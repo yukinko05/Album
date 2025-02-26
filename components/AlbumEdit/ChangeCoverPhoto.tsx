@@ -16,7 +16,7 @@ export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 	const [selectedPhoto, setSelectedPhoto] = useState("");
 	const dispatch = useDispatch<AppDispatch>();
 	const { currentUser } = useContext(authContext);
-	const uid = currentUser?.uid;
+	const userId = currentUser?.uid;
 
 	useEffect(() => {
 		if (!albumId) {
@@ -25,9 +25,9 @@ export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 		}
 
 		const fetchAlbumsData = async () => {
-			if (!uid) return;
+			if (!userId) return;
 			try {
-				const albums = await dispatch(getAlbums(uid)).unwrap();
+				const albums = await dispatch(getAlbums(userId)).unwrap();
 				const albumData = albums.find((album) => album.albumId === albumId);
 				if (albumData) {
 					setSelectedPhoto(albumData?.coverPhotoUrl);

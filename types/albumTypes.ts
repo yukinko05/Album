@@ -1,12 +1,11 @@
-import { Timestamp } from "firebase/firestore";
-
 export interface Album {
 	albumId: string;
 	title: string;
 	createdAt: string;
+	updatedAt: string;
 	coverPhotoUrl: string;
 	userId: string;
-	sharedWith: Array<string>;
+	shareRoomId: string;
 }
 
 export interface AlbumUpdateRequest {
@@ -14,7 +13,7 @@ export interface AlbumUpdateRequest {
 		title: string;
 		coverPhotoUrl: string;
 	};
-	id: string;
+	albumId: string;
 }
 
 export interface EditAlbumTitleRequest {
@@ -27,21 +26,13 @@ export interface EditAlbumCoverPhotoRequest {
 	albumId: string;
 }
 
-export interface CreateAlbumRequest {
-	id: string | null;
-	title: string;
-	coverPhotoUrl: string | null;
-	createdAt: Timestamp;
-	photos: string[];
-	uid: string;
-	sharedWith: Array<string>;
-}
 export interface AlbumCreateInputs {
 	albumData: {
 		title: string;
 		photos: string[];
 	};
-	uid: string;
+	userId: string;
+	shareRoomId: string;
 }
 
 export interface AlbumFormProps {

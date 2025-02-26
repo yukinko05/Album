@@ -34,7 +34,7 @@ export const photoRepository = {
 		return photosSnapshot;
 	},
 
-	async addPhotos({ photosList, albumId, uid }: AddPhotosRequest) {
+	async addPhotos({ photosList, albumId, userId }: AddPhotosRequest) {
 		let photos: string[] = [];
 
 		if (photosList) {
@@ -43,7 +43,7 @@ export const photoRepository = {
 					const photoId = crypto.randomUUID();
 					const storageRef = ref(
 						storage,
-						`photos/${uid}/${albumId}/${photoId}`,
+						`photos/${userId}/${albumId}/${photoId}`,
 					);
 					const photosSnapshot = await uploadString(
 						storageRef,
@@ -58,7 +58,7 @@ export const photoRepository = {
 				photos.map(async (photoUrl) => {
 					const photosDocumentData = {
 						albumId: albumId,
-						userId: uid,
+						userId,
 						photoUrl: photoUrl,
 						createdAt: serverTimestamp(),
 					};
