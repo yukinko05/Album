@@ -20,7 +20,7 @@ export default function AlbumShareRoomPage() {
 	const searchParams = useSearchParams();
 	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
 	const { currentUser } = useContext(authContext);
-	const [albums, setAlbums] = useState<Album[] | undefined>([]);
+	const [albums, setAlbums] = useState<Album[]>([]);
 	const [loading, setLoading] = useState(true);
 	const userId = currentUser?.uid;
 	const dispatch = useDispatch<AppDispatch>();
