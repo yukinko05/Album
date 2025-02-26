@@ -80,7 +80,7 @@ export default function AlbumShareRoomPage() {
 						<Link
 							href={{
 								pathname: `/albums/${album.albumId}`,
-								query: { albumTitle: album.title },
+								query: { albumTitle: album.title, shareRoomId: shareRoomId },
 							}}
 							key={album.albumId}
 						>
