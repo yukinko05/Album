@@ -64,6 +64,10 @@ export const shareRepository = {
 	},
 
 	async shareRoomJoin({ userId, sharedRoomId }: ShareRoomJoinRequest) {
+		if (!userId || !sharedRoomId) {
+			throw new Error("ユーザーIDまたは共有ルームIDが指定されていません");
+		}
+
 		try {
 			const shareRef = doc(db, "shareID", sharedRoomId);
 			const shareDoc = await getDoc(shareRef);
