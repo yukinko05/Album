@@ -1,5 +1,5 @@
 import { db, storage } from "@/lib/firebase";
-import { doc, setDoc } from "@firebase/firestore";
+import { doc, getDoc, setDoc } from "@firebase/firestore";
 import { auth } from "@/lib/firebase";
 import type { NewUserInput, LoginUserInput } from "@/types/userTypes";
 import {
@@ -67,6 +67,29 @@ export const userRepository = {
 		} catch (error) {
 			console.error("Error in userRepository.loginUser:", error);
 			throw error;
+		}
+	},
+
+	async fetchUser(userId: string) {
+		try {
+			const userRef = doc(db, "users", userId);
+			const userDoc = await getDoc(userRef);
+
+			if (!userDoc.exists()) {
+				throw new Error("指定されたユーザーが見つかりません");
+			}
+
+			return {
+				id: userDoc.id,
+				...userDoc.data(),
+			};
+		} catch (error) {
+			console.error("ユーザーデータの取得に失敗しました", error);
+			throw new Error(
+				`ユーザーデータの取得に失敗しました。 エラー: ${
+					error instanceof Error ? error.message : "不明なエラー"
+				}`,
+			);
 		}
 	},
 };
