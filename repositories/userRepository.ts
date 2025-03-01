@@ -79,9 +79,14 @@ export const userRepository = {
 				throw new Error("指定されたユーザーが見つかりません");
 			}
 
+			const userData = userDoc.data();
+
 			return {
-				id: userDoc.id,
-				...userDoc.data(),
+				userId: userDoc.id,
+				email: userData.email,
+				userName: userData.userName,
+				iconImg: userData.iconImg,
+				createdAt: userData.createdAt,
 			};
 		} catch (error) {
 			console.error("ユーザーデータの取得に失敗しました", error);
