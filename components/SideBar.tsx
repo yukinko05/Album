@@ -9,6 +9,7 @@ import SignOut from "@/app/signout/signout";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
 import { getUser } from "@/services/userService";
+import Image from "next/image";
 
 export default function SideBar() {
 	const { currentUser } = useContext(authContext);
@@ -39,7 +40,6 @@ export default function SideBar() {
 		fetchUserData();
 	}, [userId, dispatch]);
 
-	console.log(iconImg);
 	return (
 		<>
 			<ShareRoomSidebarList />
@@ -58,8 +58,18 @@ export default function SideBar() {
 			>
 				ルーム参加
 			</Link>
-			{/* TODO：ユーザー情報 */}
-			{userId && <SignOut />}
+			<div>
+				{iconImg && (
+					<Image
+						src={iconImg}
+						alt={`${userName}のプロフィールアイコン`}
+						width={30}
+						height={30}
+					/>
+				)}
+				<p>{userName}</p>
+				{userId && <SignOut />}
+			</div>
 		</>
 	);
 }
