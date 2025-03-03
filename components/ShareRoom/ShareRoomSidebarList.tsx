@@ -43,6 +43,7 @@ export default function ShareRoomSidebarList() {
 						query: { sharedRoomTitle: room.sharedRoomTitle },
 					}}
 					aria-label={`シェアルーム: ${room.sharedRoomTitle}`}
+					className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors"
 				>
 					{room.sharedRoomTitle}
 				</Link>

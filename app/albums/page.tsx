@@ -10,7 +10,7 @@ import styles from "./styles.module.css";
 import type { AppDispatch } from "@/store/store";
 import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
-import SideBar from "@/components/SideBar";
+import SideBar from "@/components/SideBar/SideBar";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);

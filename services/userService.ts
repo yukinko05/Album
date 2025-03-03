@@ -14,7 +14,7 @@ export const signUpUser = createAsyncThunk<
 			const newUser = await userRepository.signUpUser(userInputData);
 
 			return {
-				uid: newUser.uid,
+				userId: newUser.uid,
 				email: newUser.email,
 				userName: newUser.userName,
 				iconImg: newUser.iconImg,
@@ -66,6 +66,33 @@ export const loginUser = createAsyncThunk(
 				console.error("Unexpected error type:", error);
 			}
 			return rejectWithValue("予期せぬエラーが発生しました。");
+		}
+	},
+);
+
+export const getUser = createAsyncThunk<User, string>(
+	"users/getUser",
+	async (userId, { rejectWithValue }) => {
+		try {
+			const user: User = await userRepository.fetchUser(userId);
+			return {
+				userId: user.userId,
+				email: user.email,
+				userName: user.userName,
+				iconImg: user.iconImg,
+				createdAt: user.createdAt,
+			};
+		} catch (error) {
+			if (error instanceof Error) {
+				console.error("ユーザー情報の取得に失敗:", error);
+				return rejectWithValue(
+					`ユーザー情報の取得に失敗しました: ${error.message}`,
+				);
+			}
+			console.error("予期せぬエラーが発生:", error);
+			return rejectWithValue(
+				"ユーザー情報の取得中に予期せぬエラーが発生しました",
+			);
 		}
 	},
 );

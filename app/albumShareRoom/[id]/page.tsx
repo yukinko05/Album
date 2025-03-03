@@ -11,7 +11,7 @@ import type { Album } from "@/types/albumTypes";
 import styles from "./styles.module.css";
 import Link from "next/link";
 import { Spinner } from "@nextui-org/spinner";
-import SideBar from "@/components/SideBar";
+import SideBar from "@/components/SideBar/SideBar";
 import Image from "next/image";
 
 export default function AlbumShareRoomPage() {
