@@ -41,7 +41,7 @@ export default function SideBar() {
 	}, [userId, dispatch]);
 
 	return (
-		<div className="fixed left-0 top-0 h-screen w-64 bg-white shadow-lg">
+		<div className="fixed left-0 top-0 h-screen w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
 			<nav className="flex h-full flex-col p-4">
 				<div className="flex-1">
 					<ShareRoomSidebarList />
@@ -52,24 +52,23 @@ export default function SideBar() {
 							pathname: "/createShareForm",
 						}}
 						aria-label="新しい共有ルームを作成"
-						className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors"
+						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
 					>
 						ルーム作成
 					</Link>
 				</div>
-				<div className="border-b pt-2 pb-4">
+				<div className="pt-2 pb-4">
 					<Link
 						href={{
 							pathname: "/shareRoomJoinForm",
 						}}
-						className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors"
+						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
 					>
 						ルーム参加
 					</Link>
 				</div>
 
-
-				<div className="mb-4 flex items-center gap-2">
+				<div className="flex items-center gap-2 border-t py-4">
 					{iconImg && (
 						<Image
 							src={iconImg}
@@ -83,9 +82,9 @@ export default function SideBar() {
 						<p className="font-medium text-gray-800">{userName}</p>
 					</div>
 				</div>
-				<div className="mt-4 border-t pt-4">
+				<div className="border-t pt-7">
 					{userId && (
-						<div className="flex items-center justify-center">
+						<div className="flex items-center justify-center ">
 							<SignOut />
 						</div>
 					)}
