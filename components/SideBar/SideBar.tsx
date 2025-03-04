@@ -19,9 +19,11 @@ export default function SideBar() {
 	const [userName, setUserName] = useState<string>("");
 	const [iconImg, setIconImg] = useState<string | null>(null);
 
-	if (!userId) {
-		router.push("/login");
-	}
+	useEffect(() => {
+		if (!userId) {
+			router.push("/login");
+		}
+	}, [userId, router]);
 
 	useEffect(() => {
 		if (!userId) return;
