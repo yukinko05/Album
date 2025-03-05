@@ -85,7 +85,7 @@ export default function SideBar() {
 						<p className="text-gray-800">{userName}</p>
 					</div>
 				</div>
-				<div className="border-t pt-4">
+				<div className="border-t py-4">
 					{userId && (
 						<div className="flex justify-center">
 							<SignOut />
