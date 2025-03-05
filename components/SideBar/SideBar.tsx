@@ -43,12 +43,12 @@ export default function SideBar() {
 	}, [userId, dispatch]);
 
 	return (
-		<div className="fixed left-0 top-0 h-screen w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
+		<div className="fixed left-0 top-20 h-[calc(100vh-4rem)] w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
 			<nav className="flex h-full flex-col p-4">
 				<div className="flex-1">
 					<ShareRoomSidebarList />
 				</div>
-				<div className="space-y-2 border-t pt-4">
+				<div className="border-t pt-4">
 					<Link
 						href={{
 							pathname: "/createShareForm",
@@ -59,7 +59,7 @@ export default function SideBar() {
 						ルーム作成
 					</Link>
 				</div>
-				<div className="pt-2 pb-4">
+				<div className="pt-2">
 					<Link
 						href={{
 							pathname: "/shareRoomJoinForm",
@@ -82,12 +82,12 @@ export default function SideBar() {
 						/>
 					)}
 					<div>
-						<p className="font-medium text-gray-800">{userName}</p>
+						<p className="text-gray-800">{userName}</p>
 					</div>
 				</div>
-				<div className="border-t pt-7">
+				<div className="border-t pt-4">
 					{userId && (
-						<div className="flex items-center justify-center ">
+						<div className="flex justify-center">
 							<SignOut />
 						</div>
 					)}
