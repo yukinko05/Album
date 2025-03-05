@@ -1,6 +1,6 @@
 "use client";
 
-import NavigationBar from "@/components/NavigationBar";
+import Header from "@/components/Header";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,7 +8,6 @@ import type { AppDispatch } from "@/store/store";
 import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
 import type { Album } from "@/types/albumTypes";
-import styles from "./styles.module.css";
 import Link from "next/link";
 import { Spinner } from "@nextui-org/spinner";
 import SideBar from "@/components/SideBar/SideBar";
@@ -54,51 +53,64 @@ export default function AlbumShareRoomPage() {
 	}, [userId, dispatch]);
 
 	return (
-		<div>
-			<NavigationBar>{sharedRoomTitle}</NavigationBar>
-			<SideBar />
-			<div className={styles.btnWrap}>
-				<Link
-					href={{
-						pathname: "/albums/create",
-						query: {
-							sharedRoomTitle: sharedRoomTitle,
-							shareRoomId: shareRoomId,
-						},
-					}}
-				>
-					アルバム作成
-				</Link>
+		<div className="min-h-screen">
+			<Header>{sharedRoomTitle}</Header>
+			<div className="hidden md:block">
+				<SideBar />
 			</div>
 			{loading ? (
-				<div className={styles.loading}>
+				<div className="flex items-center justify-center h-full">
 					<Spinner />
 				</div>
 			) : (
-				<div className={styles.wrap}>
-					{albums?.map((album) => (
+				<main className="md:ml-64 px-4 md:px-6 pt-20 md:pt-4">
+					<div className="my-4 text-end md:mt-[80px]">
 						<Link
 							href={{
-								pathname: `/albums/${album.albumId}`,
-								query: { albumTitle: album.title, shareRoomId: shareRoomId },
+								pathname: "/albums/create",
+								query: {
+									sharedRoomTitle: sharedRoomTitle,
+									shareRoomId: shareRoomId,
+								},
 							}}
-							key={album.albumId}
+							className="inline-block rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-md"
 						>
-							<div className={styles.card}>
-								<h2 className={styles.cardTitle}>{album.title}</h2>
-								<time className={styles.cardDate}>{album.createdAt}</time>
-								<Image
-									className={styles.cardImg}
-									src={album.coverPhotoUrl ?? undefined}
-									alt={`${album.title} のアルバムカバー画像`}
-									width={300}
-									height={200}
-									priority={true}
-								/>
-							</div>
+							アルバム作成
 						</Link>
-					))}
-				</div>
+					</div>
+					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+						{albums?.map((album) => (
+							<Link
+								href={{
+									pathname: `/albums/${album.albumId}`,
+									query: { albumTitle: album.title, shareRoomId: shareRoomId },
+								}}
+								key={album.albumId}
+								className="block hover:opacity-60 transition-opacity"
+							>
+								<article className="bg-white rounded-lg shadow-md overflow-hidden">
+									<div className="relative aspect-[1]">
+										<Image
+											src={album.coverPhotoUrl ?? "/default-album.jpg"}
+											alt={`${album.title} のアルバムカバー画像`}
+											fill
+											className="object-cover"
+											priority={true}
+										/>
+									</div>
+									<div className="p-4">
+										<h2 className="font-medium text-gray-900 text-sm md:text-base mb-1 md:mb-2 truncate">
+											{album.title}
+										</h2>
+										<time className="text-xs md:text-sm text-gray-500">
+											{album.createdAt}
+										</time>
+									</div>
+								</article>
+							</Link>
+						))}
+					</div>
+				</main>
 			)}
 		</div>
 	);
