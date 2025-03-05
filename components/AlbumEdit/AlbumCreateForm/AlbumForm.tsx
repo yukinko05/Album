@@ -1,6 +1,6 @@
 "use client";
 
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/Header";
 import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";

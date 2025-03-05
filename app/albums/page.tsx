@@ -1,5 +1,5 @@
 "use client";
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/Header";
 import type { RootState } from "@/store/store";
 import { Button } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/spinner";

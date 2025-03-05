@@ -1,6 +1,6 @@
 "use client";
 
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/Header";
 import { signUpUser } from "@/services/userService";
 import type { AppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
