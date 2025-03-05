@@ -64,7 +64,7 @@ export default function AlbumShareRoomPage() {
 				</div>
 			) : (
 				<main className="md:ml-64 px-4 md:px-6 pt-20 md:pt-4">
-					<div className="my-4 text-end md:mt-[80px]">
+					<div className="my-4 text-end mt-[80px] sm:mt-[25px] md:mt-[90px]">
 						<Link
 							href={{
 								pathname: "/albums/create",

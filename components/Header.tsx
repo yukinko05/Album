@@ -8,12 +8,12 @@ const Header = ({ children }: { children?: ReactNode }) => {
 	const userId = currentUser?.uid;
 
 	return (
-		<header className="fixed top-0 left-0 right-0 z-50 h-20 border-b bg-white">
-			<div className="flex h-full items-center px-4">
-				<div className="absolute left-4">
+		<header className="fixed top-0 left-0 right-0 z-50 h-[150px] border-b bg-white sm:h-24">
+			<div className="flex flex-col h-full items-center justify-center sm:flex-row px-4">
+				<div className="sm:left-4 my-4 sm:pr-4">
 					<Link
 						href="/albums"
-						className="text-3xl font-bold text-gray-900 hover:text-gray-500 transition-colors"
+						className="text-4xl font-bold text-gray-900 hover:text-gray-500 transition-colors "
 					>
 						ALBUM
 					</Link>
