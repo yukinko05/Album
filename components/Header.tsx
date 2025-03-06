@@ -13,7 +13,7 @@ const Header = ({ children }: { children?: ReactNode }) => {
 				<div className="sm:left-4 my-4 sm:pr-4">
 					<Link
 						href="/albums"
-						className="text-4xl font-bold text-gray-900 hover:text-gray-500 transition-colors "
+						className="text-4xl font-bold text-gray-900 hover:text-gray-700 font-cherry"
 					>
 						ALBUM
 					</Link>
