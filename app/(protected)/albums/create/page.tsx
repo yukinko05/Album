@@ -84,7 +84,7 @@ export default function CreatePage() {
 
 			await dispatch(createAlbum({ albumData, userId, shareRoomId })).unwrap();
 			router.push(
-				`/albumShareRoom/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`,
+				`/rooms/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`,
 			);
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);

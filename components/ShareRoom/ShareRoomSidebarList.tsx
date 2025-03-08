@@ -39,11 +39,10 @@ export default function ShareRoomSidebarList() {
 	return (
 		<div>
 			{shareRooms.map((room) => (
-				<div className="border-b">
+				<div key={room.shareRoomId} className="border-b">
 					<Link
-						key={room.shareRoomId}
 						href={{
-							pathname: `/albumShareRoom/${room.shareRoomId}`,
+							pathname: `/rooms/${room.shareRoomId}`,
 							query: { sharedRoomTitle: room.sharedRoomTitle },
 						}}
 						aria-label={`シェアルーム: ${room.sharedRoomTitle}`}

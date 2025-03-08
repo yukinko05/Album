@@ -1,6 +1,5 @@
 "use client";
 
-import NavigationBar from "@/components/Header";
 import { signUpUser } from "@/services/userService";
 import type { AppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -92,104 +91,97 @@ export default function SignupPage() {
 		};
 		try {
 			await dispatch(signUpUser(userInputData)).unwrap();
-			router.push("/albums");
+			router.push("/dashboard");
 		} catch (error) {
 			console.error("SignUp failed:", error);
 		}
 	};
 
 	return (
-		<div>
-			<NavigationBar />
-			<div className={styles.wrap}>
-				<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
-					<h1 className={styles.title}>ALBUM</h1>
-					{errorMessage && (
-						<p className={styles.errorMessage}>{errorMessage}</p>
+		<div className={styles.wrap}>
+			<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
+				<h1 className={styles.title}>ALBUM</h1>
+				{errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+				<div className={styles.inputWrap}>
+					<label className={styles.label} htmlFor="name">
+						ニックネーム
+					</label>
+					<input
+						{...register("userName")}
+						className={errors.userName ? styles.inputError : styles.input}
+						type="text"
+					/>
+					{errors.userName && (
+						<span className={styles.errorMessage}>
+							{errors.userName.message}
+						</span>
 					)}
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="name">
-							ニックネーム
-						</label>
-						<input
-							{...register("userName")}
-							className={errors.userName ? styles.inputError : styles.input}
-							type="text"
-						/>
-						{errors.userName && (
-							<span className={styles.errorMessage}>
-								{errors.userName.message}
-							</span>
-						)}
-					</div>
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="email">
-							メールアドレス
-						</label>
-						<input
-							{...register("email")}
-							className={errors.email ? styles.inputError : styles.input}
-							type="text"
-						/>
-						{errors.email && (
-							<span className={styles.errorMessage}>
-								{errors.email.message}
-							</span>
-						)}
-					</div>
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="password">
-							パスワード
-						</label>
-						<input
-							{...register("password")}
-							className={errors.password ? styles.inputError : styles.input}
-							type="password"
-						/>
-						{errors.password && (
-							<span className={styles.errorMessage}>
-								{errors.password.message}
-							</span>
-						)}
+				</div>
+				<div className={styles.inputWrap}>
+					<label className={styles.label} htmlFor="email">
+						メールアドレス
+					</label>
+					<input
+						{...register("email")}
+						className={errors.email ? styles.inputError : styles.input}
+						type="text"
+					/>
+					{errors.email && (
+						<span className={styles.errorMessage}>{errors.email.message}</span>
+					)}
+				</div>
+				<div className={styles.inputWrap}>
+					<label className={styles.label} htmlFor="password">
+						パスワード
+					</label>
+					<input
+						{...register("password")}
+						className={errors.password ? styles.inputError : styles.input}
+						type="password"
+					/>
+					{errors.password && (
+						<span className={styles.errorMessage}>
+							{errors.password.message}
+						</span>
+					)}
 
-						<label className={styles.label} htmlFor="passwordConfirmation">
-							パスワード確認
-						</label>
-						<input
-							{...register("passwordConfirmation")}
-							className={
-								errors.passwordConfirmation ? styles.inputError : styles.input
-							}
-							type="password"
+					<label className={styles.label} htmlFor="passwordConfirmation">
+						パスワード確認
+					</label>
+					<input
+						{...register("passwordConfirmation")}
+						className={
+							errors.passwordConfirmation ? styles.inputError : styles.input
+						}
+						type="password"
+					/>
+					{errors.passwordConfirmation && (
+						<span className={styles.errorMessage}>
+							{errors.passwordConfirmation.message}
+						</span>
+					)}
+				</div>
+				<div className={styles.inputWrap}>
+					<label htmlFor="iconImg" className={styles.label}>
+						プロフィール写真をアップロード
+					</label>
+					<input
+						type="file"
+						id="iconImg"
+						name="iconImg"
+						accept=".jpg, .jpeg, .png"
+						onChange={handleChangeFile}
+					/>
+					{iconImg && (
+						<img
+							className={styles.viewImg}
+							src={iconImg}
+							alt="選択中のカバー写真"
 						/>
-						{errors.passwordConfirmation && (
-							<span className={styles.errorMessage}>
-								{errors.passwordConfirmation.message}
-							</span>
-						)}
-					</div>
-					<div className={styles.inputWrap}>
-						<label htmlFor="iconImg" className={styles.label}>
-							プロフィール写真をアップロード
-						</label>
-						<input
-							type="file"
-							id="iconImg"
-							name="iconImg"
-							accept=".jpg, .jpeg, .png"
-							onChange={handleChangeFile}
-						/>
-						{iconImg && (
-							<img
-								className={styles.viewImg}
-								src={iconImg}
-								alt="選択中のカバー写真"
-							/>
-						)}
-					</div>
-					<button className={styles.button}>新規登録する</button>
-				</form>
-			</div>
+					)}
+				</div>
+				<button className={styles.button}>新規登録する</button>
+			</form>
 		</div>
 	);
 }

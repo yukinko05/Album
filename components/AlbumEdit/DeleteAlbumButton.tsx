@@ -5,11 +5,14 @@ import { deleteAlbum } from "@/services/albumService";
 import { useRouter } from "next/navigation";
 import type { PhotosProps } from "@/types/photoTypes";
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
+	const searchParams = useSearchParams();
+	const shareRoomId = searchParams.get("shareRoomId");
 
 	if (!albumId) return null;
 
@@ -22,7 +25,13 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 		try {
 			setIsLoading(true);
 			await dispatch(deleteAlbum({ albumId, photos }));
-			router.push("/albums");
+
+			// 共有ルームIDがある場合はそのルームページに、なければダッシュボードに遷移
+			if (shareRoomId) {
+				router.push(`/rooms/${shareRoomId}`);
+			} else {
+				router.push("/dashboard");
+			}
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			let errorMessage = "アルバムの削除中にエラーが発生しました。";
@@ -36,6 +45,8 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 				errorMessage = "権限がありません。管理者に確認してください。";
 			}
 			alert(errorMessage);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

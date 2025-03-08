@@ -1,5 +1,4 @@
 "use client";
-import NavigationBar from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import styles from "./page.module.css";
@@ -7,12 +6,14 @@ import { getPhotos } from "@/services/photoService";
 import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import EditLinkButton from "@/app/albums/[id]/edit/albumEditButton";
+import EditLinkButton from "@/components/AlbumEdit/AlbumEditButton";
 import AlbumDeleteButton from "@/components/AlbumEdit/DeleteAlbumButton";
 import EditAlbumTitle from "@/components/AlbumEdit/EditAlbumTitle";
 import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 import AddPhoto from "@/components/AlbumEdit/AddPhoto";
 import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
+import Link from "next/link";
+import SideBar from "@/components/SideBar/SideBar";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -21,6 +22,7 @@ export default function AlbumPhotosPage() {
 	const albumTitle = searchParams.get("albumTitle");
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
+	const shareRoomId = searchParams.get("shareRoomId");
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -41,7 +43,23 @@ export default function AlbumPhotosPage() {
 
 	return (
 		<div>
-			<NavigationBar />
+			<div className="flex justify-between items-center mb-4">
+				<h1 className="text-2xl font-bold">{albumTitle}</h1>
+				<div className="flex space-x-2">
+					<Link
+						href={`/albums/${albumId}/edit`}
+						className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition-colors"
+					>
+						アルバム編集
+					</Link>
+					<Link
+						href={`/rooms/${shareRoomId}`}
+						className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition-colors"
+					>
+						ルームに戻る
+					</Link>
+				</div>
+			</div>
 			{loading ? (
 				<div className={styles.loading}>
 					<Spinner />

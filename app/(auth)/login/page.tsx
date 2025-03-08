@@ -1,7 +1,6 @@
 "use client";
 
 import styles from "./styles.module.css";
-import NavigationBar from "@/components/Header";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,57 +35,50 @@ export default function LoginPage() {
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
 			await dispatch(loginUser(data)).unwrap();
-			router.push("/albums");
+			router.push("/dashboard");
 		} catch (error) {
 			console.error("Login failed:", error);
 		}
 	};
 
 	return (
-		<div>
-			<NavigationBar />
-			<div className={styles.wrap}>
-				<form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
-					<h1 className={styles.title}>ログイン</h1>
-					{errorMessage && (
-						<p className={styles.errorMessage}>{errorMessage}</p>
+		<div className={styles.wrap}>
+			<form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
+				<h1 className={styles.title}>ログイン</h1>
+				{errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
+				<div className={styles.inputWrap}>
+					<label htmlFor="email" className={styles.label}>
+						メールアドレス
+					</label>
+					<input
+						type="text"
+						id="email"
+						className={styles.input}
+						{...register("email")}
+					/>
+					{errors.email && (
+						<span className={styles.errorMessage}>{errors.email.message}</span>
 					)}
-					<div className={styles.inputWrap}>
-						<label htmlFor="email" className={styles.label}>
-							メールアドレス
-						</label>
-						<input
-							type="text"
-							id="email"
-							className={styles.input}
-							{...register("email")}
-						/>
-						{errors.email && (
-							<span className={styles.errorMessage}>
-								{errors.email.message}
-							</span>
-						)}
-					</div>
+				</div>
 
-					<div className={styles.inputWrap}>
-						<label htmlFor="password" className={styles.label}>
-							パスワード
-						</label>
-						<input
-							type="password"
-							className={styles.input}
-							{...register("password")}
-						/>
-						{errors.password && (
-							<span className={styles.errorMessage}>
-								{errors.password.message}
-							</span>
-						)}
-					</div>
+				<div className={styles.inputWrap}>
+					<label htmlFor="password" className={styles.label}>
+						パスワード
+					</label>
+					<input
+						type="password"
+						className={styles.input}
+						{...register("password")}
+					/>
+					{errors.password && (
+						<span className={styles.errorMessage}>
+							{errors.password.message}
+						</span>
+					)}
+				</div>
 
-					<button className={styles.button}>ログインする</button>
-				</form>
-			</div>
+				<button className={styles.button}>ログインする</button>
+			</form>
 		</div>
 	);
 }

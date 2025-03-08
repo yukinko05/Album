@@ -34,10 +34,14 @@ export default function EditAlbumPage() {
 	const router = useRouter();
 	const [loading, setLoading] = useState(true);
 	const [albumData, setAlbumData] = useState<Album | undefined>();
-
 	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | undefined>(
 		albumData?.coverPhotoUrl,
 	);
+	const [shareRoomId, setShareRoomId] = useState<string | undefined>(
+		albumData?.shareRoomId,
+	);
+	const [error, setError] = useState<string | null>(null);
+	const [isLoading, setIsLoading] = useState(false);
 
 	if (!userId) return;
 
@@ -48,6 +52,7 @@ export default function EditAlbumPage() {
 				const albumData = albums.find((album) => album.albumId === albumId);
 				setAlbumData(albumData);
 				setCoverPhotoUrl(albumData?.coverPhotoUrl);
+				setShareRoomId(albumData?.shareRoomId);
 				if (albumData) {
 					setValue("title", albumData.title);
 				}
@@ -138,7 +143,13 @@ export default function EditAlbumPage() {
 					albumId: albumData.albumId,
 				}),
 			).unwrap();
-			router.push("/albums");
+
+			// 共有ルームIDがある場合はそのルームページに、なければダッシュボードに遷移
+			if (albumData.shareRoomId) {
+				router.push(`/rooms/${albumData.shareRoomId}?albumTitle=${data.title}`);
+			} else {
+				router.push("/dashboard");
+			}
 		} catch (error) {
 			console.error(error);
 		}
@@ -155,7 +166,7 @@ export default function EditAlbumPage() {
 				albumData && (
 					<div className={styles.wrap}>
 						<form
-							onSubmit={handleSubmit((data) => onSubmit(data))}
+							onSubmit={handleSubmit(onSubmit)}
 							className={styles.editForm}
 						>
 							<h1 className={styles.title}>アルバム編集</h1>
@@ -195,7 +206,7 @@ export default function EditAlbumPage() {
 									/>
 								)}
 							</div>
-							<Button type="submit" className={styles.button}>
+							<Button type="submit" className={styles.button} disabled={isLoading}>
 								更新
 							</Button>
 						</form>

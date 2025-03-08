@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/Header";
 import { useParams, useSearchParams } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -10,10 +9,9 @@ import { authContext } from "@/features/auth/AuthProvider";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
 import { Spinner } from "@nextui-org/spinner";
-import SideBar from "@/components/SideBar/SideBar";
 import Image from "next/image";
 
-export default function AlbumShareRoomPage() {
+export default function RoomPage() {
 	const params = useParams();
 	const shareRoomId = String(params.id);
 	const searchParams = useSearchParams();
@@ -50,36 +48,44 @@ export default function AlbumShareRoomPage() {
 		};
 
 		fetchAlbumsData();
-	}, [userId, dispatch]);
+	}, [userId, dispatch, shareRoomId]);
 
 	return (
-		<div className="min-h-screen">
-			<Header>{sharedRoomTitle}</Header>
-			<div className="hidden md:block">
-				<SideBar />
+		<div>
+			<div className="mb-6">
+				<h1 className="text-2xl font-bold mb-2">{sharedRoomTitle}</h1>
+				<p className="text-gray-600">共有ルームID: {shareRoomId}</p>
 			</div>
+
+			<div className="my-4 text-end">
+				<Link
+					href={{
+						pathname: "/albums/create",
+						query: {
+							sharedRoomTitle: sharedRoomTitle,
+							shareRoomId: shareRoomId,
+						},
+					}}
+					className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-md"
+				>
+					アルバム作成
+				</Link>
+			</div>
+
 			{loading ? (
-				<div className="flex items-center justify-center h-full">
+				<div className="flex items-center justify-center h-64">
 					<Spinner />
 				</div>
 			) : (
-				<main className="md:ml-64 px-4 md:px-6 pt-20 md:pt-4">
-					<div className="my-4 text-end mt-[80px] sm:mt-[25px] md:mt-[90px]">
-						<Link
-							href={{
-								pathname: "/albums/create",
-								query: {
-									sharedRoomTitle: sharedRoomTitle,
-									shareRoomId: shareRoomId,
-								},
-							}}
-							className="inline-block rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-md"
-						>
-							アルバム作成
-						</Link>
-					</div>
-					<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-						{albums?.map((album) => (
+				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
+					{albums?.length === 0 ? (
+						<div className="col-span-full bg-white rounded-lg shadow-md p-6 text-center">
+							<p className="text-gray-500 mb-4">
+								このルームにはまだアルバムがありません
+							</p>
+						</div>
+					) : (
+						albums?.map((album) => (
 							<Link
 								href={{
 									pathname: `/albums/${album.albumId}`,
@@ -99,7 +105,7 @@ export default function AlbumShareRoomPage() {
 										/>
 									</div>
 									<div className="p-4">
-										<h2 className="font-medium text-gray-900 text-sm md:text-base mb-1 md:mb-2 truncate">
+										<h2 className="font-medium text-gray-900 text-sm md:text-base mb-1 truncate">
 											{album.title}
 										</h2>
 										<time className="text-xs md:text-sm text-gray-500">
@@ -108,9 +114,9 @@ export default function AlbumShareRoomPage() {
 									</div>
 								</article>
 							</Link>
-						))}
-					</div>
-				</main>
+						))
+					)}
+				</div>
 			)}
 		</div>
 	);

@@ -40,7 +40,7 @@ export default function SideBar() {
 	}, [userId, dispatch, router]);
 
 	return (
-		<div className="fixed left-0 top-20 h-[calc(100vh-4rem)] w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
+		<div className="fixed left-0 h-full w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
 			<nav className="flex h-full flex-col p-4">
 				<div className="flex-1 overflow-y-auto scrollbar-hide">
 					<ShareRoomSidebarList />
@@ -49,24 +49,28 @@ export default function SideBar() {
 					<p className="text-sm font-bold text-gray-600 mb-2 pl-4">
 						ルーム操作
 					</p>
-					<Link
-						href={{
-							pathname: "/createShareForm",
-						}}
-						aria-label="新しい共有ルームを作成"
-						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-200 hover:text-blue-500 transition-colors"
-					>
-						ルーム作成
-					</Link>
-					<Link
-						href={{
-							pathname: "/shareRoomJoinForm",
-						}}
-						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-200 hover:text-blue-500 transition-colors"
-						aria-label="既存の共有ルームに参加"
-					>
-						ルーム参加
-					</Link>
+					<div className="border-t pt-4">
+						<Link
+							href={{
+								pathname: "/rooms/create",
+							}}
+							aria-label="新しい共有ルームを作成"
+							className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
+						>
+							ルーム作成
+						</Link>
+					</div>
+					<div className="pt-2">
+						<Link
+							href={{
+								pathname: "/rooms/join",
+							}}
+							className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
+							aria-label="既存の共有ルームに参加"
+						>
+							ルーム参加
+						</Link>
+					</div>
 				</div>
 				<div className="flex items-center gap-2 py-4">
 					{iconImg && (

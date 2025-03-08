@@ -45,56 +45,53 @@ export default function AlbumForm({
 	});
 
 	return (
-		<div>
-			<Header />
-			<div className={styles.wrap}>
-				<form
-					onSubmit={handleSubmit((data) => onSubmit(data))}
-					className={styles.createForm}
-				>
-					<h1 className={styles.title}>{formTitle}</h1>
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="title">
-							アルバム名
-						</label>
-						<input
-							{...register("title")}
-							className={errors.title ? styles.inputError : styles.input}
-							type="text"
-						/>
-						{errors.title && (
-							<span className={styles.errorMessage}>
-								{errors.title.message}
-							</span>
-						)}
-					</div>
+		<div className={styles.wrap}>
+			<form
+				onSubmit={handleSubmit((data) => onSubmit(data))}
+				className={styles.createForm}
+			>
+				<h1 className={styles.title}>{formTitle}</h1>
+				<div className={styles.inputWrap}>
+					<label className={styles.label} htmlFor="title">
+						アルバム名
+					</label>
+					<input
+						{...register("title")}
+						className={errors.title ? styles.inputError : styles.input}
+						type="text"
+					/>
+					{errors.title && (
+						<span className={styles.errorMessage}>
+							{errors.title.message}
+						</span>
+					)}
+				</div>
 
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="photo">
-							アルバム画像
-						</label>
-						<input
-							type="file"
-							id="photo"
-							{...register("file")}
-							accept="image/*"
-							className={styles.coverPhotoUrl}
-							multiple
+				<div className={styles.inputWrap}>
+					<label className={styles.label} htmlFor="photo">
+						アルバム画像
+					</label>
+					<input
+						type="file"
+						id="photo"
+						{...register("file")}
+						accept="image/*"
+						className={styles.coverPhotoUrl}
+						multiple
+					/>
+					{coverPhotoUrl && (
+						<img
+							className={styles.viewImg}
+							src={coverPhotoUrl}
+							alt="選択中のカバー写真"
 						/>
-						{coverPhotoUrl && (
-							<img
-								className={styles.viewImg}
-								src={coverPhotoUrl}
-								alt="選択中のカバー写真"
-							/>
-						)}
-					</div>
+					)}
+				</div>
 
-					<Button type="submit" className={styles.button}>
-						{submitButtonText}
-					</Button>
-				</form>
-			</div>
+				<Button type="submit" className={styles.button}>
+					{submitButtonText}
+				</Button>
+			</form>
 		</div>
 	);
 }
