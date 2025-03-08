@@ -1,6 +1,6 @@
 "use client";
 
-import NavigationBar from "@/components/Header";
+import Header from "@/components/Header";
 import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
@@ -46,7 +46,7 @@ export default function AlbumForm({
 
 	return (
 		<div>
-			<NavigationBar />
+			<Header />
 			<div className={styles.wrap}>
 				<form
 					onSubmit={handleSubmit((data) => onSubmit(data))}
