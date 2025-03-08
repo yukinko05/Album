@@ -12,7 +12,6 @@ import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 import AddPhoto from "@/components/AlbumEdit/AddPhoto";
 import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 import Link from "next/link";
-import SideBar from "@/components/SideBar/SideBar";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -59,22 +58,14 @@ export default function AlbumPhotosPage() {
 					</Link>
 				</div>
 			</div>
+
 			{loading ? (
 				<div className="flex justify-center pt-24">
 					<Spinner />
 				</div>
 			) : (
-				<div className="flex flex-wrap gap-8 mt-8 px-6">
-					<div>
-						<h1>{albumTitle}</h1>
-					</div>
-					<EditAlbumTitle albumId={albumId} currentTitle={albumTitle} />
-					<AlbumDeleteButton albumId={albumId} photos={photos} />
-					<EditLinkButton albumId={albumId} />
-					<ChangeCoverPhoto albumId={albumId} photos={photos} />
-					<AddPhoto albumId={albumId} />
-					<PhotoSelectDelete albumId={albumId} photos={photos} />
-					<div>
+				<div>
+					<div className="flex flex-wrap gap-8 mt-8 px-6">
 						{photos.map((photo) => (
 							<img
 								key={photo.photoId}
@@ -91,6 +82,16 @@ export default function AlbumPhotosPage() {
 							/>
 						))}
 					</div>
+					<div className="mt-8 px-6">
+						<EditAlbumTitle albumId={albumId} currentTitle={albumTitle} />
+						<AlbumDeleteButton albumId={albumId} photos={photos} />
+						<EditLinkButton albumId={albumId} />
+						<ChangeCoverPhoto albumId={albumId} photos={photos} />
+						<AddPhoto albumId={albumId} />
+						<PhotoSelectDelete albumId={albumId} photos={photos} />
+					</div>
+
+
 				</div>
 			)}
 		</div>
