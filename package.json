@@ -10,13 +10,10 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
-		"@mui/icons-material": "^5.16.1",
 		"@reduxjs/toolkit": "^2.2.6",
-		"axios": "^1.7.7",
 		"compressorjs": "^1.2.1",
 		"dayjs": "^1.11.13",
 		"firebase": "^11.1.0",
-		"geist": "^1.2.1",
 		"json-server": "v0.17.4",
 		"next": "latest",
 		"react": "18.2.0",
