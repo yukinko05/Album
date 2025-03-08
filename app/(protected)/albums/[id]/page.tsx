@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
-import styles from "./page.module.css";
 import { getPhotos } from "@/services/photoService";
 import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
@@ -61,11 +60,11 @@ export default function AlbumPhotosPage() {
 				</div>
 			</div>
 			{loading ? (
-				<div className={styles.loading}>
+				<div className="flex justify-center pt-24">
 					<Spinner />
 				</div>
 			) : (
-				<div className={styles.warp}>
+				<div className="flex flex-wrap gap-8 mt-8 px-6">
 					<div>
 						<h1>{albumTitle}</h1>
 					</div>
@@ -79,7 +78,7 @@ export default function AlbumPhotosPage() {
 						{photos.map((photo) => (
 							<img
 								key={photo.photoId}
-								className={styles.cardImg}
+								className="rounded-2xl w-[300px] h-[300px]"
 								src={photo.photoUrl}
 								alt={`${albumTitle}のアルバム内の写真`}
 								width={100}

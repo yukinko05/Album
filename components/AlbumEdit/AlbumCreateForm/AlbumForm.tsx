@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
-import styles from "./styles.module.css";
 
 type AlbumFormProps = {
 	onSubmit: SubmitHandler<FormFields>;
@@ -44,28 +43,29 @@ export default function AlbumForm({
 	});
 
 	return (
-		<div className={styles.wrap}>
+		<div className="h-[calc(100vh-65px)] flex items-center justify-center bg-black bg-opacity-70">
 			<form
 				onSubmit={handleSubmit((data) => onSubmit(data))}
-				className={styles.createForm}
+				className="w-[560px] rounded-2xl p-16 bg-white flex flex-col gap-4"
 			>
-				<h1 className={styles.title}>{formTitle}</h1>
-				<div className={styles.inputWrap}>
-					<label className={styles.label} htmlFor="title">
+				<h1 className="text-4xl font-bold text-center">{formTitle}</h1>
+				<div className="flex flex-col gap-1">
+					<label className="text-xs text-gray-700 mt-2" htmlFor="title">
 						アルバム名
 					</label>
 					<input
 						{...register("title")}
-						className={errors.title ? styles.inputError : styles.input}
+						className={`bg-gray-200 bg-opacity-20 rounded-2xl h-[42px] px-3 ${errors.title ? "outline-red-500" : "outline-gray-900"
+							}`}
 						type="text"
 					/>
 					{errors.title && (
-						<span className={styles.errorMessage}>{errors.title.message}</span>
+						<span className="text-red-500 text-xs">{errors.title.message}</span>
 					)}
 				</div>
 
-				<div className={styles.inputWrap}>
-					<label className={styles.label} htmlFor="photo">
+				<div className="flex flex-col gap-1">
+					<label className="text-xs text-gray-700 mt-2" htmlFor="photo">
 						アルバム画像
 					</label>
 					<input
@@ -73,19 +73,19 @@ export default function AlbumForm({
 						id="photo"
 						{...register("file")}
 						accept="image/*"
-						className={styles.coverPhotoUrl}
+						className="text-xs"
 						multiple
 					/>
 					{coverPhotoUrl && (
 						<img
-							className={styles.viewImg}
+							className="h-[100px] w-[100px]"
 							src={coverPhotoUrl}
 							alt="選択中のカバー写真"
 						/>
 					)}
 				</div>
 
-				<button type="submit" className={styles.button}>
+				<button type="submit" className="bg-gray-900 text-white rounded-2xl py-2 mt-1 h-12">
 					{submitButtonText}
 				</button>
 			</form>

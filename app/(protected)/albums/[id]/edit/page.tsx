@@ -12,7 +12,6 @@ import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
 import { AppDispatch } from "@/store/store";
 import type { Album, AlbumUpdateRequest } from "@/types/albumTypes";
-import styles from "./page.module.css";
 import Spinner from "@/components/Spinner";
 import Compressor from "compressorjs";
 import { updateAlbum } from "@/services/albumService";
@@ -158,32 +157,33 @@ export default function EditAlbumPage() {
 		<div>
 			<NavigationBar />
 			{loading ? (
-				<div className={styles.loading}>
+				<div className="flex items-center justify-center">
 					<Spinner size="lg" />
 				</div>
 			) : (
 				albumData && (
-					<div className={styles.wrap}>
-						<form onSubmit={handleSubmit(onSubmit)} className={styles.editForm}>
-							<h1 className={styles.title}>アルバム編集</h1>
-							<div className={styles.inputWrap}>
-								<label className={styles.label} htmlFor="title">
+					<div className="h-[calc(100vh-65px)] flex items-center justify-center bg-black bg-opacity-70">
+						<form onSubmit={handleSubmit(onSubmit)} className="w-[560px] rounded-2xl p-16 bg-white flex flex-col gap-4">
+							<h1 className="text-4xl font-bold text-center">アルバム編集</h1>
+							<div className="flex flex-col gap-1">
+								<label className="text-xs text-gray-700 mt-2" htmlFor="title">
 									アルバム名
 								</label>
 								<input
 									{...register("title")}
-									className={errors.title ? styles.inputError : styles.input}
+									className={`bg-gray-200 bg-opacity-20 rounded-2xl h-[42px] px-3 ${errors.title ? "outline-red-500" : "outline-gray-900"
+										}`}
 									type="text"
 								/>
 								{errors.title && (
-									<span className={styles.errorMessage}>
+									<span className="text-red-500 text-xs">
 										{errors.title.message}
 									</span>
 								)}
 							</div>
 
-							<div className={styles.inputWrap}>
-								<label className={styles.label} htmlFor="photo">
+							<div className="flex flex-col gap-1">
+								<label className="text-xs text-gray-700 mt-2" htmlFor="photo">
 									アルバム画像
 								</label>
 								<input
@@ -192,11 +192,11 @@ export default function EditAlbumPage() {
 									{...register("file")}
 									accept="image/*"
 									onChange={handleFileChange}
-									className={styles.coverPhotoUrl}
+									className="text-xs"
 								/>
 								{coverPhotoUrl && (
 									<img
-										className={styles.viewImg}
+										className="h-[100px] w-[100px]"
 										src={coverPhotoUrl}
 										alt="選択中のカバー写真"
 									/>
@@ -204,7 +204,7 @@ export default function EditAlbumPage() {
 							</div>
 							<button
 								type="submit"
-								className={styles.button}
+								className="bg-gray-900 text-white rounded-2xl py-2 mt-1 h-12"
 								disabled={isLoading}
 							>
 								更新

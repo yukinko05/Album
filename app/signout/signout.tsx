@@ -2,7 +2,6 @@
 
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import styles from "./styles.module.css";
 import { useState } from "react";
 
 export default function SignOut() {
@@ -25,7 +24,7 @@ export default function SignOut() {
 	};
 
 	return (
-		<button onClick={handleSubmit} className={styles.button}>
+		<button onClick={handleSubmit} className="w-full">
 			{isLoading ? "ログアウト中..." : "ログアウト"}
 		</button>
 	);

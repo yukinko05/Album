@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "./styles.module.css";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,42 +41,42 @@ export default function LoginPage() {
 	};
 
 	return (
-		<div className={styles.wrap}>
-			<form className={styles.loginForm} onSubmit={handleSubmit(onSubmit)}>
-				<h1 className={styles.title}>ログイン</h1>
-				{errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-				<div className={styles.inputWrap}>
-					<label htmlFor="email" className={styles.label}>
+		<div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8">
+			<form className="w-full max-w-md p-8 bg-white rounded-lg shadow-md" onSubmit={handleSubmit(onSubmit)}>
+				<h1 className="text-2xl font-bold mb-6 text-center">ログイン</h1>
+				{errorMessage && <p className="text-red-600 text-sm mt-2">{errorMessage}</p>}
+				<div className="mb-6">
+					<label htmlFor="email" className="block mb-2 font-medium">
 						メールアドレス
 					</label>
 					<input
 						type="text"
 						id="email"
-						className={styles.input}
+						className="w-full p-3 border border-gray-200 rounded-md"
 						{...register("email")}
 					/>
 					{errors.email && (
-						<span className={styles.errorMessage}>{errors.email.message}</span>
+						<span className="text-red-600 text-sm mt-2">{errors.email.message}</span>
 					)}
 				</div>
 
-				<div className={styles.inputWrap}>
-					<label htmlFor="password" className={styles.label}>
+				<div className="mb-6">
+					<label htmlFor="password" className="block mb-2 font-medium">
 						パスワード
 					</label>
 					<input
 						type="password"
-						className={styles.input}
+						className="w-full p-3 border border-gray-200 rounded-md"
 						{...register("password")}
 					/>
 					{errors.password && (
-						<span className={styles.errorMessage}>
+						<span className="text-red-600 text-sm mt-2">
 							{errors.password.message}
 						</span>
 					)}
 				</div>
 
-				<button className={styles.button}>ログインする</button>
+				<button className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors">ログインする</button>
 			</form>
 		</div>
 	);

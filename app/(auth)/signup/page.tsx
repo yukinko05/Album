@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
-import styles from "./styles.module.css";
 import type { RootState } from "@/store/store";
 import Compressor from "compressorjs";
 import { useState } from "react";
@@ -98,71 +97,73 @@ export default function SignupPage() {
 	};
 
 	return (
-		<div className={styles.wrap}>
-			<form onSubmit={handleSubmit(onSubmit)} className={styles.signupForm}>
-				<h1 className={styles.title}>ALBUM</h1>
-				{errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
-				<div className={styles.inputWrap}>
-					<label className={styles.label} htmlFor="name">
+		<div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8">
+			<form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg p-8 bg-white rounded-lg shadow-md">
+				<h1 className="text-2xl font-bold mb-6 text-center">ALBUM</h1>
+				{errorMessage && <p className="text-red-600 text-sm mt-2">{errorMessage}</p>}
+				<div className="mb-6">
+					<label className="block mb-2 font-medium" htmlFor="name">
 						ニックネーム
 					</label>
 					<input
 						{...register("userName")}
-						className={errors.userName ? styles.inputError : styles.input}
+						className={`w-full p-3 border rounded-md ${errors.userName ? "border-red-600" : "border-gray-200"
+							}`}
 						type="text"
 					/>
 					{errors.userName && (
-						<span className={styles.errorMessage}>
+						<span className="text-red-600 text-sm mt-2">
 							{errors.userName.message}
 						</span>
 					)}
 				</div>
-				<div className={styles.inputWrap}>
-					<label className={styles.label} htmlFor="email">
+				<div className="mb-6">
+					<label className="block mb-2 font-medium" htmlFor="email">
 						メールアドレス
 					</label>
 					<input
 						{...register("email")}
-						className={errors.email ? styles.inputError : styles.input}
+						className={`w-full p-3 border rounded-md ${errors.email ? "border-red-600" : "border-gray-200"
+							}`}
 						type="text"
 					/>
 					{errors.email && (
-						<span className={styles.errorMessage}>{errors.email.message}</span>
+						<span className="text-red-600 text-sm mt-2">{errors.email.message}</span>
 					)}
 				</div>
-				<div className={styles.inputWrap}>
-					<label className={styles.label} htmlFor="password">
+				<div className="mb-6">
+					<label className="block mb-2 font-medium" htmlFor="password">
 						パスワード
 					</label>
 					<input
 						{...register("password")}
-						className={errors.password ? styles.inputError : styles.input}
+						className={`w-full p-3 border rounded-md ${errors.password ? "border-red-600" : "border-gray-200"
+							}`}
 						type="password"
 					/>
 					{errors.password && (
-						<span className={styles.errorMessage}>
+						<span className="text-red-600 text-sm mt-2">
 							{errors.password.message}
 						</span>
 					)}
 
-					<label className={styles.label} htmlFor="passwordConfirmation">
+					<label className="block mb-2 font-medium mt-4" htmlFor="passwordConfirmation">
 						パスワード確認
 					</label>
 					<input
 						{...register("passwordConfirmation")}
-						className={
-							errors.passwordConfirmation ? styles.inputError : styles.input
-						}
+						className={`w-full p-3 border rounded-md ${errors.passwordConfirmation ? "border-red-600" : "border-gray-200"
+							}`}
 						type="password"
 					/>
 					{errors.passwordConfirmation && (
-						<span className={styles.errorMessage}>
+						<span className="text-red-600 text-sm mt-2">
 							{errors.passwordConfirmation.message}
 						</span>
 					)}
 				</div>
-				<div className={styles.inputWrap}>
-					<label htmlFor="iconImg" className={styles.label}>
+				<div className="mb-6">
+					<label htmlFor="iconImg" className="block mb-2 font-medium">
 						プロフィール写真をアップロード
 					</label>
 					<input
@@ -174,13 +175,13 @@ export default function SignupPage() {
 					/>
 					{iconImg && (
 						<img
-							className={styles.viewImg}
+							className="max-w-full h-auto mt-2 rounded-md"
 							src={iconImg}
 							alt="選択中のカバー写真"
 						/>
 					)}
 				</div>
-				<button className={styles.button}>新規登録する</button>
+				<button className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors">新規登録する</button>
 			</form>
 		</div>
 	);
