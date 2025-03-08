@@ -3,14 +3,14 @@
 import Header from "@/components/Header";
 
 export default function AuthLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  return (
-    <div className="min-h-screen">
-      <Header />
-      <main className="pt-16">{children}</main>
-    </div>
-  );
+	return (
+		<div className="min-h-screen">
+			<Header />
+			<main className="pt-16">{children}</main>
+		</div>
+	);
 }

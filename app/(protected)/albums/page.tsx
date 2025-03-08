@@ -1,8 +1,6 @@
 "use client";
 import NavigationBar from "@/components/Header";
 import type { RootState } from "@/store/store";
-import { Button } from "@nextui-org/react";
-import { Spinner } from "@nextui-org/spinner";
 import Link from "next/link";
 import React, { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

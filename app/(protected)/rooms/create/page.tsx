@@ -84,8 +84,9 @@ export default function CreateRoomPage() {
 							type="text"
 							id="sharedRoomTitle"
 							{...register("sharedRoomTitle")}
-							className={`w-full px-3 py-2 border rounded-md ${errors.sharedRoomTitle ? "border-red-500" : "border-gray-300"
-								}`}
+							className={`w-full px-3 py-2 border rounded-md ${
+								errors.sharedRoomTitle ? "border-red-500" : "border-gray-300"
+							}`}
 							placeholder="家族アルバム"
 						/>
 						{errors.sharedRoomTitle && (

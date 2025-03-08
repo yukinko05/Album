@@ -8,7 +8,7 @@ import { getAlbums } from "@/services/albumService";
 import { authContext } from "@/features/auth/AuthProvider";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/Spinner";
 import Image from "next/image";
 
 export default function RoomPage() {
@@ -54,7 +54,6 @@ export default function RoomPage() {
 		<div>
 			<div className="mb-6">
 				<h1 className="text-2xl font-bold mb-2">{sharedRoomTitle}</h1>
-				<p className="text-gray-600">共有ルームID: {shareRoomId}</p>
 			</div>
 
 			<div className="my-4 text-end">
@@ -74,7 +73,7 @@ export default function RoomPage() {
 
 			{loading ? (
 				<div className="flex items-center justify-center h-64">
-					<Spinner />
+					<Spinner size="lg" />
 				</div>
 			) : (
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">

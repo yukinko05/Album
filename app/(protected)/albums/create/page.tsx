@@ -83,9 +83,7 @@ export default function CreatePage() {
 			};
 
 			await dispatch(createAlbum({ albumData, userId, shareRoomId })).unwrap();
-			router.push(
-				`/rooms/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`,
-			);
+			router.push(`/rooms/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`);
 		} catch (error) {
 			console.error(error instanceof Error ? error.message : error);
 			alert("エラーが発生しました。再度お試しください。");

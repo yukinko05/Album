@@ -11,13 +11,11 @@
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
 		"@mui/icons-material": "^5.16.1",
-		"@nextui-org/react": "^2.4.2",
 		"@reduxjs/toolkit": "^2.2.6",
 		"axios": "^1.7.7",
 		"compressorjs": "^1.2.1",
 		"dayjs": "^1.11.13",
 		"firebase": "^11.1.0",
-		"framer-motion": "^11.2.11",
 		"geist": "^1.2.1",
 		"json-server": "v0.17.4",
 		"next": "latest",

@@ -3,7 +3,6 @@
 import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import styles from "./styles.module.css";
-import { Button } from "@nextui-org/react";
 import { useState } from "react";
 
 export default function SignOut() {
@@ -26,15 +25,8 @@ export default function SignOut() {
 	};
 
 	return (
-		<Button
-			onClick={handleSubmit}
-			color="primary"
-			variant="flat"
-			isLoading={isLoading}
-			isDisabled={isLoading}
-			className={styles.button}
-		>
+		<button onClick={handleSubmit} className={styles.button}>
 			{isLoading ? "ログアウト中..." : "ログアウト"}
-		</Button>
+		</button>
 	);
 }

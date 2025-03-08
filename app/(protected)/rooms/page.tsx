@@ -7,7 +7,7 @@ import type { AppDispatch } from "@/store/store";
 import { getShareRooms } from "@/services/shareService";
 import type { ShareRooms } from "@/types/shareTypes";
 import Link from "next/link";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/Spinner";
 
 export default function RoomsPage() {
 	const { currentUser } = useContext(authContext);

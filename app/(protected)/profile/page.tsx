@@ -3,7 +3,7 @@
 import { useContext, useEffect, useState } from "react";
 import { authContext } from "@/features/auth/AuthProvider";
 import Image from "next/image";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/Spinner";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/store/store";
 import { getUser } from "@/services/userService";

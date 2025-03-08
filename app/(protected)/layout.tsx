@@ -7,29 +7,29 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 export default function ProtectedLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  const { currentUser } = useContext(authContext);
-  const router = useRouter();
+	const { currentUser } = useContext(authContext);
+	const router = useRouter();
 
-  useEffect(() => {
-    if (!currentUser) {
-      router.push("/login");
-    }
-  }, [currentUser, router]);
+	useEffect(() => {
+		if (!currentUser) {
+			router.push("/login");
+		}
+	}, [currentUser, router]);
 
-  if (!currentUser) {
-    return null; // ログインページにリダイレクト中は何も表示しない
-  }
+	if (!currentUser) {
+		return null; // ログインページにリダイレクト中は何も表示しない
+	}
 
-  return (
-    <div className="min-h-screen">
-      <div className="hidden md:block">
-        <SideBar />
-      </div>
-      <main className="md:ml-64 px-8 pt-8">{children}</main>
-    </div>
-  );
+	return (
+		<div className="min-h-screen">
+			<div className="hidden md:block">
+				<SideBar />
+			</div>
+			<main className="md:ml-64 px-8 pt-8">{children}</main>
+		</div>
+	);
 }

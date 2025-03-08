@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/Spinner";
 import styles from "./page.module.css";
 import { getPhotos } from "@/services/photoService";
 import type { Photo } from "@/types/photoTypes";

@@ -2,7 +2,6 @@
 
 import NavigationBar from "@/components/Header";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/react";
 import { useState, useEffect, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -14,7 +13,7 @@ import { authContext } from "@/features/auth/AuthProvider";
 import { AppDispatch } from "@/store/store";
 import type { Album, AlbumUpdateRequest } from "@/types/albumTypes";
 import styles from "./page.module.css";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/Spinner";
 import Compressor from "compressorjs";
 import { updateAlbum } from "@/services/albumService";
 
@@ -160,15 +159,12 @@ export default function EditAlbumPage() {
 			<NavigationBar />
 			{loading ? (
 				<div className={styles.loading}>
-					<Spinner />
+					<Spinner size="lg" />
 				</div>
 			) : (
 				albumData && (
 					<div className={styles.wrap}>
-						<form
-							onSubmit={handleSubmit(onSubmit)}
-							className={styles.editForm}
-						>
+						<form onSubmit={handleSubmit(onSubmit)} className={styles.editForm}>
 							<h1 className={styles.title}>アルバム編集</h1>
 							<div className={styles.inputWrap}>
 								<label className={styles.label} htmlFor="title">
@@ -206,9 +202,13 @@ export default function EditAlbumPage() {
 									/>
 								)}
 							</div>
-							<Button type="submit" className={styles.button} disabled={isLoading}>
+							<button
+								type="submit"
+								className={styles.button}
+								disabled={isLoading}
+							>
 								更新
-							</Button>
+							</button>
 						</form>
 					</div>
 				)

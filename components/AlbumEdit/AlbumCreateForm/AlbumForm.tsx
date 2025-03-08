@@ -3,7 +3,6 @@
 import Header from "@/components/Header";
 import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
@@ -61,9 +60,7 @@ export default function AlbumForm({
 						type="text"
 					/>
 					{errors.title && (
-						<span className={styles.errorMessage}>
-							{errors.title.message}
-						</span>
+						<span className={styles.errorMessage}>{errors.title.message}</span>
 					)}
 				</div>
 
@@ -88,9 +85,9 @@ export default function AlbumForm({
 					)}
 				</div>
 
-				<Button type="submit" className={styles.button}>
+				<button type="submit" className={styles.button}>
 					{submitButtonText}
-				</Button>
+				</button>
 			</form>
 		</div>
 	);

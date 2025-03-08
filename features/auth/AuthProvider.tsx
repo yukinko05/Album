@@ -3,7 +3,7 @@
 import { createContext, useEffect, useState, type ReactNode } from "react";
 import { auth } from "@/lib/firebase";
 import type { User } from "firebase/auth";
-import { Spinner } from "@nextui-org/spinner";
+import Spinner from "@/components/Spinner";
 
 type AuthContextProps = {
 	currentUser: User | null;
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 	if (!isAuthStateChecking) {
 		return (
-			<div className="flex justify-center items-center min-h-screen">
+			<div className="flex items-center justify-center h-screen">
 				<Spinner size="lg" />
 			</div>
 		);
