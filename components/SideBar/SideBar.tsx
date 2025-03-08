@@ -23,13 +23,10 @@ export default function SideBar() {
 		if (!userId) {
 			router.push("/login");
 		}
-	}, [userId, router]);
-
-	useEffect(() => {
-		if (!userId) return;
 
 		const fetchUserData = async () => {
 			try {
+				if (!userId) return;
 				const response = await dispatch(getUser(userId)).unwrap();
 
 				setUserName(response.userName);
@@ -40,7 +37,7 @@ export default function SideBar() {
 		};
 
 		fetchUserData();
-	}, [userId, dispatch]);
+	}, [userId, dispatch, router]);
 
 	return (
 		<div className="fixed left-0 top-20 h-[calc(100vh-4rem)] w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">

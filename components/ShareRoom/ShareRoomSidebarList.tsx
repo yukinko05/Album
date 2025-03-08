@@ -14,13 +14,12 @@ export default function ShareRoomSidebarList() {
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
 	const dispatch = useDispatch<AppDispatch>();
 
-	if (!userId) {
-		return <div>ログインが必要です</div>;
-	}
-
 	useEffect(() => {
 		const fetchShareRoomData = async () => {
 			try {
+				if (!userId) {
+					return;
+				}
 				const response = await dispatch(getShareRooms(userId));
 				if (response.payload) {
 					setShareRooms(response.payload as ShareRooms[]);
@@ -32,6 +31,10 @@ export default function ShareRoomSidebarList() {
 
 		fetchShareRoomData();
 	}, [userId]);
+
+	if (!userId) {
+		return <div>ログインが必要です</div>;
+	}
 
 	return (
 		<div>
