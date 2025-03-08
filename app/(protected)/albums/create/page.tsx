@@ -1,92 +1,84 @@
 "use client";
 
 import AlbumForm from "@/components/AlbumEdit/AlbumCreateForm/AlbumForm";
-import type { AppDispatch } from "@/store/store";
 import { useRouter } from "next/navigation";
 import type { SubmitHandler } from "react-hook-form";
-import { useDispatch } from "react-redux";
-import { createAlbum } from "@/services/albumService";
-import { useEffect, useContext } from "react";
+import { useAlbumStore } from "@/stores/albumStore";
+import { usePhotoStore } from "@/stores/photoStore";
+import { useEffect, useState } from "react";
 import { FormFields } from "@/components/AlbumEdit/AlbumCreateForm/AlbumForm";
 import Compressor from "compressorjs";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
 import { useSearchParams } from "next/navigation";
+import { ref, uploadString, getDownloadURL } from "firebase/storage";
+import { storage } from "@/lib/firebase";
 
 export default function CreatePage() {
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const userId = currentUser?.uid;
-	const dispatch = useDispatch<AppDispatch>();
+	const createAlbum = useAlbumStore((state) => state.createAlbum);
+	const addPhotos = usePhotoStore((state) => state.addPhotos);
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const shareRoomId = searchParams.get("shareRoomId");
 	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		if (!userId) {
 			return;
 		}
-	}, []);
+	}, [userId]);
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
+		if (!userId || !shareRoomId) {
+			console.error("ユーザーIDまたは共有ルームIDが不足しています");
+			return;
+		}
+
+		setIsLoading(true);
 		try {
-			if (!userId || shareRoomId === null) {
-				throw new Error("ユーザーIDまたはルームが見つかりません");
-			}
+			const file = data.file[0];
 
-			const fileList = data.file;
-			const files = Array.from(fileList);
+			// 画像圧縮処理
+			const compressedFile = await new Promise<File>((resolve, reject) => {
+				new Compressor(file, {
+					quality: 0.8,
+					maxWidth: 1000,
+					success: (result) => {
+						resolve(result as File);
+					},
+					error: (err) => {
+						reject(err);
+					},
+				});
+			});
 
-			if (!files || files.length === 0) return;
+			// 画像をBase64に変換
+			const reader = new FileReader();
+			const base64Image = await new Promise<string>((resolve) => {
+				reader.onloadend = () => resolve(reader.result as string);
+				reader.readAsDataURL(compressedFile);
+			});
 
-			const compressedFiles = await Promise.all(
-				files.map((file) => {
-					if (file instanceof File) {
-						return new Promise<string | null>((resolve, reject) => {
-							let quality;
-							if (file.size > 5 * 1024 * 1024) {
-								quality = 0.4;
-							} else if (file.size < 2 * 1024 * 1024) {
-								quality = 0.6;
-							} else {
-								quality = 0.8;
-							}
-
-							new Compressor(file, {
-								quality,
-								success: (compressedFile) => {
-									const reader = new FileReader();
-									reader.readAsDataURL(compressedFile);
-
-									reader.onloadend = (evt) => {
-										if (evt.target !== null) {
-											resolve(evt.target.result as string);
-										} else {
-											resolve(null);
-										}
-									};
-								},
-								error: (err) => {
-									console.error("Compression failed:", err);
-									reject(err);
-								},
-							});
-						});
-					} else {
-						return Promise.resolve(null);
-					}
-				}),
-			);
-
+			// アルバムデータを作成
 			const albumData = {
-				title: data.title,
-				photos: compressedFiles as string[],
+				albumData: {
+					title: data.title,
+					photos: [base64Image],
+				},
+				userId,
+				shareRoomId,
 			};
 
-			await dispatch(createAlbum({ albumData, userId, shareRoomId })).unwrap();
+			// アルバムを作成
+			await createAlbum(albumData);
+
 			router.push(`/rooms/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`);
 		} catch (error) {
-			console.error(error instanceof Error ? error.message : error);
-			alert("エラーが発生しました。再度お試しください。");
+			console.error("アルバム作成に失敗しました:", error);
+		} finally {
+			setIsLoading(false);
 		}
 	};
 

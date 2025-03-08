@@ -1,19 +1,18 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import Compressor from "compressorjs";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { addPhotos } from "@/services/photoService";
-import { authContext } from "@/features/auth/AuthProvider";
+import { usePhotoStore } from "@/stores/photoStore";
+import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
 	albumId: string;
 };
 
 export default function AddPhotos({ albumId }: Props) {
-	const { currentUser } = useContext(authContext);
-	const userId = currentUser?.uid;
+	const { currentUser } = useAuth();
 	const [photoData, setPhotoData] = useState<string[]>([]);
-	const dispatch = useDispatch<AppDispatch>();
+	const [isLoading, setIsLoading] = useState(false);
+	const addPhotos = usePhotoStore((state) => state.addPhotos);
+	const status = usePhotoStore((state) => state.status);
 
 	const handleFileChange = async (
 		event: React.ChangeEvent<HTMLInputElement>,
@@ -30,24 +29,17 @@ export default function AddPhotos({ albumId }: Props) {
 			SMALL: 2 * 1024 * 1024, // 2MB
 		};
 
-		const COMPRESSION_QUALITY = {
-			HIGH: 0.8,
-			MEDIUM: 0.6,
-			LOW: 0.4,
-		};
-
 		const compressedFiles = await Promise.all(
 			files.map((file) => {
 				if (file instanceof File) {
 					return new Promise<string | null>((resolve, reject) => {
-						let quality: number;
-
+						let quality;
 						if (file.size > FILE_SIZE.LARGE) {
-							quality = COMPRESSION_QUALITY.LOW;
+							quality = 0.4;
 						} else if (file.size < FILE_SIZE.SMALL) {
-							quality = COMPRESSION_QUALITY.MEDIUM;
+							quality = 0.6;
 						} else {
-							quality = COMPRESSION_QUALITY.HIGH;
+							quality = 0.8;
 						}
 
 						new Compressor(file, {
@@ -65,10 +57,7 @@ export default function AddPhotos({ albumId }: Props) {
 								};
 							},
 							error: (err) => {
-								console.error("画像の圧縮に失敗しました:", err);
-								alert(
-									"画像の圧縮に失敗しました。別の画像を試すか、サイズの小さい画像を選択してください。",
-								);
+								console.error("Compression failed:", err);
 								reject(err);
 							},
 						});
@@ -79,37 +68,73 @@ export default function AddPhotos({ albumId }: Props) {
 			}),
 		);
 
-		setPhotoData(compressedFiles.filter((file) => file !== null) as string[]);
+		const validFiles = compressedFiles.filter(
+			(file): file is string => file !== null,
+		);
+		setPhotoData(validFiles);
 	};
 
 	const handleUpload = async () => {
-		if (userId === undefined) return;
-		const [isLoading, setIsLoading] = useState(false);
+		if (!currentUser || !albumId) {
+			console.error("ユーザーIDまたはアルバムIDが不足しています");
+			return;
+		}
+
+		if (photoData.length === 0) {
+			alert("アップロードする写真を選択してください");
+			return;
+		}
 
 		try {
 			setIsLoading(true);
-			await dispatch(addPhotos({ photosList: photoData, albumId, userId }));
+			await addPhotos({
+				photosList: photoData,
+				albumId,
+				userId: currentUser.uid,
+			});
+			setPhotoData([]);
 			alert("写真のアップロードが完了しました");
 		} catch (error) {
-			console.error("写真の追加に失敗しました:", error);
-			alert("写真のアップロードに失敗しました。もう一度お試しください。");
+			console.error("写真のアップロードに失敗しました:", error);
+			alert("写真のアップロードに失敗しました");
 		} finally {
 			setIsLoading(false);
 		}
 	};
 
 	return (
-		<div className="modal">
+		<div>
+			<h2>写真を追加</h2>
 			<input
 				type="file"
 				accept="image/*"
-				onChange={handleFileChange}
 				multiple
+				onChange={handleFileChange}
+				disabled={isLoading || status === "loading"}
 			/>
-			{photoData.map((photo, index) => (
-				<img src={photo} key={index} alt="選択写真プレビュー" width={100} />
-			))}
-			<button onClick={handleUpload}>送信</button>
+			<button
+				onClick={handleUpload}
+				disabled={isLoading || status === "loading" || photoData.length === 0}
+			>
+				{isLoading || status === "loading"
+					? "アップロード中..."
+					: "アップロード"}
+			</button>
+			{photoData.length > 0 && (
+				<div>
+					<p>{photoData.length}枚の写真が選択されています</p>
+					<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+						{photoData.map((photo, index) => (
+							<img
+								key={index}
+								src={photo}
+								alt={`プレビュー ${index + 1}`}
+								style={{ width: "100px", height: "100px", objectFit: "cover" }}
+							/>
+						))}
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

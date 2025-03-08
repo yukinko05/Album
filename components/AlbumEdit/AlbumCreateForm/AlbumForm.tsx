@@ -55,8 +55,9 @@ export default function AlbumForm({
 					</label>
 					<input
 						{...register("title")}
-						className={`bg-gray-200 bg-opacity-20 rounded-2xl h-[42px] px-3 ${errors.title ? "outline-red-500" : "outline-gray-900"
-							}`}
+						className={`bg-gray-200 bg-opacity-20 rounded-2xl h-[42px] px-3 ${
+							errors.title ? "outline-red-500" : "outline-gray-900"
+						}`}
 						type="text"
 					/>
 					{errors.title && (
@@ -85,7 +86,10 @@ export default function AlbumForm({
 					)}
 				</div>
 
-				<button type="submit" className="bg-gray-900 text-white rounded-2xl py-2 mt-1 h-12">
+				<button
+					type="submit"
+					className="bg-gray-900 text-white rounded-2xl py-2 mt-1 h-12"
+				>
 					{submitButtonText}
 				</button>
 			</form>

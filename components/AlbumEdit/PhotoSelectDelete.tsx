@@ -1,72 +1,72 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Photo } from "@/types/photoTypes";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { getAlbums } from "@/services/albumService";
-import { authContext } from "@/features/auth/AuthProvider";
-import { photoSelectDelete } from "@/services/photoService";
 import { PhotosProps } from "@/types/photoTypes";
+import { useAlbumStore } from "@/stores/albumStore";
+import { usePhotoStore } from "@/stores/photoStore";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
-	const [selectedPhoto, setSelectedPhoto] = useState<string[]>([]);
-	const dispatch = useDispatch<AppDispatch>();
-	const { currentUser } = useContext(authContext);
-	const userId = currentUser?.uid;
+	const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
+	const { currentUser } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
+	const getAlbums = useAlbumStore((state) => state.getAlbums);
+	const deletePhotos = usePhotoStore((state) => state.deletePhotos);
+	const status = usePhotoStore((state) => state.status);
 
 	useEffect(() => {
 		if (!albumId) {
-			console.log("ユーザーが未認証です");
+			console.log("アルバムIDが不足しています");
 			return;
 		}
 
 		const fetchAlbumsData = async () => {
-			if (!userId) return;
+			if (!currentUser) return;
 			try {
-				const albums = await dispatch(getAlbums(userId)).unwrap();
-				albums.find((album) => album.albumId === albumId);
-				return albums;
+				await getAlbums(currentUser.uid);
 			} catch (error) {
-				console.error(error);
-				if (error instanceof Error) {
-					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
-				} else {
-					alert(
-						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
-					);
-				}
+				console.error("アルバムデータの取得に失敗しました:", error);
 			}
 		};
 
 		fetchAlbumsData();
-	}, [albumId, dispatch, userId]);
+	}, [albumId, currentUser, getAlbums]);
 
-	const handleCheckboxChange = (photoUrl: string) => {
-		setSelectedPhoto((prevSelected) =>
-			prevSelected.includes(photoUrl)
-				? prevSelected.filter((url) => url !== photoUrl)
-				: [...prevSelected, photoUrl],
-		);
+	const handleCheckboxChange = (photoId: string) => {
+		setSelectedPhotoIds((prev) => {
+			if (prev.includes(photoId)) {
+				return prev.filter((id) => id !== photoId);
+			} else {
+				return [...prev, photoId];
+			}
+		});
 	};
 
-	const handleUpdate = async () => {
-		setIsLoading(true);
-		const photosToDelete: Photo[] = photos.filter((photo) =>
-			selectedPhoto.includes(photo.photoUrl),
-		);
-
-		if (photosToDelete.length === 0) {
-			console.error("削除対象の写真が見つかりません");
+	const handleDelete = async () => {
+		if (selectedPhotoIds.length === 0) {
+			alert("削除する写真を選択してください");
 			return;
 		}
 
+		const isConfirmed = window.confirm(
+			`選択した${selectedPhotoIds.length}枚の写真を削除してもよろしいですか？`,
+		);
+
+		if (!isConfirmed) return;
+
 		try {
-			await dispatch(photoSelectDelete(photosToDelete));
-		} catch (error) {
-			alert(
-				"アルバムの削除中にエラーが発生しました。" +
-					"ネットワーク接続を確認して再度お試しください。",
+			setIsLoading(true);
+			const photosToDelete = photos.filter((photo) =>
+				selectedPhotoIds.includes(photo.photoId),
 			);
+
+			await deletePhotos(photosToDelete);
+			setSelectedPhotoIds([]);
+			alert("選択した写真を削除しました");
+			// ページをリロードして最新の状態を表示
+			window.location.reload();
+		} catch (error) {
+			console.error("写真の削除に失敗しました:", error);
+			alert("写真の削除に失敗しました");
 		} finally {
 			setIsLoading(false);
 		}
@@ -74,25 +74,42 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 
 	return (
 		<div>
-			<h2>削除する写真を選択</h2>
-			{photos.map((photo) => (
-				<label key={photo.photoId}>
-					<input
-						type="checkbox"
-						name="coverPhoto"
-						checked={selectedPhoto.includes(photo.photoUrl)}
-						onChange={() => handleCheckboxChange(photo.photoUrl)}
-					/>
-					<img src={photo.photoUrl} alt="削除する写真" width={100} />
-				</label>
-			))}
+			<h2>写真を選択して削除</h2>
+			<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+				{photos.map((photo) => (
+					<label key={photo.photoId} style={{ cursor: "pointer" }}>
+						<input
+							type="checkbox"
+							value={photo.photoId}
+							onChange={() => handleCheckboxChange(photo.photoId)}
+							checked={selectedPhotoIds.includes(photo.photoId)}
+							disabled={isLoading || status === "loading"}
+						/>
+						<img
+							src={photo.photoUrl}
+							alt="アルバム写真"
+							style={{
+								width: "100px",
+								height: "100px",
+								objectFit: "cover",
+								border: selectedPhotoIds.includes(photo.photoId)
+									? "2px solid red"
+									: "none",
+							}}
+						/>
+					</label>
+				))}
+			</div>
 			<button
 				type="button"
-				onClick={handleUpdate}
-				aria-label="選択した写真を削除"
-				disabled={isLoading}
+				onClick={handleDelete}
+				disabled={
+					isLoading || status === "loading" || selectedPhotoIds.length === 0
+				}
 			>
-				{isLoading ? "削除中..." : "アルバム削除"}
+				{isLoading || status === "loading"
+					? "削除中..."
+					: `選択した${selectedPhotoIds.length}枚の写真を削除`}
 			</button>
 		</div>
 	);

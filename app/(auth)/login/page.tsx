@@ -4,10 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/store/store";
-import { loginUser } from "@/services/userService";
-import type { RootState } from "@/store/store";
+import { useState } from "react";
+import { useUserStore } from "@/stores/userStore";
 
 const userSchema = z.object({
 	email: z
@@ -21,9 +19,10 @@ export type UserData = z.infer<typeof userSchema>;
 
 export default function LoginPage() {
 	const router = useRouter();
-	const dispatch = useDispatch<AppDispatch>();
-	const error = useSelector((state: RootState) => state.user.error);
-	const errorMessage = typeof error === "string" ? error : null;
+	const login = useUserStore((state) => state.login);
+	const status = useUserStore((state) => state.status);
+	const error = useUserStore((state) => state.error);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
 	const {
 		register,
@@ -33,18 +32,26 @@ export default function LoginPage() {
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
-			await dispatch(loginUser(data)).unwrap();
+			await login(data);
 			router.push("/dashboard");
 		} catch (error) {
 			console.error("Login failed:", error);
+			setErrorMessage(
+				"ログインに失敗しました。メールアドレスかパスワードが間違っています。",
+			);
 		}
 	};
 
 	return (
 		<div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8">
-			<form className="w-full max-w-md p-8 bg-white rounded-lg shadow-md" onSubmit={handleSubmit(onSubmit)}>
+			<form
+				className="w-full max-w-md p-8 bg-white rounded-lg shadow-md"
+				onSubmit={handleSubmit(onSubmit)}
+			>
 				<h1 className="text-2xl font-bold mb-6 text-center">ログイン</h1>
-				{errorMessage && <p className="text-red-600 text-sm mt-2">{errorMessage}</p>}
+				{errorMessage && (
+					<p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+				)}
 				<div className="mb-6">
 					<label htmlFor="email" className="block mb-2 font-medium">
 						メールアドレス
@@ -56,7 +63,9 @@ export default function LoginPage() {
 						{...register("email")}
 					/>
 					{errors.email && (
-						<span className="text-red-600 text-sm mt-2">{errors.email.message}</span>
+						<span className="text-red-600 text-sm mt-2">
+							{errors.email.message}
+						</span>
 					)}
 				</div>
 
@@ -76,7 +85,12 @@ export default function LoginPage() {
 					)}
 				</div>
 
-				<button className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors">ログインする</button>
+				<button
+					className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors"
+					disabled={status === "loading"}
+				>
+					{status === "loading" ? "ログイン中..." : "ログインする"}
+				</button>
 			</form>
 		</div>
 	);

@@ -1,21 +1,18 @@
 "use client";
 import NavigationBar from "@/components/Header";
-import type { RootState } from "@/store/store";
 import Link from "next/link";
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { getAlbums } from "@/services/albumService";
-import { authContext } from "@/features/auth/AuthProvider";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useAlbumStore } from "@/stores/albumStore";
 import SideBar from "@/components/SideBar/SideBar";
 import Spinner from "@/components/Spinner";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
-	const albums = useSelector((state: RootState) => state.albums.albums);
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const userId = currentUser?.uid;
-	const dispatch = useDispatch<AppDispatch>();
+	const albums = useAlbumStore((state) => state.albums);
+	const getAlbums = useAlbumStore((state) => state.getAlbums);
 
 	useEffect(() => {
 		if (!userId) {
@@ -26,24 +23,16 @@ export default function Albums() {
 
 		const fetchAlbumsData = async () => {
 			try {
-				const albums = await dispatch(getAlbums(userId)).unwrap();
-				return albums;
+				await getAlbums(userId);
 			} catch (error) {
-				console.error(error);
-				if (error instanceof Error) {
-					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
-				} else {
-					alert(
-						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
-					);
-				}
+				console.error("アルバムデータの取得に失敗しました:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchAlbumsData();
-	}, [userId, dispatch]);
+	}, [userId, getAlbums]);
 
 	return (
 		<div>
@@ -78,7 +67,9 @@ export default function Albums() {
 											/>
 										)}
 									</div>
-									<div className="text-xs text-gray-500 px-4 pb-4">{album.createdAt}</div>
+									<div className="text-xs text-gray-500 px-4 pb-4">
+										{album.createdAt}
+									</div>
 								</Link>
 							))
 						) : (

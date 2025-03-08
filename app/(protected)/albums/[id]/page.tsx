@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Spinner from "@/components/Spinner";
-import { getPhotos } from "@/services/photoService";
 import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
@@ -12,6 +11,7 @@ import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 import AddPhoto from "@/components/AlbumEdit/AddPhoto";
 import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 import Link from "next/link";
+import { usePhotoStore } from "@/stores/photoStore";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -21,21 +21,22 @@ export default function AlbumPhotosPage() {
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
 	const shareRoomId = searchParams.get("shareRoomId");
+	const getPhotos = usePhotoStore((state) => state.getPhotos);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const response = await getPhotos(albumId);
-				setPhotos(response);
+				const photoData = await getPhotos(albumId);
+				setPhotos(photoData);
 			} catch (error) {
-				console.log("写真の取得に失敗しました: ", error);
+				console.error("写真データの取得に失敗しました:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchData();
-	}, [albumId, params]);
+	}, [albumId, getPhotos]);
 
 	if (albumTitle === null) return;
 
@@ -90,8 +91,6 @@ export default function AlbumPhotosPage() {
 						<AddPhoto albumId={albumId} />
 						<PhotoSelectDelete albumId={albumId} photos={photos} />
 					</div>
-
-
 				</div>
 			)}
 		</div>

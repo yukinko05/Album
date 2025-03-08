@@ -1,12 +1,12 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function DashboardPage() {
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const [userName, setUserName] = useState<string | null>(null);
 	const router = useRouter();
 

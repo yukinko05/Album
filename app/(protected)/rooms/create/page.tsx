@@ -1,11 +1,9 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { createShareRoom } from "@/services/shareService";
+import { useShareStore } from "@/stores/shareStore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,10 +18,11 @@ const shareRoomSchema = z.object({
 type ShareRoomData = z.infer<typeof shareRoomSchema>;
 
 export default function CreateRoomPage() {
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const userId = currentUser?.uid;
 	const router = useRouter();
-	const dispatch = useDispatch<AppDispatch>();
+	const createShareRoom = useShareStore((state) => state.createShareRoom);
+	const status = useShareStore((state) => state.status);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -50,7 +49,7 @@ export default function CreateRoomPage() {
 				userId,
 			};
 
-			const response = await dispatch(createShareRoom(shareRoomData)).unwrap();
+			const response = await createShareRoom(shareRoomData);
 			const roomId = response.shareId;
 			router.push(`/rooms/${roomId}?sharedRoomTitle=${data.sharedRoomTitle}`);
 		} catch (error) {

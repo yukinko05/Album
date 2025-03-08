@@ -1,15 +1,12 @@
 "use client";
 
-import { signUpUser } from "@/services/userService";
-import type { AppDispatch } from "@/store/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
 import { z } from "zod";
-import type { RootState } from "@/store/store";
 import Compressor from "compressorjs";
 import { useState } from "react";
+import { useUserStore } from "@/stores/userStore";
 
 const userSchema = z
 	.object({
@@ -36,10 +33,11 @@ const userSchema = z
 export type UserData = z.infer<typeof userSchema>;
 
 export default function SignupPage() {
-	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
-	const error = useSelector((state: RootState) => state.user.error);
-	const errorMessage = typeof error === "string" ? error : null;
+	const signUp = useUserStore((state) => state.signUp);
+	const status = useUserStore((state) => state.status);
+	const error = useUserStore((state) => state.error);
+	const [errorMessage, setErrorMessage] = useState<string | null>(null);
 	const [iconImg, setIconImg] = useState<string | null>(null);
 
 	const {
@@ -89,7 +87,7 @@ export default function SignupPage() {
 			iconImg,
 		};
 		try {
-			await dispatch(signUpUser(userInputData)).unwrap();
+			await signUp(userInputData);
 			router.push("/dashboard");
 		} catch (error) {
 			console.error("SignUp failed:", error);
@@ -98,17 +96,23 @@ export default function SignupPage() {
 
 	return (
 		<div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8">
-			<form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-lg p-8 bg-white rounded-lg shadow-md">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className="w-full max-w-lg p-8 bg-white rounded-lg shadow-md"
+			>
 				<h1 className="text-2xl font-bold mb-6 text-center">ALBUM</h1>
-				{errorMessage && <p className="text-red-600 text-sm mt-2">{errorMessage}</p>}
+				{errorMessage && (
+					<p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+				)}
 				<div className="mb-6">
 					<label className="block mb-2 font-medium" htmlFor="name">
 						ニックネーム
 					</label>
 					<input
 						{...register("userName")}
-						className={`w-full p-3 border rounded-md ${errors.userName ? "border-red-600" : "border-gray-200"
-							}`}
+						className={`w-full p-3 border rounded-md ${
+							errors.userName ? "border-red-600" : "border-gray-200"
+						}`}
 						type="text"
 					/>
 					{errors.userName && (
@@ -123,12 +127,15 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("email")}
-						className={`w-full p-3 border rounded-md ${errors.email ? "border-red-600" : "border-gray-200"
-							}`}
+						className={`w-full p-3 border rounded-md ${
+							errors.email ? "border-red-600" : "border-gray-200"
+						}`}
 						type="text"
 					/>
 					{errors.email && (
-						<span className="text-red-600 text-sm mt-2">{errors.email.message}</span>
+						<span className="text-red-600 text-sm mt-2">
+							{errors.email.message}
+						</span>
 					)}
 				</div>
 				<div className="mb-6">
@@ -137,8 +144,9 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("password")}
-						className={`w-full p-3 border rounded-md ${errors.password ? "border-red-600" : "border-gray-200"
-							}`}
+						className={`w-full p-3 border rounded-md ${
+							errors.password ? "border-red-600" : "border-gray-200"
+						}`}
 						type="password"
 					/>
 					{errors.password && (
@@ -147,13 +155,17 @@ export default function SignupPage() {
 						</span>
 					)}
 
-					<label className="block mb-2 font-medium mt-4" htmlFor="passwordConfirmation">
+					<label
+						className="block mb-2 font-medium mt-4"
+						htmlFor="passwordConfirmation"
+					>
 						パスワード確認
 					</label>
 					<input
 						{...register("passwordConfirmation")}
-						className={`w-full p-3 border rounded-md ${errors.passwordConfirmation ? "border-red-600" : "border-gray-200"
-							}`}
+						className={`w-full p-3 border rounded-md ${
+							errors.passwordConfirmation ? "border-red-600" : "border-gray-200"
+						}`}
 						type="password"
 					/>
 					{errors.passwordConfirmation && (
@@ -181,7 +193,12 @@ export default function SignupPage() {
 						/>
 					)}
 				</div>
-				<button className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors">新規登録する</button>
+				<button
+					className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors"
+					disabled={status === "loading"}
+				>
+					{status === "loading" ? "登録中..." : "新規登録する"}
+				</button>
 			</form>
 		</div>
 	);

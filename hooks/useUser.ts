@@ -1,15 +1,14 @@
-import { loginUser, signUpUser } from "@/services/userService";
-import type { AppDispatch, RootState } from "@/store/store";
 import type { NewUserInput, LoginUserInput } from "@/types/userTypes";
-import { useDispatch, useSelector } from "react-redux";
+import { useUserStore } from "@/stores/userStore";
 
 export const useUser = () => {
-	const dispatch = useDispatch<AppDispatch>();
-	const user = useSelector((state: RootState) => state.user.data);
-	const status = useSelector((state: RootState) => state.user.status);
+	const user = useUserStore((state) => state.user);
+	const status = useUserStore((state) => state.status);
+	const login = useUserStore((state) => state.login);
+	const signUp = useUserStore((state) => state.signUp);
 
-	const loginUserAction = (data: LoginUserInput) => dispatch(loginUser(data));
-	const signUpUserAction = (data: NewUserInput) => dispatch(signUpUser(data));
+	const loginUserAction = (data: LoginUserInput) => login(data);
+	const signUpUserAction = (data: NewUserInput) => signUp(data);
 
 	return { user, status, loginUserAction, signUpUserAction };
 };

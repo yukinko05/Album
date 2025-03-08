@@ -2,42 +2,51 @@
 
 import ShareRoomSidebarList from "@/components/ShareRoom/ShareRoomSidebarList";
 import Link from "next/link";
-import { useContext, useEffect, useState } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import SignOut from "@/app/signout/signout";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { getUser } from "@/services/userService";
+import { useUserStore } from "@/stores/userStore";
+import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 
 export default function SideBar() {
-	const { currentUser } = useContext(authContext);
-	const userId = currentUser?.uid;
+	const { currentUser, isAuthenticated, isLoading } = useAuth();
 	const router = useRouter();
-	const dispatch = useDispatch<AppDispatch>();
+	const getUser = useUserStore((state) => state.getUser);
+	const user = useUserStore((state) => state.user);
 	const [userName, setUserName] = useState<string>("");
 	const [iconImg, setIconImg] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (!userId) {
+		if (!isAuthenticated && !isLoading) {
 			router.push("/login");
 		}
+	}, [isAuthenticated, isLoading, router]);
 
+	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				if (!userId) return;
-				const response = await dispatch(getUser(userId)).unwrap();
-
-				setUserName(response.userName);
-				setIconImg(response.iconImg);
+				if (!currentUser) return;
+				const userData = await getUser(currentUser.uid);
+				if (userData) {
+					setUserName(userData.userName || "");
+					setIconImg(userData.iconImg || null);
+				}
 			} catch (error) {
-				console.log("ユーザーデータの取得に失敗しました: ", error);
+				console.error("ユーザーデータの取得に失敗しました:", error);
 			}
 		};
 
 		fetchUserData();
-	}, [userId, dispatch, router]);
+	}, [currentUser, getUser]);
+
+	if (isLoading) {
+		return <div>Loading...</div>;
+	}
+
+	if (!isAuthenticated) {
+		return null;
+	}
 
 	return (
 		<div className="fixed left-0 h-full w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
@@ -87,7 +96,7 @@ export default function SideBar() {
 					</div>
 				</div>
 				<div className="border-t py-4">
-					{userId && (
+					{currentUser && (
 						<div className="flex justify-center">
 							<SignOut />
 						</div>

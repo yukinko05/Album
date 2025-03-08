@@ -1,15 +1,13 @@
 import Link from "next/link";
-import { useContext } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
 import type { ReactNode } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = ({ children }: { children?: ReactNode }) => {
-	const { currentUser } = useContext(authContext);
-	const userId = currentUser?.uid;
+	const { currentUser, isAuthenticated } = useAuth();
 
 	return (
-		<header className="fixed top-0 left-0 right-0 z-50 h-[150px] border-b bg-white sm:h-24">
-			<div className="flex flex-col h-full items-center justify-center sm:flex-row px-4">
+		<header className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-white">
+			<div className="flex h-full items-center justify-center px-4">
 				<div className="absolute left-4">
 					<Link
 						href="/dashboard"
@@ -25,7 +23,7 @@ const Header = ({ children }: { children?: ReactNode }) => {
 				</div>
 				<div className="absolute right-4">
 					<nav>
-						{!userId && (
+						{!isAuthenticated && (
 							<Link
 								href="/login"
 								className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"

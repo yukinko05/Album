@@ -1,26 +1,24 @@
 "use client";
 
 import { useParams, useSearchParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { getAlbums } from "@/services/albumService";
-import { authContext } from "@/features/auth/AuthProvider";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
 import Image from "next/image";
+import { useAlbumStore } from "@/stores/albumStore";
 
 export default function RoomPage() {
 	const params = useParams();
 	const shareRoomId = String(params.id);
 	const searchParams = useSearchParams();
 	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const [albums, setAlbums] = useState<Album[]>([]);
 	const [loading, setLoading] = useState(true);
 	const userId = currentUser?.uid;
-	const dispatch = useDispatch<AppDispatch>();
+	const getAlbums = useAlbumStore((state) => state.getAlbums);
 
 	useEffect(() => {
 		if (!userId) {
@@ -31,24 +29,17 @@ export default function RoomPage() {
 
 		const fetchAlbumsData = async () => {
 			try {
-				const albums = await dispatch(getAlbums(shareRoomId)).unwrap();
-				return setAlbums(albums);
+				const albumsData = await getAlbums(shareRoomId);
+				setAlbums(albumsData);
 			} catch (error) {
-				console.error(error);
-				if (error instanceof Error) {
-					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
-				} else {
-					alert(
-						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
-					);
-				}
+				console.error("アルバムデータの取得に失敗しました:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchAlbumsData();
-	}, [userId, dispatch, shareRoomId]);
+	}, [userId, shareRoomId, getAlbums]);
 
 	return (
 		<div>

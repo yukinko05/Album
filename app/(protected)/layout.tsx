@@ -2,25 +2,25 @@
 
 import Header from "@/components/Header";
 import SideBar from "@/components/SideBar/SideBar";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function ProtectedLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
-	const { currentUser } = useContext(authContext);
+	const { currentUser, isAuthenticated } = useAuth();
 	const router = useRouter();
 
 	useEffect(() => {
-		if (!currentUser) {
+		if (!isAuthenticated) {
 			router.push("/login");
 		}
-	}, [currentUser, router]);
+	}, [isAuthenticated, router]);
 
-	if (!currentUser) {
+	if (!isAuthenticated) {
 		return null; // ログインページにリダイレクト中は何も表示しない
 	}
 

@@ -1,13 +1,14 @@
 "use client";
 
-import { store } from "@/store/store";
-import { Provider } from "react-redux";
-import { AuthProvider } from "@/features/auth/AuthProvider";
+import { useEffect } from "react";
+import { useAuthStore } from "@/stores/authStore";
 
 export function Providers({ children }: { children: React.ReactNode }) {
-	return (
-		<Provider store={store}>
-			<AuthProvider>{children}</AuthProvider>
-		</Provider>
-	);
+	const initialize = useAuthStore((state) => state.initialize);
+
+	useEffect(() => {
+		initialize();
+	}, [initialize]);
+
+	return <>{children}</>;
 }

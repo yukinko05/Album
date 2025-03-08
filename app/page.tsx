@@ -1,20 +1,21 @@
 "use client";
 
-import { useContext, useEffect } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function HomePage() {
-	const { currentUser } = useContext(authContext);
+	const { currentUser, isAuthenticated } = useAuth();
 	const router = useRouter();
 
 	useEffect(() => {
-		if (currentUser) {
+		if (isAuthenticated) {
 			router.push("/dashboard");
 		} else {
+			console.log("ログインしていません");
 			router.push("/login");
 		}
-	}, [currentUser, router]);
+	}, [isAuthenticated, router]);
 
 	// リダイレクト中は何も表示しない
 	return null;

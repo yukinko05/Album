@@ -1,20 +1,18 @@
 "use client";
 
-import { useContext, useEffect, useState } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { getShareRooms } from "@/services/shareService";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+import { useShareStore } from "@/stores/shareStore";
 import type { ShareRooms } from "@/types/shareTypes";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
 
 export default function RoomsPage() {
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const userId = currentUser?.uid;
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
 	const [loading, setLoading] = useState(true);
-	const dispatch = useDispatch<AppDispatch>();
+	const getShareRooms = useShareStore((state) => state.getShareRooms);
 
 	useEffect(() => {
 		if (!userId) return;
@@ -22,19 +20,17 @@ export default function RoomsPage() {
 		const fetchShareRoomData = async () => {
 			setLoading(true);
 			try {
-				const response = await dispatch(getShareRooms(userId));
-				if (response.payload) {
-					setShareRooms(response.payload as ShareRooms[]);
-				}
+				const rooms = await getShareRooms(userId);
+				setShareRooms(rooms);
 			} catch (error) {
-				console.error("シェアルームデータの取得に失敗しました: ", error);
+				console.error("シェアルームデータの取得に失敗しました:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchShareRoomData();
-	}, [userId, dispatch]);
+	}, [userId, getShareRooms]);
 
 	if (loading) {
 		return (

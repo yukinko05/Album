@@ -1,11 +1,9 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { shareRoomJoin } from "@/services/shareService";
+import { useShareStore } from "@/stores/shareStore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,10 +20,11 @@ const joinRoomSchema = z.object({
 type JoinRoomData = z.infer<typeof joinRoomSchema>;
 
 export default function JoinRoomPage() {
-	const { currentUser } = useContext(authContext);
+	const { currentUser } = useAuth();
 	const userId = currentUser?.uid;
 	const router = useRouter();
-	const dispatch = useDispatch<AppDispatch>();
+	const shareRoomJoin = useShareStore((state) => state.shareRoomJoin);
+	const status = useShareStore((state) => state.status);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
@@ -52,14 +51,14 @@ export default function JoinRoomPage() {
 				userId,
 			};
 
-			const response = await dispatch(shareRoomJoin(joinData)).unwrap();
+			const response = await shareRoomJoin(joinData);
 			router.push(
 				`/rooms/${data.shareRoomId}?sharedRoomTitle=${response.sharedRoomTitle}`,
 			);
 		} catch (error) {
 			console.error("ルーム参加に失敗しました:", error);
 			setError(
-				"ルームへの参加に失敗しました。IDを確認して再度お試しください。",
+				"ルームの参加に失敗しました。IDを確認してもう一度お試しください。",
 			);
 		} finally {
 			setIsSubmitting(false);

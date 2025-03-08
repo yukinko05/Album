@@ -1,11 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { useState, useEffect } from "react";
 import { Photo } from "@/types/photoTypes";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { getAlbums } from "@/services/albumService";
-import { authContext } from "@/features/auth/AuthProvider";
+import { useAlbumStore } from "@/stores/albumStore";
+import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
 	albumId: string;
@@ -14,74 +10,90 @@ type Props = {
 
 export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 	const [selectedPhoto, setSelectedPhoto] = useState("");
-	const dispatch = useDispatch<AppDispatch>();
-	const { currentUser } = useContext(authContext);
-	const userId = currentUser?.uid;
+	const [isLoading, setIsLoading] = useState(false);
+	const { currentUser } = useAuth();
+	const getAlbums = useAlbumStore((state) => state.getAlbums);
+	const editAlbumCoverPhoto = useAlbumStore(
+		(state) => state.editAlbumCoverPhoto,
+	);
+	const status = useAlbumStore((state) => state.status);
 
 	useEffect(() => {
 		if (!albumId) {
-			console.log("ユーザーが未認証です");
+			console.log("アルバムIDが不足しています");
 			return;
 		}
 
 		const fetchAlbumsData = async () => {
-			if (!userId) return;
+			if (!currentUser) return;
 			try {
-				const albums = await dispatch(getAlbums(userId)).unwrap();
-				const albumData = albums.find((album) => album.albumId === albumId);
-				if (albumData) {
-					setSelectedPhoto(albumData?.coverPhotoUrl);
-				}
-				return albums;
+				await getAlbums(currentUser.uid);
 			} catch (error) {
-				console.error(error);
-				if (error instanceof Error) {
-					alert(`アルバムデータの取得に失敗しました: ${error.message}`);
-				} else {
-					alert(
-						"予期せぬエラーが発生しました。しばらく時間をおいて再度お試しください。",
-					);
-				}
+				console.error("アルバムデータの取得に失敗しました:", error);
 			}
 		};
 
 		fetchAlbumsData();
-	}, [albumId, dispatch]);
+	}, [albumId, currentUser, getAlbums]);
+
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSelectedPhoto(e.target.value);
+	};
 
 	const handleUpdate = async () => {
+		if (!selectedPhoto) {
+			alert("カバー写真を選択してください");
+			return;
+		}
+
 		try {
-			await updateDoc(doc(db, "albums", albumId), {
+			setIsLoading(true);
+			await editAlbumCoverPhoto({
 				coverPhotoUrl: selectedPhoto,
+				albumId,
 			});
+			alert("カバー写真を更新しました");
 		} catch (error) {
 			console.error("カバー写真の更新に失敗しました:", error);
+			alert("カバー写真の更新に失敗しました");
+		} finally {
+			setIsLoading(false);
 		}
 	};
 
 	return (
-		<div role="region" aria-label="カバー写真選択">
-			<h2>カバー写真を選択</h2>
-			<fieldset>
-				<legend>利用可能な写真</legend>
+		<div>
+			<h2>カバー写真を変更</h2>
+			<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
 				{photos.map((photo) => (
-					<label key={photo.photoId}>
+					<label key={photo.photoId} style={{ cursor: "pointer" }}>
 						<input
 							type="radio"
 							name="coverPhoto"
 							value={photo.photoUrl}
+							onChange={handleChange}
 							checked={selectedPhoto === photo.photoUrl}
-							onChange={() => setSelectedPhoto(photo.photoUrl)}
+							disabled={isLoading || status === "loading"}
 						/>
 						<img
 							src={photo.photoUrl}
-							alt={`カバー写真候補 - ${photo.photoId}`}
-							width={100}
+							alt="アルバム写真"
+							style={{
+								width: "100px",
+								height: "100px",
+								objectFit: "cover",
+								border:
+									selectedPhoto === photo.photoUrl ? "2px solid blue" : "none",
+							}}
 						/>
 					</label>
 				))}
-			</fieldset>
-			<button onClick={handleUpdate} aria-label="カバー写真を更新">
-				変更
+			</div>
+			<button
+				onClick={handleUpdate}
+				disabled={isLoading || status === "loading" || !selectedPhoto}
+			>
+				{isLoading || status === "loading" ? "更新中..." : "カバー写真を更新"}
 			</button>
 		</div>
 	);

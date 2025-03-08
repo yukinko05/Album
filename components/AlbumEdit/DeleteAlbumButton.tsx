@@ -1,18 +1,17 @@
 "use client";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/store/store";
-import { deleteAlbum } from "@/services/albumService";
 import { useRouter } from "next/navigation";
 import type { PhotosProps } from "@/types/photoTypes";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { useAlbumStore } from "@/stores/albumStore";
 
 export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
-	const dispatch = useDispatch<AppDispatch>();
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const searchParams = useSearchParams();
 	const shareRoomId = searchParams.get("shareRoomId");
+	const deleteAlbum = useAlbumStore((state) => state.deleteAlbum);
+	const status = useAlbumStore((state) => state.status);
 
 	if (!albumId) return null;
 
@@ -24,7 +23,7 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 
 		try {
 			setIsLoading(true);
-			await dispatch(deleteAlbum({ albumId, photos }));
+			await deleteAlbum({ albumId, photos });
 
 			// 共有ルームIDがある場合はそのルームページに、なければダッシュボードに遷移
 			if (shareRoomId) {
@@ -33,7 +32,7 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 				router.push("/dashboard");
 			}
 		} catch (error) {
-			console.error(error instanceof Error ? error.message : error);
+			console.error("アルバムの削除に失敗しました:", error);
 			let errorMessage = "アルバムの削除中にエラーが発生しました。";
 			if (error instanceof TypeError) {
 				errorMessage =
@@ -55,9 +54,9 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 			type="button"
 			onClick={handleClick}
 			aria-label="アルバムを削除"
-			disabled={isLoading}
+			disabled={isLoading || status === "loading"}
 		>
-			{isLoading ? "削除中..." : "アルバム削除"}
+			{isLoading || status === "loading" ? "削除中..." : "アルバム削除"}
 		</button>
 	);
 }
