@@ -17,6 +17,9 @@ module.exports = {
 					"background-hover": "rgb(var(--btn-background-hover))",
 				},
 			},
+			fontFamily: {
+				cherry: ['"Cherry Bomb One"', "cursive"],
+			},
 		},
 	},
 	darkMode: "class",

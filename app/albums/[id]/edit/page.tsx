@@ -1,6 +1,6 @@
 "use client";
 
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/Header";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@nextui-org/react";
 import { useState, useEffect, useContext } from "react";

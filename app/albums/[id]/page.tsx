@@ -1,5 +1,5 @@
 "use client";
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/Header";
 import React, { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import styles from "./page.module.css";

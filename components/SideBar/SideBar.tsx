@@ -23,13 +23,10 @@ export default function SideBar() {
 		if (!userId) {
 			router.push("/login");
 		}
-	}, [userId, router]);
-
-	useEffect(() => {
-		if (!userId) return;
 
 		const fetchUserData = async () => {
 			try {
+				if (!userId) return;
 				const response = await dispatch(getUser(userId)).unwrap();
 
 				setUserName(response.userName);
@@ -40,38 +37,38 @@ export default function SideBar() {
 		};
 
 		fetchUserData();
-	}, [userId, dispatch]);
+	}, [userId, dispatch, router]);
 
 	return (
-		<div className="fixed left-0 top-0 h-screen w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
+		<div className="fixed left-0 top-20 h-[calc(100vh-4rem)] w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
 			<nav className="flex h-full flex-col p-4">
-				<div className="flex-1">
+				<div className="flex-1 overflow-y-auto scrollbar-hide">
 					<ShareRoomSidebarList />
 				</div>
-				<div className="space-y-2 border-t pt-4">
+				<div className="border-t-2 border-gray-300 mt-4 pt-4 bg-gray-100 rounded-lg shadow-inner">
+					<p className="text-sm font-bold text-gray-600 mb-2 pl-4">
+						ルーム操作
+					</p>
 					<Link
 						href={{
 							pathname: "/createShareForm",
 						}}
 						aria-label="新しい共有ルームを作成"
-						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
+						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-200 hover:text-blue-500 transition-colors"
 					>
 						ルーム作成
 					</Link>
-				</div>
-				<div className="pt-2 pb-4">
 					<Link
 						href={{
 							pathname: "/shareRoomJoinForm",
 						}}
-						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
+						className="block rounded-lg px-4 py-2 text-gray-700 hover:bg-gray-200 hover:text-blue-500 transition-colors"
 						aria-label="既存の共有ルームに参加"
 					>
 						ルーム参加
 					</Link>
 				</div>
-
-				<div className="flex items-center gap-2 border-t py-4">
+				<div className="flex items-center gap-2 py-4">
 					{iconImg && (
 						<Image
 							src={iconImg}
@@ -82,12 +79,12 @@ export default function SideBar() {
 						/>
 					)}
 					<div>
-						<p className="font-medium text-gray-800">{userName}</p>
+						<p className="text-gray-800">{userName}</p>
 					</div>
 				</div>
-				<div className="border-t pt-7">
+				<div className="border-t py-4">
 					{userId && (
-						<div className="flex items-center justify-center ">
+						<div className="flex justify-center">
 							<SignOut />
 						</div>
 					)}

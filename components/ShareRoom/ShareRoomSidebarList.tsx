@@ -14,13 +14,12 @@ export default function ShareRoomSidebarList() {
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
 	const dispatch = useDispatch<AppDispatch>();
 
-	if (!userId) {
-		return <div>ログインが必要です</div>;
-	}
-
 	useEffect(() => {
 		const fetchShareRoomData = async () => {
 			try {
+				if (!userId) {
+					return;
+				}
 				const response = await dispatch(getShareRooms(userId));
 				if (response.payload) {
 					setShareRooms(response.payload as ShareRooms[]);
@@ -33,20 +32,26 @@ export default function ShareRoomSidebarList() {
 		fetchShareRoomData();
 	}, [userId]);
 
+	if (!userId) {
+		return <div>ログインが必要です</div>;
+	}
+
 	return (
 		<div>
 			{shareRooms.map((room) => (
-				<Link
-					key={room.shareRoomId}
-					href={{
-						pathname: `/albumShareRoom/${room.shareRoomId}`,
-						query: { sharedRoomTitle: room.sharedRoomTitle },
-					}}
-					aria-label={`シェアルーム: ${room.sharedRoomTitle}`}
-					className="flex items-center gap-2 rounded-lg px-4 py-4 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
-				>
-					{room.sharedRoomTitle}
-				</Link>
+				<div className="border-b">
+					<Link
+						key={room.shareRoomId}
+						href={{
+							pathname: `/albumShareRoom/${room.shareRoomId}`,
+							query: { sharedRoomTitle: room.sharedRoomTitle },
+						}}
+						aria-label={`シェアルーム: ${room.sharedRoomTitle}`}
+						className="flex items-center gap-2 rounded-lg px-4 py-4 text-gray-700 hover:bg-gray-100 hover:text-blue-500 transition-colors"
+					>
+						{room.sharedRoomTitle}
+					</Link>
+				</div>
 			))}
 		</div>
 	);

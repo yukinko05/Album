@@ -1,5 +1,5 @@
-import "./globals.css";
 import { Providers } from "@/app/providers";
+import "./globals.css";
 
 export const metadata = {
 	title: "Next.js",
@@ -10,7 +10,13 @@ export default function RootLayout({
 	children,
 }: { children: React.ReactNode }) {
 	return (
-		<html lang="ja" className="light">
+		<html lang="ja">
+			<head>
+				<link
+					href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap"
+					rel="stylesheet"
+				/>
+			</head>
 			<body>
 				<Providers>{children}</Providers>
 			</body>

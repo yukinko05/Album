@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./styles.module.css";
-import NavigationBar from "@/components/NavigationBar";
+import NavigationBar from "@/components/Header";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
