@@ -1,10 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import type { User } from "firebase/auth";
 
-const Header = ({ children }: { children?: ReactNode }) => {
-	const { currentUser, isAuthenticated } = useAuth();
+interface HeaderProps {
+	children?: ReactNode;
+	currentUser?: User | null;
+	isAuthenticated?: boolean;
+}
 
+const Header = ({ children, currentUser, isAuthenticated = false }: HeaderProps) => {
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-white">
 			<div className="flex h-full items-center justify-center px-4">

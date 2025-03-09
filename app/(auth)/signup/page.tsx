@@ -110,9 +110,8 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("userName")}
-						className={`w-full p-3 border rounded-md ${
-							errors.userName ? "border-red-600" : "border-gray-200"
-						}`}
+						className={`w-full p-3 border rounded-md ${errors.userName ? "border-red-600" : "border-gray-200"
+							}`}
 						type="text"
 					/>
 					{errors.userName && (
@@ -127,9 +126,8 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("email")}
-						className={`w-full p-3 border rounded-md ${
-							errors.email ? "border-red-600" : "border-gray-200"
-						}`}
+						className={`w-full p-3 border rounded-md ${errors.email ? "border-red-600" : "border-gray-200"
+							}`}
 						type="text"
 					/>
 					{errors.email && (
@@ -144,9 +142,8 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("password")}
-						className={`w-full p-3 border rounded-md ${
-							errors.password ? "border-red-600" : "border-gray-200"
-						}`}
+						className={`w-full p-3 border rounded-md ${errors.password ? "border-red-600" : "border-gray-200"
+							}`}
 						type="password"
 					/>
 					{errors.password && (
@@ -163,9 +160,8 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("passwordConfirmation")}
-						className={`w-full p-3 border rounded-md ${
-							errors.passwordConfirmation ? "border-red-600" : "border-gray-200"
-						}`}
+						className={`w-full p-3 border rounded-md ${errors.passwordConfirmation ? "border-red-600" : "border-gray-200"
+							}`}
 						type="password"
 					/>
 					{errors.passwordConfirmation && (

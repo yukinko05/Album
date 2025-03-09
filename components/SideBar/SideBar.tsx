@@ -2,49 +2,24 @@
 
 import ShareRoomSidebarList from "@/components/ShareRoom/ShareRoomSidebarList";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import SignOut from "@/app/signout/signout";
-import { useUserStore } from "@/stores/userStore";
-import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
+import type { User } from "firebase/auth";
+import type { User as AppUser } from "@/types/userTypes";
 
-export default function SideBar() {
-	const { currentUser, isAuthenticated, isLoading } = useAuth();
-	const router = useRouter();
-	const getUser = useUserStore((state) => state.getUser);
-	const user = useUserStore((state) => state.user);
-	const [userName, setUserName] = useState<string>("");
-	const [iconImg, setIconImg] = useState<string | null>(null);
+interface SideBarProps {
+	currentUser?: User | null;
+	isAuthenticated?: boolean;
+	userData?: AppUser | null;
+}
 
-	useEffect(() => {
-		if (!isAuthenticated && !isLoading) {
-			router.push("/login");
-		}
-	}, [isAuthenticated, isLoading, router]);
-
-	useEffect(() => {
-		const fetchUserData = async () => {
-			try {
-				if (!currentUser) return;
-				const userData = await getUser(currentUser.uid);
-				if (userData) {
-					setUserName(userData.userName || "");
-					setIconImg(userData.iconImg || null);
-				}
-			} catch (error) {
-				console.error("ユーザーデータの取得に失敗しました:", error);
-			}
-		};
-
-		fetchUserData();
-	}, [currentUser, getUser]);
-
-	if (isLoading) {
-		return <div>Loading...</div>;
-	}
-
-	if (!isAuthenticated) {
+export default function SideBar({
+	currentUser,
+	isAuthenticated = false,
+	userData = null
+}: SideBarProps) {
+	// ユーザーデータがない場合は何も表示しない
+	if (!isAuthenticated || !currentUser) {
 		return null;
 	}
 
@@ -82,17 +57,17 @@ export default function SideBar() {
 					</div>
 				</div>
 				<div className="flex items-center gap-2 py-4">
-					{iconImg && (
+					{userData?.iconImg && (
 						<Image
-							src={iconImg}
-							alt={`${userName}のプロフィールアイコン`}
+							src={userData.iconImg}
+							alt={`${userData.userName}のプロフィールアイコン`}
 							width={30}
 							height={30}
 							className="rounded-full border-2 border-gray-200"
 						/>
 					)}
 					<div>
-						<p className="text-gray-800">{userName}</p>
+						<p className="text-gray-800">{userData?.userName}</p>
 					</div>
 				</div>
 				<div className="border-t py-4">
