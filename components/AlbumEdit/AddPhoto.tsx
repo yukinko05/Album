@@ -99,7 +99,7 @@ export default function AddPhotos({ albumId }: Props) {
 										alt={`プレビュー ${index + 1}`}
 										fill
 										sizes="100px"
-										style={{ objectFit: 'cover' }}
+										style={{ objectFit: "cover" }}
 									/>
 								</div>
 							))}

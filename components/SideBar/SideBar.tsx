@@ -58,13 +58,15 @@ export default function SideBar({
 				</div>
 				<div className="flex items-center gap-2 py-4">
 					{userData?.iconImg && (
-						<Image
-							src={userData.iconImg}
-							alt={`${userData.userName}のプロフィールアイコン`}
-							width={30}
-							height={30}
-							className="rounded-full border-2 border-gray-200"
-						/>
+						<div className="relative w-[30px] h-[30px]">
+							<Image
+								src={userData.iconImg}
+								alt={`${userData.userName}のプロフィールアイコン`}
+								fill
+								sizes="30px"
+								style={{ objectFit: "cover" }}
+							/>
+						</div>
 					)}
 					<div>
 						<p className="text-gray-800">{userData?.userName}</p>

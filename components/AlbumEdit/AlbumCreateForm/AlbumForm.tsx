@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/Header";
 import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -29,7 +28,7 @@ export default function AlbumForm({
 	formTitle,
 	submitButtonText,
 }: AlbumFormProps) {
-	const [coverPhotoUrl, setCoverPhotoUrl] = useState<string | null>(null);
+	const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
 	const {
 		register,
 		handleSubmit,
@@ -41,6 +40,12 @@ export default function AlbumForm({
 			file: undefined,
 		},
 	});
+
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files.length > 0) {
+			setSelectedFiles(e.target.files);
+		}
+	};
 
 	return (
 		<div className="h-[calc(100vh-65px)] flex items-center justify-center bg-black bg-opacity-70">
@@ -76,13 +81,15 @@ export default function AlbumForm({
 						accept="image/*"
 						className="text-xs"
 						multiple
+						onChange={handleFileChange}
 					/>
-					{coverPhotoUrl && (
-						<img
-							className="h-[100px] w-[100px]"
-							src={coverPhotoUrl}
-							alt="選択中のカバー写真"
-						/>
+					{errors.file && (
+						<span className="text-red-500 text-xs">{errors.file.message}</span>
+					)}
+					{selectedFiles && selectedFiles.length > 0 && (
+						<p className="text-xs mt-1">
+							{selectedFiles.length}枚の写真が選択されています
+						</p>
 					)}
 				</div>
 

@@ -77,12 +77,15 @@ export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 								checked={selectedPhoto === photo.photoUrl}
 								disabled={isLoading || status === "loading"}
 							/>
-							<Image
-								src={photo.photoUrl}
-								alt="アルバム写真"
-								width={100}
-								height={100}
-							/>
+							<div className="relative w-[100px] h-[100px]">
+								<Image
+									src={photo.photoUrl}
+									alt="アルバム写真"
+									fill
+									sizes="100px"
+									style={{ objectFit: "cover" }}
+								/>
+							</div>
 						</label>
 					))}
 				</div>

@@ -56,7 +56,8 @@ export default function ProfilePage() {
 								src={iconImg}
 								alt="プロフィール画像"
 								fill
-								className="rounded-full object-cover"
+								sizes="128px"
+								style={{ objectFit: "cover" }}
 							/>
 						) : (
 							<div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
