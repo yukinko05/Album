@@ -24,8 +24,28 @@ export default function SideBar({
 	}
 
 	return (
-		<div className="fixed left-0 h-full w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
+		<div className="fixed left-0 h-full w-64 shadow-lg bg-gradient-to-b from-sky-500 to-indigo-500">
 			<nav className="flex h-full flex-col p-4">
+				<Link
+					href="/dashboard"
+					className="text-4xl font-bold text-white hover:text-gray-300 font-cherry text-center"
+				>
+					ALBUM
+				</Link>
+				<Link href="/profile" className="flex items-center gap-2 p-2 bg-white/20 hover:bg-white/30 rounded-full mt-8">
+					{userData?.iconImg && (
+						<Image
+							src={userData.iconImg}
+							alt={`${userData.userName}のプロフィールアイコン`}
+							width={48}
+							height={48}
+							className="rounded-full border-2 border-gray-200"
+						/>
+					)}
+					<div className="text-white text-center">
+						{userData?.userName}
+					</div>
+				</Link>
 				<div className="flex-1 overflow-y-auto scrollbar-hide">
 					<ShareRoomSidebarList />
 				</div>
@@ -56,20 +76,7 @@ export default function SideBar({
 						</Link>
 					</div>
 				</div>
-				<div className="flex items-center gap-2 py-4">
-					{userData?.iconImg && (
-						<Image
-							src={userData.iconImg}
-							alt={`${userData.userName}のプロフィールアイコン`}
-							width={30}
-							height={30}
-							className="rounded-full border-2 border-gray-200"
-						/>
-					)}
-					<div>
-						<p className="text-gray-800">{userData?.userName}</p>
-					</div>
-				</div>
+
 				<div className="border-t py-4">
 					{currentUser && (
 						<div className="flex justify-center">
