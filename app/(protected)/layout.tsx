@@ -14,25 +14,28 @@ export default function ProtectedLayout({
 	children: React.ReactNode;
 }) {
 	const currentUser = useAuthStore((state) => state.currentUser);
-	const isAuthStateChecking = useAuthStore((state) => state.isAuthStateChecking);
+	const isAuthStateChecking = useAuthStore(
+		(state) => state.isAuthStateChecking,
+	);
 	const getUser = useUserStore((state) => state.getUser);
 	const router = useRouter();
 	const [userData, setUserData] = useState<AppUser | null>(null);
 	const [isLoading, setIsLoading] = useState<boolean>(true);
 
-	// 認証されていない場合はログインページにリダイレクト
+	// 認証状態とユーザーデータの処理
 	useEffect(() => {
+		// 認証されていない場合はログインページにリダイレクト
 		if (isAuthStateChecking && !currentUser) {
 			router.push("/login");
+			return;
 		}
-	}, [currentUser, isAuthStateChecking, router]);
 
-	// ユーザーデータを取得
-	useEffect(() => {
+		// ユーザーデータを取得
 		const fetchUserData = async () => {
 			try {
 				if (!currentUser) return;
 				setIsLoading(true);
+				console.log("currentUser", currentUser.uid);
 				const user = await getUser(currentUser.uid);
 				setUserData(user);
 			} catch (error) {
@@ -45,7 +48,7 @@ export default function ProtectedLayout({
 		if (currentUser) {
 			fetchUserData();
 		}
-	}, [currentUser, getUser]);
+	}, [currentUser, isAuthStateChecking, router, getUser]);
 
 	// 認証状態確認中またはユーザーがnullの場合は何も表示しない
 	if (!isAuthStateChecking || !currentUser) {
@@ -54,12 +57,15 @@ export default function ProtectedLayout({
 
 	// ユーザーデータ取得中はローディング表示
 	if (isLoading) {
-		return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
+		return (
+			<div className="flex justify-center items-center min-h-screen">
+				Loading...
+			</div>
+		);
 	}
 
 	return (
 		<div className="min-h-screen">
-			<Header currentUser={currentUser} isAuthenticated={true} />
 			<div className="hidden md:block">
 				<SideBar
 					currentUser={currentUser}
