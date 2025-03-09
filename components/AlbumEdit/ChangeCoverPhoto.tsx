@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Photo } from "@/types/photoTypes";
 import { useAlbumStore } from "@/stores/albumStore";
 import { useAuth } from "@/hooks/useAuth";
+import Image from "next/image";
 
 type Props = {
 	albumId: string;
@@ -63,38 +64,35 @@ export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 
 	return (
 		<div>
-			<h2>カバー写真を変更</h2>
-			<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-				{photos.map((photo) => (
-					<label key={photo.photoId} style={{ cursor: "pointer" }}>
-						<input
-							type="radio"
-							name="coverPhoto"
-							value={photo.photoUrl}
-							onChange={handleChange}
-							checked={selectedPhoto === photo.photoUrl}
-							disabled={isLoading || status === "loading"}
-						/>
-						<img
-							src={photo.photoUrl}
-							alt="アルバム写真"
-							style={{
-								width: "100px",
-								height: "100px",
-								objectFit: "cover",
-								border:
-									selectedPhoto === photo.photoUrl ? "2px solid blue" : "none",
-							}}
-						/>
-					</label>
-				))}
-			</div>
-			<button
-				onClick={handleUpdate}
-				disabled={isLoading || status === "loading" || !selectedPhoto}
-			>
-				{isLoading || status === "loading" ? "更新中..." : "カバー写真を更新"}
-			</button>
+			<form onSubmit={handleUpdate}>
+				<h2>カバー写真を変更</h2>
+				<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+					{photos.map((photo) => (
+						<label key={photo.photoId} style={{ cursor: "pointer" }}>
+							<input
+								type="radio"
+								name="coverPhoto"
+								value={photo.photoUrl}
+								onChange={handleChange}
+								checked={selectedPhoto === photo.photoUrl}
+								disabled={isLoading || status === "loading"}
+							/>
+							<Image
+								src={photo.photoUrl}
+								alt="アルバム写真"
+								width={100}
+								height={100}
+							/>
+						</label>
+					))}
+				</div>
+				<button
+					type="submit"
+					disabled={isLoading || status === "loading" || !selectedPhoto}
+				>
+					{isLoading || status === "loading" ? "更新中..." : "カバー写真を更新"}
+				</button>
+			</form>
 		</div>
 	);
 }

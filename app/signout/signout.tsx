@@ -25,6 +25,7 @@ export default function SignOut() {
 
 	return (
 		<button
+			type="button"
 			onClick={handleSubmit}
 			className="w-full py-2 mt-4 text-center bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
 		>

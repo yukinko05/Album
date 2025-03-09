@@ -7,6 +7,7 @@ import { z } from "zod";
 import Compressor from "compressorjs";
 import { useState } from "react";
 import { useUserStore } from "@/stores/userStore";
+import Image from "next/image";
 
 const userSchema = z
 	.object({
@@ -186,14 +187,17 @@ export default function SignupPage() {
 						onChange={handleChangeFile}
 					/>
 					{iconImg && (
-						<img
-							className="max-w-full h-auto mt-2 rounded-md"
+						<Image
 							src={iconImg}
 							alt="選択中のカバー写真"
+							width={100}
+							height={100}
+							className="max-w-full h-auto mt-2 rounded-md"
 						/>
 					)}
 				</div>
 				<button
+					type="submit"
 					className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors"
 					disabled={status === "loading"}
 				>

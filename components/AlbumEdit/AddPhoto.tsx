@@ -2,6 +2,7 @@ import { useState } from "react";
 import Compressor from "compressorjs";
 import { usePhotoStore } from "@/stores/photoStore";
 import { useAuth } from "@/hooks/useAuth";
+import Image from "next/image";
 
 type Props = {
 	albumId: string;
@@ -104,37 +105,43 @@ export default function AddPhotos({ albumId }: Props) {
 
 	return (
 		<div>
-			<h2>写真を追加</h2>
-			<input
-				type="file"
-				accept="image/*"
-				multiple
-				onChange={handleFileChange}
-				disabled={isLoading || status === "loading"}
-			/>
-			<button
-				onClick={handleUpload}
-				disabled={isLoading || status === "loading" || photoData.length === 0}
-			>
-				{isLoading || status === "loading"
-					? "アップロード中..."
-					: "アップロード"}
-			</button>
-			{photoData.length > 0 && (
-				<div>
-					<p>{photoData.length}枚の写真が選択されています</p>
-					<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-						{photoData.map((photo, index) => (
-							<img
-								key={index}
-								src={photo}
-								alt={`プレビュー ${index + 1}`}
-								style={{ width: "100px", height: "100px", objectFit: "cover" }}
-							/>
-						))}
+			<form onSubmit={handleUpload}>
+				<h2>写真を追加</h2>
+				<label>
+					写真を選択:
+					<input
+						type="file"
+						accept="image/*"
+						multiple
+						onChange={handleFileChange}
+						disabled={isLoading || status === "loading"}
+					/>
+				</label>
+				<button
+					type="submit"
+					disabled={isLoading || status === "loading" || photoData.length === 0}
+				>
+					{isLoading || status === "loading"
+						? "アップロード中..."
+						: "アップロード"}
+				</button>
+				{photoData.length > 0 && (
+					<div>
+						<p>{photoData.length}枚の写真が選択されています</p>
+						<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+							{photoData.map((photo, index) => (
+								<Image
+									key={index}
+									src={photo}
+									alt={`プレビュー ${index + 1}`}
+									width={100}
+									height={100}
+								/>
+							))}
+						</div>
 					</div>
-				</div>
-			)}
+				)}
+			</form>
 		</div>
 	);
 }

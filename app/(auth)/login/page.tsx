@@ -86,6 +86,7 @@ export default function LoginPage() {
 				</div>
 
 				<button
+					type="submit"
 					className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors"
 					disabled={status === "loading"}
 				>
