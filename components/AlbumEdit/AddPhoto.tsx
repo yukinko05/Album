@@ -1,8 +1,9 @@
+"use client";
 import { useState } from "react";
-import Compressor from "compressorjs";
 import { usePhotoStore } from "@/stores/photoStore";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
+import { compressMultipleImagesToBase64 } from "@/utils/imageCompressor";
 
 type Props = {
 	albumId: string;
@@ -23,59 +24,20 @@ export default function AddPhotos({ albumId }: Props) {
 		if (!fileList) return;
 		const files = Array.from(fileList);
 
-		if (!files || files.length === 0) return;
-
-		const FILE_SIZE = {
-			LARGE: 5 * 1024 * 1024, // 5MB
-			SMALL: 2 * 1024 * 1024, // 2MB
-		};
-
-		const compressedFiles = await Promise.all(
-			files.map((file) => {
-				if (file instanceof File) {
-					return new Promise<string | null>((resolve, reject) => {
-						let quality;
-						if (file.size > FILE_SIZE.LARGE) {
-							quality = 0.4;
-						} else if (file.size < FILE_SIZE.SMALL) {
-							quality = 0.6;
-						} else {
-							quality = 0.8;
-						}
-
-						new Compressor(file, {
-							quality,
-							success: (compressedFile) => {
-								const reader = new FileReader();
-								reader.readAsDataURL(compressedFile);
-
-								reader.onloadend = (evt) => {
-									if (evt.target !== null) {
-										resolve(evt.target.result as string);
-									} else {
-										resolve(null);
-									}
-								};
-							},
-							error: (err) => {
-								console.error("Compression failed:", err);
-								reject(err);
-							},
-						});
-					});
-				} else {
-					return Promise.resolve(null);
-				}
-			}),
-		);
-
-		const validFiles = compressedFiles.filter(
-			(file): file is string => file !== null,
-		);
-		setPhotoData(validFiles);
+		try {
+			setIsLoading(true);
+			const compressedImages = await compressMultipleImagesToBase64(files);
+			setPhotoData(compressedImages);
+		} catch (error) {
+			console.error("画像の圧縮に失敗しました:", error);
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
-	const handleUpload = async () => {
+	const handleUpload = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+
 		if (!currentUser || !albumId) {
 			console.error("ユーザーIDまたはアルバムIDが不足しています");
 			return;
@@ -105,7 +67,7 @@ export default function AddPhotos({ albumId }: Props) {
 
 	return (
 		<div>
-			<form onSubmit={handleUpload}>
+			<form>
 				<h2>写真を追加</h2>
 				<label>
 					写真を選択:
@@ -118,7 +80,8 @@ export default function AddPhotos({ albumId }: Props) {
 					/>
 				</label>
 				<button
-					type="submit"
+					type="button"
+					onClick={handleUpload}
 					disabled={isLoading || status === "loading" || photoData.length === 0}
 				>
 					{isLoading || status === "loading"
@@ -130,13 +93,15 @@ export default function AddPhotos({ albumId }: Props) {
 						<p>{photoData.length}枚の写真が選択されています</p>
 						<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
 							{photoData.map((photo, index) => (
-								<Image
-									key={index}
-									src={photo}
-									alt={`プレビュー ${index + 1}`}
-									width={100}
-									height={100}
-								/>
+								<div key={index} className="relative w-[100px] h-[100px]">
+									<Image
+										src={photo}
+										alt={`プレビュー ${index + 1}`}
+										fill
+										sizes="100px"
+										style={{ objectFit: 'cover' }}
+									/>
+								</div>
 							))}
 						</div>
 					</div>

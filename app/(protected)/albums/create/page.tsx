@@ -7,11 +7,9 @@ import { useAlbumStore } from "@/stores/albumStore";
 import { usePhotoStore } from "@/stores/photoStore";
 import { useEffect, useState } from "react";
 import { FormFields } from "@/components/AlbumEdit/AlbumCreateForm/AlbumForm";
-import Compressor from "compressorjs";
 import { useAuth } from "@/hooks/useAuth";
 import { useSearchParams } from "next/navigation";
-import { ref, uploadString, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
+import { compressMultipleImagesToBase64 } from "@/utils/imageCompressor";
 
 export default function CreatePage() {
 	const { currentUser } = useAuth();
@@ -38,34 +36,17 @@ export default function CreatePage() {
 
 		setIsLoading(true);
 		try {
-			const file = data.file[0];
+			// 全ての選択された写真を取得
+			const files = Array.from(data.file);
 
 			// 画像圧縮処理
-			const compressedFile = await new Promise<File>((resolve, reject) => {
-				new Compressor(file, {
-					quality: 0.8,
-					maxWidth: 1000,
-					success: (result) => {
-						resolve(result as File);
-					},
-					error: (err) => {
-						reject(err);
-					},
-				});
-			});
-
-			// 画像をBase64に変換
-			const reader = new FileReader();
-			const base64Image = await new Promise<string>((resolve) => {
-				reader.onloadend = () => resolve(reader.result as string);
-				reader.readAsDataURL(compressedFile);
-			});
+			const compressedFiles = await compressMultipleImagesToBase64(files);
 
 			// アルバムデータを作成
 			const albumData = {
 				albumData: {
 					title: data.title,
-					photos: [base64Image],
+					photos: compressedFiles,
 				},
 				userId,
 				shareRoomId,

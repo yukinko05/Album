@@ -4,10 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
-import Compressor from "compressorjs";
 import { useState } from "react";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
+import { compressImageToBase64 } from "@/utils/imageCompressor";
 
 const userSchema = z
 	.object({
@@ -49,37 +49,15 @@ export default function SignupPage() {
 
 	const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
+		if (!file) return;
 
-		if (e.target.files === null || !file) {
-			return;
-		}
-
-		let quality;
-
-		if (file.size > 5 * 1024 * 1024) {
-			quality = 0.4;
-		} else if (file.size < 2 * 1024 * 1024) {
-			quality = 0.6;
-		} else {
-			quality = 0.8;
-		}
-
-		new Compressor(file, {
-			quality,
-			success: (compressedFile) => {
-				const reader = new FileReader();
-				reader.readAsDataURL(compressedFile);
-
-				reader.onloadend = (evt) => {
-					if (evt.target !== null) {
-						setIconImg(evt.target.result as string);
-					}
-				};
-			},
-			error: (error) => {
-				console.error(error.message);
-			},
-		});
+		compressImageToBase64(file)
+			.then((base64Image) => {
+				setIconImg(base64Image);
+			})
+			.catch((error) => {
+				console.error("画像の圧縮に失敗しました:", error);
+			});
 	};
 
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
@@ -187,13 +165,15 @@ export default function SignupPage() {
 						onChange={handleChangeFile}
 					/>
 					{iconImg && (
-						<Image
-							src={iconImg}
-							alt="選択中のカバー写真"
-							width={100}
-							height={100}
-							className="max-w-full h-auto mt-2 rounded-md"
-						/>
+						<div className="relative w-[100px] h-[100px] mt-2">
+							<Image
+								src={iconImg}
+								alt="選択中のカバー写真"
+								fill
+								sizes="100px"
+								style={{ objectFit: "cover" }}
+							/>
+						</div>
 					)}
 				</div>
 				<button

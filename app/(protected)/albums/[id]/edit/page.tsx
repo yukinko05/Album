@@ -10,10 +10,10 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import type { Album, AlbumUpdateRequest } from "@/types/albumTypes";
 import Spinner from "@/components/Spinner";
-import Compressor from "compressorjs";
 import { useAlbumStore } from "@/stores/albumStore";
 import { ref, uploadString, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
+import { compressImage, compressImageToBase64 } from "@/utils/imageCompressor";
 
 const schema = zod.object({
 	title: zod.string().min(1, { message: "タイトルを入力してください" }),
@@ -74,20 +74,13 @@ export default function EditAlbumPage() {
 		const file = e.target.files?.[0];
 		if (!file) return;
 
-		new Compressor(file, {
-			quality: 0.8,
-			maxWidth: 1000,
-			success: (compressedFile) => {
-				const reader = new FileReader();
-				reader.readAsDataURL(compressedFile);
-				reader.onloadend = () => {
-					setPreviewUrl(reader.result as string);
-				};
-			},
-			error: (err) => {
+		compressImageToBase64(file)
+			.then((base64Image) => {
+				setPreviewUrl(base64Image);
+			})
+			.catch((err) => {
 				console.error("画像の圧縮に失敗しました:", err);
-			},
-		});
+			});
 	};
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
@@ -105,25 +98,7 @@ export default function EditAlbumPage() {
 				const file = data.file[0];
 
 				// 画像圧縮処理
-				const compressedFile = await new Promise<File>((resolve, reject) => {
-					new Compressor(file, {
-						quality: 0.8,
-						maxWidth: 1000,
-						success: (result) => {
-							resolve(result as File);
-						},
-						error: (err) => {
-							reject(err);
-						},
-					});
-				});
-
-				// 画像をBase64に変換
-				const reader = new FileReader();
-				const base64Image = await new Promise<string>((resolve) => {
-					reader.onloadend = () => resolve(reader.result as string);
-					reader.readAsDataURL(compressedFile);
-				});
+				const base64Image = await compressImageToBase64(file);
 
 				// Storageに画像をアップロード
 				const storageRef = ref(
