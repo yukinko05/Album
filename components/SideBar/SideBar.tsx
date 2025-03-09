@@ -16,7 +16,7 @@ interface SideBarProps {
 export default function SideBar({
 	currentUser,
 	isAuthenticated = false,
-	userData = null
+	userData = null,
 }: SideBarProps) {
 	// ユーザーデータがない場合は何も表示しない
 	if (!isAuthenticated || !currentUser) {

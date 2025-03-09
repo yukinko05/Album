@@ -12,7 +12,9 @@ export default function AuthLayout({
 }) {
 	const router = useRouter();
 	const currentUser = useAuthStore((state) => state.currentUser);
-	const isAuthStateChecking = useAuthStore((state) => state.isAuthStateChecking);
+	const isAuthStateChecking = useAuthStore(
+		(state) => state.isAuthStateChecking,
+	);
 
 	// ログイン済みの場合はdashboardにリダイレクト
 	useEffect(() => {
