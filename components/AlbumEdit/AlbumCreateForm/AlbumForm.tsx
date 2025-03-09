@@ -3,11 +3,9 @@
 import Header from "@/components/Header";
 import type { AlbumCreateInputs } from "@/types/albumTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@nextui-org/react";
 import { useState } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
-import styles from "./styles.module.css";
 
 type AlbumFormProps = {
 	onSubmit: SubmitHandler<FormFields>;
@@ -45,56 +43,56 @@ export default function AlbumForm({
 	});
 
 	return (
-		<div>
-			<Header />
-			<div className={styles.wrap}>
-				<form
-					onSubmit={handleSubmit((data) => onSubmit(data))}
-					className={styles.createForm}
+		<div className="h-[calc(100vh-65px)] flex items-center justify-center bg-black bg-opacity-70">
+			<form
+				onSubmit={handleSubmit((data) => onSubmit(data))}
+				className="w-[560px] rounded-2xl p-16 bg-white flex flex-col gap-4"
+			>
+				<h1 className="text-4xl font-bold text-center">{formTitle}</h1>
+				<div className="flex flex-col gap-1">
+					<label className="text-xs text-gray-700 mt-2" htmlFor="title">
+						アルバム名
+					</label>
+					<input
+						{...register("title")}
+						className={`bg-gray-200 bg-opacity-20 rounded-2xl h-[42px] px-3 ${
+							errors.title ? "outline-red-500" : "outline-gray-900"
+						}`}
+						type="text"
+					/>
+					{errors.title && (
+						<span className="text-red-500 text-xs">{errors.title.message}</span>
+					)}
+				</div>
+
+				<div className="flex flex-col gap-1">
+					<label className="text-xs text-gray-700 mt-2" htmlFor="photo">
+						アルバム画像
+					</label>
+					<input
+						type="file"
+						id="photo"
+						{...register("file")}
+						accept="image/*"
+						className="text-xs"
+						multiple
+					/>
+					{coverPhotoUrl && (
+						<img
+							className="h-[100px] w-[100px]"
+							src={coverPhotoUrl}
+							alt="選択中のカバー写真"
+						/>
+					)}
+				</div>
+
+				<button
+					type="submit"
+					className="bg-gray-900 text-white rounded-2xl py-2 mt-1 h-12"
 				>
-					<h1 className={styles.title}>{formTitle}</h1>
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="title">
-							アルバム名
-						</label>
-						<input
-							{...register("title")}
-							className={errors.title ? styles.inputError : styles.input}
-							type="text"
-						/>
-						{errors.title && (
-							<span className={styles.errorMessage}>
-								{errors.title.message}
-							</span>
-						)}
-					</div>
-
-					<div className={styles.inputWrap}>
-						<label className={styles.label} htmlFor="photo">
-							アルバム画像
-						</label>
-						<input
-							type="file"
-							id="photo"
-							{...register("file")}
-							accept="image/*"
-							className={styles.coverPhotoUrl}
-							multiple
-						/>
-						{coverPhotoUrl && (
-							<img
-								className={styles.viewImg}
-								src={coverPhotoUrl}
-								alt="選択中のカバー写真"
-							/>
-						)}
-					</div>
-
-					<Button type="submit" className={styles.button}>
-						{submitButtonText}
-					</Button>
-				</form>
-			</div>
+					{submitButtonText}
+				</button>
+			</form>
 		</div>
 	);
 }

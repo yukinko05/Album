@@ -10,23 +10,17 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
-		"@mui/icons-material": "^5.16.1",
-		"@nextui-org/react": "^2.4.2",
-		"@reduxjs/toolkit": "^2.2.6",
-		"axios": "^1.7.7",
 		"compressorjs": "^1.2.1",
 		"dayjs": "^1.11.13",
 		"firebase": "^11.1.0",
-		"framer-motion": "^11.2.11",
-		"geist": "^1.2.1",
 		"json-server": "v0.17.4",
 		"next": "latest",
 		"react": "18.2.0",
 		"react-dom": "18.2.0",
 		"react-hook-form": "^7.52.1",
-		"react-redux": "^9.1.2",
 		"typescript": "5.3.3",
-		"zod": "^3.23.8"
+		"zod": "^3.23.8",
+		"zustand": "^5.0.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
