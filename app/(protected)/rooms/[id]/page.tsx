@@ -6,8 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
-import Image from "next/image";
 import { useAlbumStore } from "@/stores/albumStore";
+import AlbumCard from "@/components/AlbumCard";
 
 export default function RoomPage() {
 	const params = useParams();
@@ -76,34 +76,11 @@ export default function RoomPage() {
 						</div>
 					) : (
 						albums?.map((album) => (
-							<Link
-								href={{
-									pathname: `/albums/${album.albumId}`,
-									query: { albumTitle: album.title, shareRoomId: shareRoomId },
-								}}
+							<AlbumCard
 								key={album.albumId}
-								className="block hover:opacity-60 transition-opacity"
-							>
-								<article className="bg-white rounded-lg shadow-md overflow-hidden">
-									<div className="relative aspect-[1]">
-										<Image
-											src={album.coverPhotoUrl ?? "/default-album.jpg"}
-											alt={`${album.title} のアルバムカバー画像`}
-											fill
-											className="object-cover"
-											priority={true}
-										/>
-									</div>
-									<div className="p-4">
-										<h2 className="font-medium text-gray-900 text-sm md:text-base mb-1 truncate">
-											{album.title}
-										</h2>
-										<time className="text-xs md:text-sm text-gray-500">
-											{album.createdAt}
-										</time>
-									</div>
-								</article>
-							</Link>
+								album={album}
+								shareRoomId={shareRoomId}
+							/>
 						))
 					)}
 				</div>

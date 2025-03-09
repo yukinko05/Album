@@ -12,6 +12,7 @@ import AddPhoto from "@/components/AlbumEdit/AddPhoto";
 import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 import Link from "next/link";
 import { usePhotoStore } from "@/stores/photoStore";
+import PhotoCard from "@/components/PhotoCard";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -68,18 +69,10 @@ export default function AlbumPhotosPage() {
 				<div>
 					<div className="flex flex-wrap gap-8 mt-8 px-6">
 						{photos.map((photo) => (
-							<img
+							<PhotoCard
 								key={photo.photoId}
-								className="rounded-2xl w-[300px] h-[300px]"
-								src={photo.photoUrl}
-								alt={`${albumTitle}のアルバム内の写真`}
-								width={100}
-								onError={(e) => {
-									e.currentTarget.src = "/placeholder.png";
-									console.error(
-										`画像の読み込みに失敗しました: ${photo.photoUrl}`,
-									);
-								}}
+								photo={photo}
+								albumTitle={albumTitle}
 							/>
 						))}
 					</div>

@@ -8,7 +8,11 @@ interface HeaderProps {
 	isAuthenticated?: boolean;
 }
 
-const Header = ({ children, currentUser, isAuthenticated = false }: HeaderProps) => {
+const Header = ({
+	children,
+	currentUser,
+	isAuthenticated = false,
+}: HeaderProps) => {
 	return (
 		<header className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-white">
 			<div className="flex h-full items-center justify-center px-4">

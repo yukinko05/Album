@@ -26,7 +26,7 @@ export default function SignOut() {
 	return (
 		<button
 			onClick={handleSubmit}
-			className="w-full py-2 mt-4 text-center bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+			className="w-full py-2 mt-4 text-center bg-white/10  text-white rounded hover:bg-white/20 transition-colors"
 		>
 			{isLoading ? "ログアウト中..." : "ログアウト"}
 		</button>
