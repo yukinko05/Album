@@ -88,24 +88,23 @@ export default function AddPhotos({ albumId }: Props) {
 						? "アップロード中..."
 						: "アップロード"}
 				</button>
-				{photoData.length > 0 && (
-					<div>
-						<p>{photoData.length}枚の写真が選択されています</p>
-						<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+				<div className="mt-4">
+					{photoData.length > 0 && (
+						<div className="flex flex-wrap gap-4 mb-4">
 							{photoData.map((photo, index) => (
-								<div key={index} className="relative w-[100px] h-[100px]">
+								<div key={index} className="relative w-24 h-24">
 									<Image
 										src={photo}
-										alt={`プレビュー ${index + 1}`}
+										alt={`アップロード予定の写真 ${index + 1}`}
 										fill
-										sizes="100px"
-										style={{ objectFit: "cover" }}
+										sizes="96px"
+										className="object-cover rounded"
 									/>
 								</div>
 							))}
 						</div>
-					</div>
-				)}
+					)}
+				</div>
 			</form>
 		</div>
 	);

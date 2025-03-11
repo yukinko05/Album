@@ -66,27 +66,23 @@ export default function ChangeCoverPhoto({ albumId, photos }: Props) {
 		<div>
 			<form onSubmit={handleUpdate}>
 				<h2>カバー写真を変更</h2>
-				<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
+				<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-4">
 					{photos.map((photo) => (
-						<label key={photo.photoId} style={{ cursor: "pointer" }}>
-							<input
-								type="radio"
-								name="coverPhoto"
-								value={photo.photoUrl}
-								onChange={handleChange}
-								checked={selectedPhoto === photo.photoUrl}
-								disabled={isLoading || status === "loading"}
+						<div
+							key={photo.photoId}
+							className={`relative w-24 h-24 cursor-pointer ${
+								selectedPhoto === photo.photoUrl ? "ring-4 ring-blue-500" : ""
+							}`}
+							onClick={() => setSelectedPhoto(photo.photoUrl)}
+						>
+							<Image
+								src={photo.photoUrl}
+								alt="アルバム写真"
+								fill
+								sizes="96px"
+								className="object-cover"
 							/>
-							<div className="relative w-[100px] h-[100px]">
-								<Image
-									src={photo.photoUrl}
-									alt="アルバム写真"
-									fill
-									sizes="100px"
-									style={{ objectFit: "cover" }}
-								/>
-							</div>
-						</label>
+						</div>
 					))}
 				</div>
 				<button

@@ -64,7 +64,7 @@ export default function SideBar({
 								alt={`${userData.userName}のプロフィールアイコン`}
 								fill
 								sizes="30px"
-								style={{ objectFit: "cover" }}
+								className="object-cover"
 							/>
 						</div>
 					)}

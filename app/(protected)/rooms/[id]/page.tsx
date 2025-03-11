@@ -89,11 +89,10 @@ export default function RoomPage() {
 										<Image
 											src={album.coverPhotoUrl ?? "/default-album.jpg"}
 											alt={`${album.title} のアルバムカバー画像`}
-											// className="object-cover"
 											priority={true}
 											fill
 											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-											style={{ objectFit: "cover" }}
+											className="object-cover"
 										/>
 									</div>
 									<div className="p-4">

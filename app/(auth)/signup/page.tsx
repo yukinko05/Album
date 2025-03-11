@@ -171,7 +171,7 @@ export default function SignupPage() {
 								alt="選択中のカバー写真"
 								fill
 								sizes="100px"
-								style={{ objectFit: "cover" }}
+								className="object-cover rounded-full"
 							/>
 						</div>
 					)}
