@@ -8,6 +8,12 @@ export interface Album {
 	shareRoomId: string;
 }
 
+export interface AlbumCardProps {
+	album: Album;
+	shareRoomId: string;
+	className?: string;
+}
+
 export interface AlbumUpdateRequest {
 	data: {
 		title: string;
