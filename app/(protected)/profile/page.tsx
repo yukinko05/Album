@@ -5,6 +5,7 @@ import Image from "next/image";
 import Spinner from "@/components/Spinner";
 import { useUserStore } from "@/stores/userStore";
 import { useAuth } from "@/hooks/useAuth";
+import { FaCircleUser } from "react-icons/fa6";
 
 export default function ProfilePage() {
 	const { currentUser, isAuthenticated, isLoading } = useAuth();
@@ -60,9 +61,7 @@ export default function ProfilePage() {
 								className="object-cover rounded-full"
 							/>
 						) : (
-							<div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center">
-								<span className="text-4xl text-gray-500">U</span>
-							</div>
+							<FaCircleUser className="text-gray-800" size={128} />
 						)}
 					</div>
 					<div className="flex-1">
