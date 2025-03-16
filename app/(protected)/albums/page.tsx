@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useAlbumStore } from "@/stores/albumStore";
 import SideBar from "@/components/SideBar/SideBar";
 import Spinner from "@/components/Spinner";
+import AlbumCard from "@/components/AlbumCard";
 
 export default function Albums() {
 	const [loading, setLoading] = useState(true);
@@ -52,25 +53,7 @@ export default function Albums() {
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-8 mb-8 px-6">
 						{albums && albums.length > 0 ? (
 							albums.map((album) => (
-								<Link
-									key={album.albumId}
-									href={`/albums/${album.albumId}?albumTitle=${album.title}`}
-									className="shadow-md rounded-2xl w-auto h-[400px]"
-								>
-									<div className="text-xl font-bold p-4">{album.title}</div>
-									<div className="w-full h-[300px] relative border-t border-gray-200 p-4 mt-2">
-										{album.coverPhotoUrl && (
-											<img
-												src={album.coverPhotoUrl}
-												alt={`${album.title}のカバー画像`}
-												className="w-full h-full object-cover"
-											/>
-										)}
-									</div>
-									<div className="text-xs text-gray-500 px-4 pb-4">
-										{album.createdAt}
-									</div>
-								</Link>
+								<AlbumCard album={album} shareRoomId={album.shareRoomId} />
 							))
 						) : (
 							<p>アルバムがありません</p>
