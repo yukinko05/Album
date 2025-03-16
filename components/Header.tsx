@@ -19,7 +19,7 @@ const Header = ({
 				<div className="absolute left-4">
 					<Link
 						href="/dashboard"
-						className="text-3xl font-bold text-gray-900 hover:text-gray-500 transition-colors"
+						className="text-4xl font-bold text-orange-800 hover:text-orange-600 font-cherry transition-colors"
 					>
 						ALBUM
 					</Link>
@@ -29,18 +29,24 @@ const Header = ({
 						<h1 className="text-2xl font-bold text-gray-700">{children}</h1>
 					)}
 				</div>
-				<div className="absolute right-4">
-					<nav>
-						{!isAuthenticated && (
+				<nav>
+					{!isAuthenticated && (
+						<div className="flex gap-4">
 							<Link
 								href="/login"
-								className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+								className="px-4 py-2 text-sm bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-all duration-300 ease-in-out shadow-md hover:shadow-lg"
 							>
 								ログイン
 							</Link>
-						)}
-					</nav>
-				</div>
+							<Link
+								href="/signup"
+								className="px-4 py-2 text-sm bg-white border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white hover:border-orange-500 font-medium rounded-md transition-all duration-300 ease-in-out shadow-md hover:shadow-lg"
+							>
+								新規登録
+							</Link>
+						</div>
+					)}
+				</nav>
 			</div>
 		</header>
 	);
