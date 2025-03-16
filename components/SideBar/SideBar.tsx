@@ -6,6 +6,7 @@ import SignOut from "@/app/signout/signout";
 import Image from "next/image";
 import type { User } from "firebase/auth";
 import type { User as AppUser } from "@/types/userTypes";
+import { FaCircleUser } from "react-icons/fa6";
 
 interface SideBarProps {
 	currentUser?: User | null;
@@ -57,7 +58,7 @@ export default function SideBar({
 					</div>
 				</div>
 				<div className="flex items-center gap-2 py-4">
-					{userData?.iconImg && (
+					{userData?.iconImg ? (
 						<div className="relative w-[30px] h-[30px]">
 							<Image
 								src={userData.iconImg}
@@ -67,6 +68,8 @@ export default function SideBar({
 								className="object-cover"
 							/>
 						</div>
+					) : (
+						<FaCircleUser className="text-gray-800" size={30} />
 					)}
 					<div>
 						<p className="text-gray-800">{userData?.userName}</p>
