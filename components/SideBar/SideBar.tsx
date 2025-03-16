@@ -25,8 +25,33 @@ export default function SideBar({
 	}
 
 	return (
-		<div className="fixed left-0 h-full w-64 bg-gradient-to-r from-[#A8CAF0] to-[#E9F0FA] shadow-lg">
+		<div className="fixed left-0 h-full w-64 shadow-lg bg-gradient-to-b from-sky-500 to-indigo-500">
 			<nav className="flex h-full flex-col p-4">
+				<Link
+					href="/dashboard"
+					className="text-4xl font-bold text-white hover:text-gray-300 font-cherry text-center"
+				>
+					ALBUM
+				</Link>
+				<Link
+					href="/profile"
+					className="flex items-center gap-2 p-2 bg-white/20 hover:bg-white/30 rounded-full mt-8"
+				>
+					{userData?.iconImg ? (
+						<div className="relative w-[30px] h-[30px]">
+							<Image
+								src={userData.iconImg}
+								alt={`${userData.userName}のプロフィールアイコン`}
+								fill
+								sizes="30px"
+								className="object-cover rounded-full"
+							/>
+						</div>
+					) : (
+						<FaCircleUser className="text-gray-800" size={30} />
+					)}
+					<p className="text-white">{userData?.userName}</p>
+				</Link>
 				<div className="flex-1 overflow-y-auto scrollbar-hide">
 					<ShareRoomSidebarList />
 				</div>
@@ -55,24 +80,6 @@ export default function SideBar({
 						>
 							ルーム参加
 						</Link>
-					</div>
-				</div>
-				<div className="flex items-center gap-2 py-4">
-					{userData?.iconImg ? (
-						<div className="relative w-[30px] h-[30px]">
-							<Image
-								src={userData.iconImg}
-								alt={`${userData.userName}のプロフィールアイコン`}
-								fill
-								sizes="30px"
-								className="object-cover"
-							/>
-						</div>
-					) : (
-						<FaCircleUser className="text-gray-800" size={30} />
-					)}
-					<div>
-						<p className="text-gray-800">{userData?.userName}</p>
 					</div>
 				</div>
 				<div className="border-t py-4">
