@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useUserStore } from "@/stores/userStore";
 import Image from "next/image";
 import { compressImageToBase64 } from "@/utils/imageCompressor";
+import Link from "next/link";
 
 const userSchema = z
 	.object({
@@ -74,87 +75,103 @@ export default function SignupPage() {
 	};
 
 	return (
-		<div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8">
+		<div className="flex justify-center items-center min-h-[calc(100vh-4rem)] p-8 bg-gradient-to-b from-amber-100 to-orange-200">
 			<form
 				onSubmit={handleSubmit(onSubmit)}
-				className="w-full max-w-lg p-8 bg-white rounded-lg shadow-md"
+				className="w-full max-w-lg p-8 bg-white rounded-lg shadow-md border border-amber-200"
 			>
-				<h1 className="text-2xl font-bold mb-6 text-center">ALBUM</h1>
+				<h1 className="text-2xl font-bold mb-6 text-center text-orange-800">
+					新規登録
+				</h1>
 				{errorMessage && (
-					<p className="text-red-600 text-sm mt-2">{errorMessage}</p>
+					<p className="text-red-500 text-sm mt-2">{errorMessage}</p>
 				)}
 				<div className="mb-6">
-					<label className="block mb-2 font-medium" htmlFor="name">
+					<label
+						className="block mb-2 font-medium text-orange-900"
+						htmlFor="name"
+					>
 						ニックネーム
 					</label>
 					<input
 						{...register("userName")}
-						className={`w-full p-3 border rounded-md ${
-							errors.userName ? "border-red-600" : "border-gray-200"
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.userName ? "border-red-500" : "border-amber-200"
 						}`}
 						type="text"
 					/>
 					{errors.userName && (
-						<span className="text-red-600 text-sm mt-2">
+						<span className="text-red-500 text-sm mt-2">
 							{errors.userName.message}
 						</span>
 					)}
 				</div>
 				<div className="mb-6">
-					<label className="block mb-2 font-medium" htmlFor="email">
+					<label
+						className="block mb-2 font-medium text-orange-900"
+						htmlFor="email"
+					>
 						メールアドレス
 					</label>
 					<input
 						{...register("email")}
-						className={`w-full p-3 border rounded-md ${
-							errors.email ? "border-red-600" : "border-gray-200"
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.email ? "border-red-500" : "border-amber-200"
 						}`}
 						type="text"
 					/>
 					{errors.email && (
-						<span className="text-red-600 text-sm mt-2">
+						<span className="text-red-500 text-sm mt-2">
 							{errors.email.message}
 						</span>
 					)}
 				</div>
 				<div className="mb-6">
-					<label className="block mb-2 font-medium" htmlFor="password">
+					<label
+						className="block mb-2 font-medium text-orange-900"
+						htmlFor="password"
+					>
 						パスワード
 					</label>
 					<input
 						{...register("password")}
-						className={`w-full p-3 border rounded-md ${
-							errors.password ? "border-red-600" : "border-gray-200"
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.password ? "border-red-500" : "border-amber-200"
 						}`}
 						type="password"
 					/>
 					{errors.password && (
-						<span className="text-red-600 text-sm mt-2">
+						<span className="text-red-500 text-sm mt-2">
 							{errors.password.message}
 						</span>
 					)}
 
 					<label
-						className="block mb-2 font-medium mt-4"
+						className="block mb-2 font-medium mt-4 text-orange-900"
 						htmlFor="passwordConfirmation"
 					>
 						パスワード確認
 					</label>
 					<input
 						{...register("passwordConfirmation")}
-						className={`w-full p-3 border rounded-md ${
-							errors.passwordConfirmation ? "border-red-600" : "border-gray-200"
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.passwordConfirmation
+								? "border-red-500"
+								: "border-amber-200"
 						}`}
 						type="password"
 					/>
 					{errors.passwordConfirmation && (
-						<span className="text-red-600 text-sm mt-2">
+						<span className="text-red-500 text-sm mt-2">
 							{errors.passwordConfirmation.message}
 						</span>
 					)}
 				</div>
 				<div className="mb-6">
-					<label htmlFor="iconImg" className="block mb-2 font-medium">
+					<label
+						htmlFor="iconImg"
+						className="block mb-2 font-medium text-orange-900"
+					>
 						プロフィール写真をアップロード
 					</label>
 					<input
@@ -163,26 +180,39 @@ export default function SignupPage() {
 						name="iconImg"
 						accept=".jpg, .jpeg, .png"
 						onChange={handleChangeFile}
+						className="opacity-0 w-0 h-0"
 					/>
+					<label
+						htmlFor="iconImg"
+						className="cursor-pointer bg-orange-100 text-orange-800 px-4 py-2 rounded-lg shadow hover:bg-orange-200 inline-block text-center"
+					>
+						ファイルを選択
+					</label>
 					{iconImg && (
-						<div className="relative w-[100px] h-[100px] mt-2">
+						<div className="relative w-24 h-24 mt-2 rounded-lg overflow-hidden border border-amber-200">
 							<Image
 								src={iconImg}
 								alt="選択中のカバー写真"
 								fill
-								sizes="100px"
-								className="object-cover rounded-full"
+								sizes="96px"
+								className="object-cover"
 							/>
 						</div>
 					)}
 				</div>
 				<button
 					type="submit"
-					className="w-full py-3 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-md transition-colors"
+					className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-md transition-colors disabled:opacity-50"
 					disabled={status === "loading"}
 				>
-					{status === "loading" ? "登録中..." : "新規登録する"}
+					{status === "loading" ? "登録中..." : "登録する"}
 				</button>
+				<Link
+					href="/login"
+					className="text-sm text-orange-900 block text-end mt-4 hover:text-orange-600 hover:underline"
+				>
+					ログインはこちら
+				</Link>
 			</form>
 		</div>
 	);
