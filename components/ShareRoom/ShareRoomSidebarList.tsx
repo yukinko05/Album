@@ -33,16 +33,21 @@ export default function ShareRoomSidebarList() {
 
 	return (
 		<div className="mt-4">
-			<h2 className="text-lg text-white font-semibold mb-2 px-4">共有ルーム</h2>
+			<h2 className="text-lg text-stone-800/80 font-semibold mb-2 px-4">
+				共有ルーム
+			</h2>
 			<ul className="space-y-1">
 				{shareRooms.length === 0 ? (
-					<li className="px-4 py-2 text-white">共有ルームがありません</li>
+					<li className="px-4 py-2 text-stone-800/70">
+						共有ルームがありません
+					</li>
 				) : (
 					shareRooms.map((room) => (
 						<li key={room.shareRoomId}>
 							<Link
 								href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
-								className="block px-4 py-2 text-white hover:bg-gray-100 hover:text-blue-500 rounded-md transition-colors"
+								className="block px-4 py-2 text-stone-800/70
+ hover:bg-gray-100 hover:text-orange-600 rounded-md transition-colors"
 							>
 								{room.sharedRoomTitle}
 							</Link>
