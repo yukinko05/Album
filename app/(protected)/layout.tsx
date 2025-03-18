@@ -73,7 +73,7 @@ export default function ProtectedLayout({
 					userData={userData}
 				/>
 			</div>
-			<main className="md:ml-64 px-8 pt-8">{children}</main>
+			<main className="md:ml-64">{children}</main>
 		</div>
 	);
 }
