@@ -47,9 +47,9 @@ export default function ProfilePage() {
 	}
 
 	return (
-		<div className="container mx-auto px-4 py-8 mt-16">
-			<h1 className="text-2xl font-bold mb-6">プロフィール</h1>
-			<div className="bg-white rounded-lg shadow-md p-6">
+		<div className="px-16 py-8 bg-amber-50 min-h-screen">
+			<h1 className="text-2xl font-bold mb-6 text-orange-800">プロフィール</h1>
+			<div className="bg-white rounded-lg shadow-md p-8 border border-amber-200 w-5/6">
 				<div className="flex flex-col md:flex-row items-center gap-6">
 					<div className="w-32 h-32 relative">
 						{iconImg ? (
@@ -61,17 +61,19 @@ export default function ProfilePage() {
 								className="object-cover rounded-full"
 							/>
 						) : (
-							<FaCircleUser className="text-gray-800" size={128} />
+							<div className="w-full h-full bg-orange-100 rounded-full flex items-center justify-center">
+								<FaCircleUser className="text-orange-800" size={128} />
+							</div>
 						)}
 					</div>
 					<div className="flex-1">
 						<div className="mb-4">
-							<h2 className="text-sm text-gray-500">ユーザー名</h2>
-							<p className="text-xl font-medium">{userName}</p>
+							<h2 className="text-sm text-orange-600">ユーザー名</h2>
+							<p className="text-xl font-medium text-orange-900">{userName}</p>
 						</div>
 						<div>
-							<h2 className="text-sm text-gray-500">メールアドレス</h2>
-							<p className="text-xl font-medium">{email}</p>
+							<h2 className="text-sm text-orange-600">メールアドレス</h2>
+							<p className="text-xl font-medium text-orange-900">{email}</p>
 						</div>
 					</div>
 				</div>
