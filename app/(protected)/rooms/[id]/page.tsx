@@ -42,9 +42,11 @@ export default function RoomPage() {
 	}, [userId, shareRoomId, getAlbums]);
 
 	return (
-		<div>
+		<div className="bg-amber-50 min-h-screen p-6">
 			<div className="mb-6">
-				<h1 className="text-2xl font-bold mb-2">{sharedRoomTitle}</h1>
+				<h1 className="text-2xl font-bold mb-2 text-orange-800">
+					{sharedRoomTitle}
+				</h1>
 			</div>
 
 			<div className="my-4 text-end">
@@ -56,7 +58,7 @@ export default function RoomPage() {
 							shareRoomId: shareRoomId,
 						},
 					}}
-					className="inline-block rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors shadow-md"
+					className="inline-block rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 transition-colors shadow-md"
 				>
 					アルバム作成
 				</Link>
@@ -69,8 +71,8 @@ export default function RoomPage() {
 			) : (
 				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
 					{albums?.length === 0 ? (
-						<div className="col-span-full bg-white rounded-lg shadow-md p-6 text-center">
-							<p className="text-gray-500 mb-4">
+						<div className="col-span-full bg-white rounded-lg shadow-md p-6 text-center border border-amber-200">
+							<p className="text-orange-800 mb-4">
 								このルームにはまだアルバムがありません
 							</p>
 						</div>
@@ -82,9 +84,9 @@ export default function RoomPage() {
 									query: { albumTitle: album.title, shareRoomId: shareRoomId },
 								}}
 								key={album.albumId}
-								className="block hover:opacity-60 transition-opacity"
+								className="block hover:opacity-90 transition-opacity"
 							>
-								<article className="bg-white rounded-lg shadow-md overflow-hidden">
+								<article className="bg-white rounded-lg shadow-md overflow-hidden border border-amber-200">
 									<div className="relative aspect-[1]">
 										<Image
 											src={album.coverPhotoUrl ?? "/default-album.jpg"}
@@ -96,10 +98,10 @@ export default function RoomPage() {
 										/>
 									</div>
 									<div className="p-4">
-										<h2 className="font-medium text-gray-900 text-sm md:text-base mb-1 truncate">
+										<h2 className="font-medium text-orange-800 text-sm md:text-base mb-1 truncate">
 											{album.title}
 										</h2>
-										<time className="text-xs md:text-sm text-gray-500">
+										<time className="text-xs md:text-sm text-orange-600">
 											{album.createdAt}
 										</time>
 									</div>
