@@ -7,7 +7,12 @@ import Link from "next/link";
 import { usePhotoStore } from "@/stores/photoStore";
 import {
 	FiMenu,
-	FiX
+	FiX,
+	FiImage,
+	FiEdit,
+	FiTrash2,
+	FiPlusCircle,
+	FiLink,
 } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -113,6 +118,18 @@ export default function AlbumPhotosPage() {
 					</motion.div>
 				)}
 			</AnimatePresence>
+
+			{!loading && (
+				<div>
+					{photos.map((photo) => (
+						<img
+							key={photo.photoId}
+							src={photo.photoUrl}
+							alt={`${albumTitle}のアルバム内の写真`}
+						/>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
