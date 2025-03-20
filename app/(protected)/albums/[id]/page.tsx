@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { usePhotoStore } from "@/stores/photoStore";
+import Spinner from "@/components/Spinner";
 import {
 	FiMenu,
 	FiX,
@@ -15,6 +16,7 @@ import {
 	FiLink,
 } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
+import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 
 type EditMode =
 	| ""
@@ -130,6 +132,22 @@ export default function AlbumPhotosPage() {
 					))}
 				</div>
 			)}
+
+			{loading && (
+				<div>
+					<Spinner />
+				</div>
+			)}
+
+			<AnimatePresence>
+				{editMode === "coverPhoto" && (
+					<ChangeCoverPhoto
+						albumId={albumId}
+						photos={photos}
+						onClose={closeEditMode}
+					/>
+				)}
+			</AnimatePresence>
 		</div>
 	);
 }
