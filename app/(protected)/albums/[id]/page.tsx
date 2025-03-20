@@ -13,6 +13,15 @@ import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 import Link from "next/link";
 import { usePhotoStore } from "@/stores/photoStore";
 
+type EditMode =
+	| ""
+	| "coverPhoto"
+	| "title"
+	| "delete"
+	| "link"
+	| "addPhoto"
+	| "deletePhotos";
+
 export default function AlbumPhotosPage() {
 	const params = useParams();
 	const albumId = String(params.id);
@@ -20,8 +29,21 @@ export default function AlbumPhotosPage() {
 	const albumTitle = searchParams.get("albumTitle");
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [editMode, setEditMode] = useState<EditMode>("");
 	const shareRoomId = searchParams.get("shareRoomId");
 	const getPhotos = usePhotoStore((state) => state.getPhotos);
+
+	// 編集モードが有効な時に、body要素にoverflow-hiddenを設定する
+	useEffect(() => {
+		if (editMode !== "") {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "";
+		}
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, [editMode]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -87,7 +109,25 @@ export default function AlbumPhotosPage() {
 						<EditAlbumTitle albumId={albumId} currentTitle={albumTitle} />
 						<AlbumDeleteButton albumId={albumId} photos={photos} />
 						<EditLinkButton albumId={albumId} />
-						<ChangeCoverPhoto albumId={albumId} photos={photos} />
+						{!isChangeCoverPhotoOpen && (
+							<div className="p-4">
+								<div>
+									<button
+										className="bottom-2 right-2 bg-black text-white p-2 rounded"
+										onClick={() => setIsChangeCoverPhotoOpen(true)}
+									>
+										変更
+									</button>
+								</div>
+							</div>
+						)}
+						{isChangeCoverPhotoOpen && (
+							<ChangeCoverPhoto
+								albumId={albumId}
+								photos={photos}
+								onClose={() => setIsChangeCoverPhotoOpen(false)}
+							/>
+						)}
 						<AddPhoto albumId={albumId} />
 						<PhotoSelectDelete albumId={albumId} photos={photos} />
 					</div>
