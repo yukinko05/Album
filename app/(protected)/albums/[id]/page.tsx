@@ -17,6 +17,7 @@ export default function AlbumPhotosPage() {
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
 	const shareRoomId = searchParams.get("shareRoomId");
+	const [isTitleEditing, setIsTitleEditing] = useState(false);
 	const getPhotos = usePhotoStore((state) => state.getPhotos);
 
 	useEffect(() => {
@@ -36,20 +37,37 @@ export default function AlbumPhotosPage() {
 
 	if (albumTitle === null) return;
 
+	const handleEnableEdit = () => {
+		setIsTitleEditing(true);
+	};
+
+	const handleTitleEditComplete = () => {
+		setIsTitleEditing(false);
+	};
+
 	return (
 		<div className="pt-6 px-6">
 			<div className="flex justify-between items-center">
-				<AlbumTitle albumId={albumId} currentTitle={albumTitle} />
-
-				<Link
-					href={`/rooms/${shareRoomId}`}
-					className="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600 transition-colors"
-				>
-					ルームに戻る
-				</Link>
-			</div>
-			<div className="flex justify-end mt-4">
-				<EditMenu albumId={albumId} photos={photos} albumTitle={albumTitle} />
+				<AlbumTitle
+					albumId={albumId}
+					currentTitle={albumTitle}
+					isEditing={isTitleEditing}
+					onEditComplete={handleTitleEditComplete}
+				/>
+				<div className="flex items-center gap-4">
+					<Link
+						href={`/rooms/${shareRoomId}`}
+						className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-600 transition-colors"
+					>
+						ルームに戻る
+					</Link>
+					<EditMenu
+						albumId={albumId}
+						photos={photos}
+						albumTitle={albumTitle}
+						onEditTitle={handleEnableEdit}
+					/>
+				</div>
 			</div>
 			{!loading && (
 				<div className="flex flex-wrap gap-8 mt-8 px-6">
