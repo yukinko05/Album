@@ -1,11 +1,23 @@
 "use client";
 import { useRouter } from "next/navigation";
-import type { PhotosProps } from "@/types/photoTypes";
+import type { Photo } from "@/types/photoTypes";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAlbumStore } from "@/stores/albumStore";
 
-export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
+type AlbumDeleteButtonProps = {
+	albumId: string;
+	photos: Photo[];
+	classNames?: string;
+	children?: React.ReactNode;
+};
+
+export default function AlbumDeleteButton({
+	albumId,
+	photos,
+	classNames,
+	children,
+}: AlbumDeleteButtonProps) {
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const searchParams = useSearchParams();
@@ -17,7 +29,7 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 
 	const handleClick = async () => {
 		const isConfirmed = window.confirm(
-			"このアルバムを削除してもよろしいですか？",
+			"このアルバムを削除してもよろしいですか？\nアルバム内のすべての写真も削除されます。",
 		);
 		if (!isConfirmed) return;
 
@@ -55,8 +67,16 @@ export default function AlbumDeleteButton({ albumId, photos }: PhotosProps) {
 			onClick={handleClick}
 			aria-label="アルバムを削除"
 			disabled={isLoading || status === "loading"}
+			className={classNames}
 		>
-			{isLoading || status === "loading" ? "削除中..." : "アルバム削除"}
+			{isLoading || status === "loading" ? (
+				<>
+					<span className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin mr-1.5" />
+					削除中...
+				</>
+			) : (
+				children || "アルバムを削除"
+			)}
 		</button>
 	);
 }
