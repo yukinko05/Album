@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Photo } from "@/types/photoTypes";
 import { AnimatePresence, motion } from "framer-motion";
 import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
@@ -23,13 +23,34 @@ type EditMode =
 	| "addPhoto"
 	| "deletePhotos";
 
+type EditMenuProps = {
+	albumId: string;
+	photos: Photo[];
+	albumTitle: string;
+	onEditTitle: () => void;
+};
+
 export default function EditMenu({
 	albumId,
 	photos,
 	albumTitle,
-}: { albumId: string; photos: Photo[]; albumTitle: string }) {
+	onEditTitle,
+}: EditMenuProps) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const [editMode, setEditMode] = useState<EditMode>("");
+
+	//編集モードが有効なときはbodyのスクロールを無効化
+	useEffect(() => {
+		if (editMode !== "") {
+			document.body.style.overflow = "hidden";
+		} else {
+			document.body.style.overflow = "";
+		}
+
+		return () => {
+			document.body.style.overflow = "";
+		};
+	}, [editMode]);
 
 	const closeEditMode = () => {
 		setEditMode("");
