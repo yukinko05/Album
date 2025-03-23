@@ -6,26 +6,8 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { usePhotoStore } from "@/stores/photoStore";
 import Spinner from "@/components/Spinner";
-import {
-	FiMenu,
-	FiX,
-	FiImage,
-	FiEdit,
-	FiTrash2,
-	FiPlusCircle,
-	FiLink,
-} from "react-icons/fi";
-import { AnimatePresence, motion } from "framer-motion";
-import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 import AlbumTitle from "@/components/AlbumEdit/AlbumTitle";
-type EditMode =
-	| ""
-	| "coverPhoto"
-	| "title"
-	| "delete"
-	| "link"
-	| "addPhoto"
-	| "deletePhotos";
+import EditMenu from "@/components/EditMenu";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -34,22 +16,8 @@ export default function AlbumPhotosPage() {
 	const albumTitle = searchParams.get("albumTitle");
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
-	const [editMode, setEditMode] = useState<EditMode>("");
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	const shareRoomId = searchParams.get("shareRoomId");
 	const getPhotos = usePhotoStore((state) => state.getPhotos);
-
-	// 編集モードが有効な時に、body要素にoverflow-hiddenを設定する
-	useEffect(() => {
-		if (editMode !== "") {
-			document.body.style.overflow = "hidden";
-		} else {
-			document.body.style.overflow = "";
-		}
-		return () => {
-			document.body.style.overflow = "";
-		};
-	}, [editMode]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -66,14 +34,6 @@ export default function AlbumPhotosPage() {
 		fetchData();
 	}, [albumId, getPhotos]);
 
-	const closeEditMode = () => {
-		setEditMode("");
-		setIsMenuOpen(false);
-	};
-
-	const toggleMenu = () => {
-		setIsMenuOpen(!isMenuOpen);
-	};
 	if (albumTitle === null) return;
 
 	return (
@@ -87,67 +47,27 @@ export default function AlbumPhotosPage() {
 					>
 						ルームに戻る
 					</Link>
-					<button onClick={toggleMenu}>
-						{isMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
-					</button>
 				</div>
 			</div>
-			<AnimatePresence>
-				{isMenuOpen && (
-					<motion.div
-						initial={{ opacity: 0, y: -20 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{ opacity: 0, y: -20 }}
-						transition={{ duration: 0.2 }}
-					>
-						<div>
-							<button onClick={() => setEditMode("coverPhoto")}>
-								カバー写真を変更
-							</button>
-							<button onClick={() => setEditMode("title")}>
-								タイトルを変更
-							</button>
-							<button onClick={() => setEditMode("addPhoto")}>
-								写真を追加
-							</button>
-							<button onClick={() => setEditMode("deletePhotos")}>
-								写真を削除
-							</button>
-							<button onClick={() => setEditMode("delete")}>
-								アルバムを削除
-							</button>
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
-
+			<EditMenu albumId={albumId} photos={photos} albumTitle={albumTitle} />
 			{!loading && (
-				<div>
+				<div className="flex flex-wrap gap-8 mt-8 px-6">
 					{photos.map((photo) => (
 						<img
 							key={photo.photoId}
 							src={photo.photoUrl}
 							alt={`${albumTitle}のアルバム内の写真`}
+							className="rounded-2xl w-[300px] h-[300px] object-cover"
 						/>
 					))}
 				</div>
 			)}
 
 			{loading && (
-				<div>
+				<div className="flex justify-center pt-24">
 					<Spinner />
 				</div>
 			)}
-
-			<AnimatePresence>
-				{editMode === "coverPhoto" && (
-					<ChangeCoverPhoto
-						albumId={albumId}
-						photos={photos}
-						onClose={closeEditMode}
-					/>
-				)}
-			</AnimatePresence>
 		</div>
 	);
 }
