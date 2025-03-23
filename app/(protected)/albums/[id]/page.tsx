@@ -17,7 +17,7 @@ import {
 } from "react-icons/fi";
 import { AnimatePresence, motion } from "framer-motion";
 import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
-
+import AlbumTitle from "@/components/AlbumEdit/AlbumTitle";
 type EditMode =
 	| ""
 	| "coverPhoto"
@@ -79,7 +79,7 @@ export default function AlbumPhotosPage() {
 	return (
 		<div>
 			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-2xl font-bold">{albumTitle}</h1>
+				<AlbumTitle albumId={albumId} currentTitle={albumTitle} />
 				<div className="flex space-x-2">
 					<Link
 						href={`/rooms/${shareRoomId}`}
