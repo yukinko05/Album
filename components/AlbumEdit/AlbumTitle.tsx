@@ -2,25 +2,39 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAlbumStore } from "@/stores/albumStore";
+
 type AlbumTitle = {
 	albumId: string;
 	currentTitle: string;
+	isEditing: boolean;
+	onEditComplete: () => void;
 };
 
-export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
+export default function AlbumTitle({
+	albumId,
+	currentTitle,
+	isEditing,
+	onEditComplete,
+}: AlbumTitle) {
 	const editAlbumTitle = useAlbumStore((state) => state.editAlbumTitle);
 	const status = useAlbumStore((state) => state.status);
 	const [title, setTitle] = useState<string>(currentTitle);
-	const [isEditing, setEditing] = useState(false);
+	const [localEditing, setLocalEditing] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const inputRef = useRef<HTMLInputElement>(null);
 
+	// 編集モードがローカルまたはハンバーガーメニュー項目から選択されているかを確認
 	useEffect(() => {
-		if (isEditing && inputRef.current) {
+		if ((localEditing || isEditing) && inputRef.current) {
 			inputRef.current.focus();
 		}
-	}, [isEditing]);
+	}, [localEditing, isEditing]);
+
+	//ハンバーガーメニュー項目からタイトルを変更された場合、内部のステートも更新
+	useEffect(() => {
+		setTitle(currentTitle);
+	}, [currentTitle]);
 
 	const handleClickUpdate = async () => {
 		try {
@@ -29,11 +43,12 @@ export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
 				title,
 				albumId,
 			});
+			onEditComplete();
 		} catch (error) {
 			console.error("タイトルの更新に失敗しました:", error);
 		} finally {
 			setIsLoading(false);
-			setEditing(false);
+			setLocalEditing(false);
 		}
 	};
 
@@ -47,18 +62,21 @@ export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
 					title,
 					albumId,
 				});
+				onEditComplete();
 			} catch (error) {
 				console.error("タイトルの更新に失敗しました:", error);
 			} finally {
 				setIsLoading(false);
-				setEditing(false);
+				setLocalEditing(false);
 			}
 		}
 	};
 
+	const isInEditMode = localEditing || isEditing;
+
 	return (
 		<div className="max-w-4xl pl-6 text-4xl">
-			{isEditing ? (
+			{isInEditMode ? (
 				<div className="flex items-center">
 					<input
 						ref={inputRef}
@@ -83,7 +101,7 @@ export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
 				</div>
 			) : (
 				<h1
-					onClick={() => setEditing(true)}
+					onClick={() => setLocalEditing(true)}
 					className="text-stone-700 border-b border-amber-200"
 				>
 					{title}

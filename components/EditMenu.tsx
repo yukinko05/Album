@@ -11,7 +11,6 @@ import {
 	FiEdit,
 	FiTrash2,
 	FiPlusCircle,
-	FiLink,
 } from "react-icons/fi";
 
 type EditMode =
@@ -65,7 +64,8 @@ export default function EditMenu({
 		onEditTitle();
 		setIsMenuOpen(false);
 	};
-	if (albumTitle === null) return;
+
+	if (albumTitle === null) return null;
 
 	return (
 		<div>
