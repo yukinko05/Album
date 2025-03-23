@@ -91,24 +91,28 @@ export default function EditMenu({
 								onClick={() => setEditMode("coverPhoto")}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
 							>
+								<FiImage className="text-orange-500" />
 								カバー写真を変更
 							</button>
 							<button
 								onClick={handleTitleEdit}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
 							>
+								<FiEdit className="text-orange-500" />
 								タイトルを変更
 							</button>
 							<button
 								onClick={() => setEditMode("addPhoto")}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
 							>
+								<FiPlusCircle className="text-orange-500" />
 								写真を追加
 							</button>
 							<button
 								onClick={() => setEditMode("deletePhotos")}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
 							>
+								<FiTrash2 className="text-orange-500" />
 								写真を削除
 							</button>
 							<hr className="my-2 border-amber-100" />
@@ -116,6 +120,7 @@ export default function EditMenu({
 								onClick={() => setEditMode("delete")}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
 							>
+								<FiTrash2 className="text-red-500" />
 								アルバムを削除
 							</button>
 						</div>
