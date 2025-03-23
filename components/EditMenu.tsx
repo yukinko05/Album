@@ -53,7 +53,7 @@ export default function EditMenu({
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.2 }}
-						className="absolute top-16 right-0 bg-white shadow-lg rounded-lg overflow-hidden z-40 border border-amber-200"
+						className="absolute top-30 w-48 mt-2 mr-6 right-0 bg-white shadow-lg rounded-lg overflow-hidden z-40 border border-amber-200"
 					>
 						<div className="py-2">
 							<button
