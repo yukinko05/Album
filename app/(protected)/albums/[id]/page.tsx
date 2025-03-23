@@ -37,19 +37,20 @@ export default function AlbumPhotosPage() {
 	if (albumTitle === null) return;
 
 	return (
-		<div>
-			<div className="flex justify-between items-center mb-4">
+		<div className="pt-6 px-6">
+			<div className="flex justify-between items-center">
 				<AlbumTitle albumId={albumId} currentTitle={albumTitle} />
-				<div className="flex space-x-2">
-					<Link
-						href={`/rooms/${shareRoomId}`}
-						className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition-colors"
-					>
-						ルームに戻る
-					</Link>
-				</div>
+
+				<Link
+					href={`/rooms/${shareRoomId}`}
+					className="bg-gray-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-600 transition-colors"
+				>
+					ルームに戻る
+				</Link>
 			</div>
-			<EditMenu albumId={albumId} photos={photos} albumTitle={albumTitle} />
+			<div className="flex justify-end mt-4">
+				<EditMenu albumId={albumId} photos={photos} albumTitle={albumTitle} />
+			</div>
 			{!loading && (
 				<div className="flex flex-wrap gap-8 mt-8 px-6">
 					{photos.map((photo) => (
