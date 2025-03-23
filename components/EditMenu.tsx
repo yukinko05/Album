@@ -60,12 +60,22 @@ export default function EditMenu({
 	const toggleMenu = () => {
 		setIsMenuOpen(!isMenuOpen);
 	};
+
+	const handleTitleEdit = () => {
+		onEditTitle();
+		setIsMenuOpen(false);
+	};
 	if (albumTitle === null) return;
 
 	return (
 		<div>
-			<button onClick={toggleMenu}>
-				{isMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+			<button
+				onClick={toggleMenu}
+				className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-500 text-white hover:bg-orange-600 transition-colors"
+			>
+				<div className="relative z-30">
+					{isMenuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+				</div>
 			</button>
 			<AnimatePresence>
 				{isMenuOpen && (
@@ -74,7 +84,7 @@ export default function EditMenu({
 						animate={{ opacity: 1, y: 0 }}
 						exit={{ opacity: 0, y: -20 }}
 						transition={{ duration: 0.2 }}
-						className="absolute top-30 w-48 mt-2 mr-6 right-0 bg-white shadow-lg rounded-lg overflow-hidden z-40 border border-amber-200"
+						className="absolute top-12 right-0 w-64 bg-white shadow-lg rounded-lg overflow-hidden z-40 border border-amber-200"
 					>
 						<div className="py-2">
 							<button
@@ -84,7 +94,7 @@ export default function EditMenu({
 								カバー写真を変更
 							</button>
 							<button
-								onClick={() => setEditMode("title")}
+								onClick={handleTitleEdit}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
 							>
 								タイトルを変更
@@ -101,6 +111,7 @@ export default function EditMenu({
 							>
 								写真を削除
 							</button>
+							<hr className="my-2 border-amber-100" />
 							<button
 								onClick={() => setEditMode("delete")}
 								className="w-full text-left px-4 py-3 hover:bg-orange-50 flex items-center gap-2 text-orange-800"
