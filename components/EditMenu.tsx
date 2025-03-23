@@ -5,6 +5,7 @@ import type { Photo } from "@/types/photoTypes";
 import { AnimatePresence, motion } from "framer-motion";
 import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 import AddPhotos from "@/components/AlbumEdit/AddPhoto";
+import AlbumDeleteButton from "@/components/AlbumEdit/DeleteAlbumButton";
 import {
 	FiX,
 	FiImage,
@@ -141,15 +142,18 @@ export default function EditMenu({
 							</button>
 
 							<div className="p-3 border-t border-amber-100 mt-1 mb-1">
-								<button
-									onClick={() => setEditMode("delete")}
-									className="w-full text-left px-3 py-2 rounded-md hover:bg-red-50 flex items-center gap-2.5 text-red-600"
+								<AlbumDeleteButton
+									albumId={albumId}
+									photos={photos}
+									classNames="w-full text-left px-3 py-2 rounded-md hover:bg-red-50 flex items-center gap-2.5 text-red-600"
 								>
-									<span className="p-1.5 rounded-md bg-red-100 text-red-500">
-										<FiTrash2 size={16} />
-									</span>
-									<span>アルバムを削除</span>
-								</button>
+									<div className="flex items-center gap-2.5 w-full">
+										<span className="p-1.5 rounded-md bg-red-100 text-red-500">
+											<FiTrash2 size={16} />
+										</span>
+										<span>アルバムを削除</span>
+									</div>
+								</AlbumDeleteButton>
 							</div>
 						</div>
 					</motion.div>
