@@ -57,33 +57,38 @@ export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
 	};
 
 	return (
-		<div className="p-6 max-w-4xl mx-auto">
-			<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
-				{isEditing ? (
-					<div>
-						<input
-							ref={inputRef}
-							type="text"
-							id="albumTitle"
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							onKeyDown={handleKeyDownUpdate}
-							required
-							maxLength={100}
-							disabled={isLoading || status === "loading"}
-						/>
-						<button
-							type="button"
-							disabled={isLoading || status === "loading"}
-							onClick={handleClickUpdate}
-						>
-							{isLoading || status === "loading" ? "更新中..." : "変更"}
-						</button>
-					</div>
-				) : (
-					<h1 onClick={() => setEditing(true)}>{title}</h1>
-				)}
-			</div>
+		<div className="max-w-4xl pl-6 text-4xl">
+			{isEditing ? (
+				<div className="flex items-center">
+					<input
+						ref={inputRef}
+						type="text"
+						id="albumTitle"
+						value={title}
+						onChange={(e) => setTitle(e.target.value)}
+						onKeyDown={handleKeyDownUpdate}
+						required
+						maxLength={100}
+						disabled={isLoading || status === "loading"}
+						className="text-stone-700 border-b border-amber-200"
+					/>
+					<button
+						type="button"
+						disabled={isLoading || status === "loading"}
+						onClick={handleClickUpdate}
+						className="text-sm px-4 py-2 ml-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+					>
+						{isLoading || status === "loading" ? "更新中..." : "変更"}
+					</button>
+				</div>
+			) : (
+				<h1
+					onClick={() => setEditing(true)}
+					className="text-stone-700 border-b border-amber-200"
+				>
+					{title}
+				</h1>
+			)}
 		</div>
 	);
 }
