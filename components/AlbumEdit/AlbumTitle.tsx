@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAlbumStore } from "@/stores/albumStore";
 type AlbumTitle = {
 	albumId: string;
@@ -14,6 +14,14 @@ export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
 	const [isEditing, setEditing] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		if (isEditing && inputRef.current) {
+			inputRef.current.focus();
+		}
+	}, [isEditing]);
+
 	const handleUpdate = async () => {
 		try {
 			setIsLoading(true);
@@ -25,14 +33,17 @@ export default function AlbumTitle({ albumId, currentTitle }: AlbumTitle) {
 			console.error("タイトルの更新に失敗しました:", error);
 		} finally {
 			setIsLoading(false);
+			setEditing(false);
 		}
 	};
+
 	return (
 		<div className="p-6 max-w-4xl mx-auto">
 			<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 				{isEditing ? (
 					<div>
 						<input
+							ref={inputRef}
 							type="text"
 							id="albumTitle"
 							value={title}
