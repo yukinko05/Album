@@ -43,5 +43,24 @@ export default function ImageUploader() {
 			dropArea.removeEventListener("drop", handleDrop);
 		};
 	}, [handleFile]);
+
+	//ペースト処理
+	useEffect(() => {
+		const handlePaste = (e: ClipboardEvent) => {
+			const items = e.clipboardData?.items;
+			if (!items) return;
+
+			Array.from(items).forEach((item) => {
+				if (item.type.startsWith("image")) {
+					const file = item.getAsFile();
+					if (file) handleFile(file);
+				}
+			});
+		};
+
+		window.addEventListener("paste", handlePaste);
+		return () => window.removeEventListener("paste", handlePaste);
+	}, [handleFile]);
+
 	return <div></div>;
 }
