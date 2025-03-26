@@ -3,91 +3,98 @@
 import { useEffect, useRef, useState } from "react";
 
 type ImageUploaderProps = {
-  onFileSelect: (files: File[]) => void;
-  isLoading?: boolean;
-  status?: "idle" | "loading" | "error";
-  showPreview?: boolean;
-  multiple?: boolean;
-  className?: string;
+	onFileSelect: (files: File[]) => void;
+	isLoading?: boolean;
+	status?: "idle" | "loading" | "error";
+	showPreview?: boolean;
+	multiple?: boolean;
+	className?: string;
 };
 
 export default function ImageUploader({
-  onFileSelect,
-  isLoading = false,
-  status = "idle",
-  showPreview = true,
-  multiple = true,
-  className = "",
+	onFileSelect,
+	isLoading = false,
+	status = "idle",
+	showPreview = true,
+	multiple = true,
+	className = "",
 }: ImageUploaderProps) {
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-  const dropRef = useRef<HTMLDivElement>(null);
+	const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+	const dropRef = useRef<HTMLDivElement>(null);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      const filesArray = Array.from(e.target.files);
-      onFileSelect(filesArray);
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files.length > 0) {
+			const filesArray = Array.from(e.target.files);
+			onFileSelect(filesArray);
 
-      if (showPreview) {
-        // プレビュー用のURL生成
-        const urls = filesArray.map((file) => URL.createObjectURL(file));
-        setPreviewUrls((prev) => [...prev, ...urls]);
-      }
-    }
-  };
+			if (showPreview) {
+				// プレビュー用のURL生成
+				const urls = filesArray.map((file) => URL.createObjectURL(file));
+				setPreviewUrls((prev) => [...prev, ...urls]);
+			}
+		}
+	};
 
-  //プレビュー用のURLを破棄する
-  useEffect(() => {
-    return () => {
-      previewUrls.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [previewUrls]);
+	//プレビュー用のURLを破棄する
+	useEffect(() => {
+		return () => {
+			previewUrls.forEach((url) => URL.revokeObjectURL(url));
+		};
+	}, [previewUrls]);
 
-  //ドラッグアンドドロップの処理
-  useEffect(() => {
-    const dropArea = dropRef.current;
-    if (!dropArea) return;
+	//ドラッグアンドドロップの処理
+	useEffect(() => {
+		const dropArea = dropRef.current;
+		if (!dropArea) return;
 
-    const handleDrop = (e: DragEvent) => {
-      e.preventDefault();
-      if (e.dataTransfer?.files.length) {
-        handleFile(e.dataTransfer.files[0]);
-      }
-    };
+		const handleDrop = (e: DragEvent) => {
+			e.preventDefault();
+			if (e.dataTransfer?.files.length) {
+				const filesArray = Array.from(e.dataTransfer.files);
+				const validFiles = multiple ? filesArray : [filesArray[0]];
+				onFileSelect(validFiles);
 
-    const preventDefaults = (e: Event) => {
-      e.preventDefault();
-    };
+				if (showPreview) {
+					const urls = validFiles.map((file) => URL.createObjectURL(file));
+					setPreviewUrls((prev) => [...prev, ...urls]);
+				}
+			}
+		};
 
-    ["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
-      dropArea.addEventListener(event, preventDefaults, false),
-    );
-    dropArea.addEventListener("drop", handleDrop, false);
+		const preventDefaults = (e: Event) => {
+			e.preventDefault();
+		};
 
-    return () => {
-      ["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
-        dropArea.removeEventListener(event, preventDefaults, false),
-      );
-      dropArea.removeEventListener("drop", handleDrop);
-    };
-  }, [handleFile]);
+		["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
+			dropArea.addEventListener(event, preventDefaults, false),
+		);
+		dropArea.addEventListener("drop", handleDrop, false);
 
-  //ペースト処理
-  useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      const items = e.clipboardData?.items;
-      if (!items) return;
+		return () => {
+			["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
+				dropArea.removeEventListener(event, preventDefaults, false),
+			);
+			dropArea.removeEventListener("drop", handleDrop);
+		};
+	}, [multiple, onFileSelect, showPreview]);
 
-      Array.from(items).forEach((item) => {
-        if (item.type.startsWith("image")) {
-          const file = item.getAsFile();
-          if (file) handleFile(file);
-        }
-      });
-    };
+	//ペースト処理
+	useEffect(() => {
+		const handlePaste = (e: ClipboardEvent) => {
+			const items = e.clipboardData?.items;
+			if (!items) return;
 
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
-  }, [handleFile]);
+			Array.from(items).forEach((item) => {
+				if (item.type.startsWith("image")) {
+					const file = item.getAsFile();
+					if (file) handleFile(file);
+				}
+			});
+		};
 
-  return <div></div>;
+		window.addEventListener("paste", handlePaste);
+		return () => window.removeEventListener("paste", handlePaste);
+	}, [handleFile]);
+
+	return <div></div>;
 }
