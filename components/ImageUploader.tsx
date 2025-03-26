@@ -84,17 +84,19 @@ export default function ImageUploader({
 			const items = e.clipboardData?.items;
 			if (!items) return;
 
+			const imageFiles: File[] = [];
+
 			Array.from(items).forEach((item) => {
 				if (item.type.startsWith("image")) {
 					const file = item.getAsFile();
-					if (file) handleFile(file);
+					if (file) imageFiles.push(file);
 				}
 			});
 		};
 
 		window.addEventListener("paste", handlePaste);
 		return () => window.removeEventListener("paste", handlePaste);
-	}, [handleFile]);
+	}, [multiple, onFileSelect, showPreview]);
 
 	return <div></div>;
 }
