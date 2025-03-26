@@ -3,80 +3,93 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 type ImageUploaderProps = {
-  onFileSelect: (files: File[]) => void;
-  isLoading?: boolean;
-  status?: "idle" | "loading" | "error";
-  showPreview?: boolean;
-  multiple?: boolean;
-  className?: string;
+	onFileSelect: (files: File[]) => void;
+	isLoading?: boolean;
+	status?: "idle" | "loading" | "error";
+	showPreview?: boolean;
+	multiple?: boolean;
+	className?: string;
 };
 
 export default function ImageUploader({
-  onFileSelect,
-  isLoading = false,
-  status = "idle",
-  showPreview = true,
-  multiple = true,
-  className = "",
+	onFileSelect,
+	isLoading = false,
+	status = "idle",
+	showPreview = true,
+	multiple = true,
+	className = "",
 }: ImageUploaderProps) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const dropRef = useRef<HTMLDivElement>(null);
+	const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+	const dropRef = useRef<HTMLDivElement>(null);
 
-  //画像ファイルを読み込む処理
-  const handleFile = useCallback((file: File) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImageUrl(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  }, []);
+	const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files && e.target.files.length > 0) {
+			const filesArray = Array.from(e.target.files);
+			onFileSelect(filesArray);
 
-  //ドラッグアンドドロップの処理
-  useEffect(() => {
-    const dropArea = dropRef.current;
-    if (!dropArea) return;
+			if (showPreview) {
+				// プレビュー用のURL生成
+				const urls = filesArray.map((file) => URL.createObjectURL(file));
+				setPreviewUrls((prev) => [...prev, ...urls]);
+			}
+		}
+	};
 
-    const handleDrop = (e: DragEvent) => {
-      e.preventDefault();
-      if (e.dataTransfer?.files.length) {
-        handleFile(e.dataTransfer.files[0]);
-      }
-    };
+	//画像ファイルを読み込む処理
+	const handleFile = useCallback((file: File) => {
+		const reader = new FileReader();
+		reader.onloadend = () => {
+			setImageUrl(reader.result as string);
+		};
+		reader.readAsDataURL(file);
+	}, []);
 
-    const preventDefaults = (e: Event) => {
-      e.preventDefault();
-    };
+	//ドラッグアンドドロップの処理
+	useEffect(() => {
+		const dropArea = dropRef.current;
+		if (!dropArea) return;
 
-    ["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
-      dropArea.addEventListener(event, preventDefaults, false),
-    );
-    dropArea.addEventListener("drop", handleDrop, false);
+		const handleDrop = (e: DragEvent) => {
+			e.preventDefault();
+			if (e.dataTransfer?.files.length) {
+				handleFile(e.dataTransfer.files[0]);
+			}
+		};
 
-    return () => {
-      ["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
-        dropArea.removeEventListener(event, preventDefaults, false),
-      );
-      dropArea.removeEventListener("drop", handleDrop);
-    };
-  }, [handleFile]);
+		const preventDefaults = (e: Event) => {
+			e.preventDefault();
+		};
 
-  //ペースト処理
-  useEffect(() => {
-    const handlePaste = (e: ClipboardEvent) => {
-      const items = e.clipboardData?.items;
-      if (!items) return;
+		["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
+			dropArea.addEventListener(event, preventDefaults, false),
+		);
+		dropArea.addEventListener("drop", handleDrop, false);
 
-      Array.from(items).forEach((item) => {
-        if (item.type.startsWith("image")) {
-          const file = item.getAsFile();
-          if (file) handleFile(file);
-        }
-      });
-    };
+		return () => {
+			["dragenter", "dragover", "dragleave", "drop"].forEach((event) =>
+				dropArea.removeEventListener(event, preventDefaults, false),
+			);
+			dropArea.removeEventListener("drop", handleDrop);
+		};
+	}, [handleFile]);
 
-    window.addEventListener("paste", handlePaste);
-    return () => window.removeEventListener("paste", handlePaste);
-  }, [handleFile]);
+	//ペースト処理
+	useEffect(() => {
+		const handlePaste = (e: ClipboardEvent) => {
+			const items = e.clipboardData?.items;
+			if (!items) return;
 
-  return <div></div>;
+			Array.from(items).forEach((item) => {
+				if (item.type.startsWith("image")) {
+					const file = item.getAsFile();
+					if (file) handleFile(file);
+				}
+			});
+		};
+
+		window.addEventListener("paste", handlePaste);
+		return () => window.removeEventListener("paste", handlePaste);
+	}, [handleFile]);
+
+	return <div></div>;
 }
