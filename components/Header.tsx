@@ -17,12 +17,9 @@ const Header = ({
 		<header className="fixed top-0 left-0 right-0 z-50 h-16 border-b bg-white">
 			<div className="flex h-full items-center justify-center px-4">
 				<div className="absolute left-4">
-					<Link
-						href="/dashboard"
-						className="text-4xl font-bold text-orange-800 hover:text-orange-600 font-cherry transition-colors"
-					>
+					<h1 className="text-4xl font-bold text-orange-800 font-cherry">
 						ALBUM
-					</Link>
+					</h1>
 				</div>
 				<div className="flex-1 text-center">
 					{children && (

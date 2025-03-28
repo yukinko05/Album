@@ -34,7 +34,7 @@ export default function LoginPage() {
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
 			await login(data);
-			router.push("/dashboard");
+			router.push("/rooms");
 		} catch (error) {
 			console.error("Login failed:", error);
 			setErrorMessage(

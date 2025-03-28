@@ -68,7 +68,7 @@ export default function SignupPage() {
 		};
 		try {
 			await signUp(userInputData);
-			router.push("/dashboard");
+			router.push("/rooms");
 		} catch (error) {
 			console.error("SignUp failed:", error);
 		}

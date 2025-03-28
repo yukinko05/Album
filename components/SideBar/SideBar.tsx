@@ -28,7 +28,7 @@ export default function SideBar({
 		<div className="fixed left-0 h-full w-64 shadow-lg bg-gradient-to-b from-amber-100 to-orange-200">
 			<nav className="flex h-full flex-col p-4">
 				<Link
-					href="/dashboard"
+					href="/rooms"
 					className="text-4xl font-bold text-orange-800 hover:text-orange-600 font-cherry text-center"
 				>
 					ALBUM
