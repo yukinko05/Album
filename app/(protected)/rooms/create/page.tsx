@@ -7,6 +7,7 @@ import { useShareStore } from "@/stores/shareStore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { FiUsers, FiPlusCircle } from "react-icons/fi";
 
 const shareRoomSchema = z.object({
 	sharedRoomTitle: z
@@ -61,21 +62,26 @@ export default function CreateRoomPage() {
 	};
 
 	return (
-		<div className="py-8 max-w-md mx-auto">
-			<h1 className="text-2xl font-bold mb-6">新しい共有ルームを作成</h1>
+		<div className="container mx-auto px-4 py-8">
+			<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
+				<h1 className="text-2xl font-medium text-orange-800 flex items-center">
+					<FiUsers className="mr-2" size={24} />
+					新しい共有ルームを作成
+				</h1>
+			</div>
 
-			<div className="bg-white rounded-lg shadow-md p-6">
+			<div className="bg-white rounded-lg shadow-md p-8 max-w-lg mx-auto">
 				{error && (
-					<div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+					<div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-md">
 						{error}
 					</div>
 				)}
 
 				<form onSubmit={handleSubmit(onSubmit)}>
-					<div className="mb-4">
+					<div className="mb-6">
 						<label
 							htmlFor="sharedRoomTitle"
-							className="block text-gray-700 font-medium mb-2"
+							className="block text-orange-800 font-medium mb-2"
 						>
 							ルーム名
 						</label>
@@ -83,33 +89,53 @@ export default function CreateRoomPage() {
 							type="text"
 							id="sharedRoomTitle"
 							{...register("sharedRoomTitle")}
-							className={`w-full px-3 py-2 border rounded-md ${
-								errors.sharedRoomTitle ? "border-red-500" : "border-gray-300"
+							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${
+								errors.sharedRoomTitle
+									? "border-red-500 focus:ring-red-200"
+									: "border-amber-200 focus:ring-orange-200"
 							}`}
 							placeholder="家族アルバム"
 						/>
 						{errors.sharedRoomTitle && (
-							<p className="mt-1 text-red-500 text-sm">
+							<p className="mt-2 text-red-500 text-sm">
 								{errors.sharedRoomTitle.message}
 							</p>
 						)}
 					</div>
 
-					<div className="flex justify-end mt-6">
+					<div className="mt-4 p-4 bg-amber-50 rounded-lg text-sm text-orange-700 mb-6">
+						<p>
+							ルーム名を入力して共有ルームを作成してください。
+							<br />
+							作成後はルームからIDを確認して他のユーザーに共有してください。
+						</p>
+					</div>
+
+					<div className="flex justify-between mt-8 pt-4 border-t border-amber-200">
 						<button
 							type="button"
 							onClick={() => router.back()}
-							className="px-4 py-2 text-gray-600 mr-2"
-							disabled={isSubmitting}
+							className="px-6 py-2 bg-white border border-amber-300 text-orange-700 rounded-lg hover:bg-amber-50 transition-colors"
+							disabled={isSubmitting || status === "loading"}
 						>
 							キャンセル
 						</button>
 						<button
 							type="submit"
-							className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
-							disabled={isSubmitting}
+							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+							disabled={isSubmitting || status === "loading"}
 						>
-							{isSubmitting ? "作成中..." : "ルームを作成"}
+							{isSubmitting || status === "loading" ? (
+								<>
+									<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+									作成中...
+								</>
+							) : (
+								<>
+									<FiPlusCircle className="mr-2" />
+									ルームを作成
+								</>
+							)}
 						</button>
 					</div>
 				</form>
