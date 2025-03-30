@@ -1,6 +1,5 @@
 "use client";
 
-import Header from "@/components/Header";
 import SideBar from "@/components/SideBar/SideBar";
 import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
@@ -35,7 +34,6 @@ export default function ProtectedLayout({
 			try {
 				if (!currentUser) return;
 				setIsLoading(true);
-				console.log("currentUser", currentUser.uid);
 				const user = await getUser(currentUser.uid);
 				setUserData(user);
 			} catch (error) {

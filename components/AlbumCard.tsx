@@ -8,7 +8,6 @@ export default function AlbumCard({
 	className = "",
 	sharedRoomTitle,
 }: AlbumCardProps) {
-	console.log(sharedRoomTitle);
 	return (
 		<Link
 			href={{
