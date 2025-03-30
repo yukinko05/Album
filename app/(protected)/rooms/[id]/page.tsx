@@ -7,7 +7,7 @@ import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
 import { useAlbumStore } from "@/stores/albumStore";
-import { FiPlusCircle, FiCamera, FiBook } from "react-icons/fi";
+import { FiPlusCircle, FiCamera, FiUsers } from "react-icons/fi";
 import AlbumCard from "@/components/AlbumCard";
 
 export default function RoomPage() {
@@ -52,7 +52,7 @@ export default function RoomPage() {
 				<div className="container mx-auto px-4 py-8">
 					<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 						<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-							<FiBook className="mr-2" size={24} />
+							<FiUsers className="mr-2" size={24} />
 							{sharedRoomTitle}
 						</h1>
 						<Link
