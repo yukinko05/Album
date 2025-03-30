@@ -55,25 +55,32 @@ export default function RoomPage() {
 							<FiUsers className="mr-2" size={24} />
 							{sharedRoomTitle}
 						</h1>
-						<Link
-							href="/albums/create"
-							className="flex items-center px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
-						>
-							<FiPlusCircle className="mr-2" />
-							アルバム作成
-						</Link>
 					</div>
 					{albums && albums.length > 0 ? (
-						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-							{albums.map((album) => (
-								<AlbumCard
-									key={album.albumId}
-									album={album}
-									shareRoomId={shareRoomId}
-									sharedRoomTitle={sharedRoomTitle || ""}
-								/>
-							))}
-						</div>
+						<>
+							<Link
+								href={{
+									pathname: "/albums/create",
+									query: {
+										shareRoomId,
+									},
+								}}
+								className="flex items-center px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
+							>
+								<FiPlusCircle className="mr-2" />
+								アルバム作成
+							</Link>
+							<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+								{albums.map((album) => (
+									<AlbumCard
+										key={album.albumId}
+										album={album}
+										shareRoomId={shareRoomId}
+										sharedRoomTitle={sharedRoomTitle || ""}
+									/>
+								))}
+							</div>
+						</>
 					) : (
 						<div className="bg-white rounded-lg shadow-md p-8 text-center">
 							<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -83,7 +90,12 @@ export default function RoomPage() {
 								アルバムがありません
 							</p>
 							<Link
-								href="/albums/create"
+								href={{
+									pathname: "/albums/create",
+									query: {
+										shareRoomId,
+									},
+								}}
 								className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 							>
 								<FiPlusCircle className="mr-2" />

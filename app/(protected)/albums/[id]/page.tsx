@@ -46,6 +46,7 @@ export default function AlbumPhotosPage() {
 		setIsTitleEditing(false);
 	};
 
+	console.log(photos);
 	return (
 		<div className="px-4 py-8">
 			<div className="flex justify-between items-center border-b border-amber-200 pb-4">
