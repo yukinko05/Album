@@ -34,7 +34,7 @@ export default function RoomsPage() {
 	}, [userId, getShareRooms]);
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50">
+		<>
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
@@ -112,6 +112,6 @@ export default function RoomsPage() {
 					</div>
 				)}
 			</div>
-		</div>
+		</>
 	);
 }

@@ -46,7 +46,7 @@ export default function AlbumPhotosPage() {
 	};
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 px-4 py-8">
+		<div className="px-4 py-8">
 			<div className="flex justify-between items-center border-b border-amber-200 pb-4">
 				<AlbumTitle
 					albumId={albumId}

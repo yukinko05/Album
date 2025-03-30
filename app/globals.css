@@ -18,6 +18,9 @@
       --foreground: 200 20% 96%;
     }
   }
+  body {
+    @apply min-h-screen bg-gradient-to-b from-orange-50 to-amber-50;
+  }
 }
 
 @layer utilities {

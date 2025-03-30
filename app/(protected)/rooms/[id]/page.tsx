@@ -43,7 +43,7 @@ export default function RoomPage() {
 	}, [userId, shareRoomId, getAlbums]);
 
 	return (
-		<div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50">
+		<>
 			{loading ? (
 				<div className="flex justify-center items-center h-[calc(100vh-65px)]">
 					<Spinner size="lg" />
@@ -92,6 +92,6 @@ export default function RoomPage() {
 					)}
 				</div>
 			)}
-		</div>
+		</>
 	);
 }
