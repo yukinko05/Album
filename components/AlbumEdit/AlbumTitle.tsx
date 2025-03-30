@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAlbumStore } from "@/stores/albumStore";
+import { FiBook } from "react-icons/fi";
 
 type AlbumTitle = {
 	albumId: string;
@@ -75,7 +76,7 @@ export default function AlbumTitle({
 	const isInEditMode = localEditing || isEditing;
 
 	return (
-		<div className="max-w-4xl pl-6 text-4xl">
+		<div className="max-w-4xl text-2xl">
 			{isInEditMode ? (
 				<div className="flex items-center">
 					<input
@@ -90,6 +91,7 @@ export default function AlbumTitle({
 						disabled={isLoading || status === "loading"}
 						className="text-stone-700 border-b border-amber-200"
 					/>
+
 					<button
 						type="button"
 						disabled={isLoading || status === "loading"}
@@ -100,12 +102,12 @@ export default function AlbumTitle({
 					</button>
 				</div>
 			) : (
-				<h1
-					onClick={() => setLocalEditing(true)}
-					className="text-stone-700 border-b border-amber-200"
-				>
-					{title}
-				</h1>
+				<div className="flex items-center">
+					<FiBook className="mr-2 text-orange-800" size={24} />
+					<h1 onClick={() => setLocalEditing(true)} className="text-orange-800">
+						{title}
+					</h1>
+				</div>
 			)}
 		</div>
 	);

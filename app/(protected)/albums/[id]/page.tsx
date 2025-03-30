@@ -46,8 +46,8 @@ export default function AlbumPhotosPage() {
 	};
 
 	return (
-		<div className="pt-6 px-6">
-			<div className="flex justify-between items-center">
+		<div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50 px-4 py-8">
+			<div className="flex justify-between items-center border-b border-amber-200 pb-4">
 				<AlbumTitle
 					albumId={albumId}
 					currentTitle={albumTitle}
@@ -70,13 +70,13 @@ export default function AlbumPhotosPage() {
 				</div>
 			</div>
 			{!loading && (
-				<div className="flex flex-wrap gap-8 mt-8 px-6">
+				<div className="flex flex-wrap gap-1 mt-8 px-6">
 					{photos.map((photo) => (
 						<img
 							key={photo.photoId}
 							src={photo.photoUrl}
 							alt={`${albumTitle}のアルバム内の写真`}
-							className="rounded-2xl w-[300px] h-[300px] object-cover"
+							className="rounded-md w-[300px] h-[300px] object-cover"
 						/>
 					))}
 				</div>
