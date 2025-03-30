@@ -6,8 +6,9 @@ import { useAuth } from "@/hooks/useAuth";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
 import Spinner from "@/components/Spinner";
-import Image from "next/image";
 import { useAlbumStore } from "@/stores/albumStore";
+import { FiPlusCircle, FiCamera, FiBook } from "react-icons/fi";
+import AlbumCard from "@/components/AlbumCard";
 
 export default function RoomPage() {
 	const params = useParams();
@@ -42,72 +43,52 @@ export default function RoomPage() {
 	}, [userId, shareRoomId, getAlbums]);
 
 	return (
-		<div className="bg-amber-50 min-h-screen p-6">
-			<div className="mb-6">
-				<h1 className="text-2xl font-bold mb-2 text-orange-800">
-					{sharedRoomTitle}
-				</h1>
-			</div>
-
-			<div className="my-4 text-end">
-				<Link
-					href={{
-						pathname: "/albums/create",
-						query: {
-							sharedRoomTitle: sharedRoomTitle,
-							shareRoomId: shareRoomId,
-						},
-					}}
-					className="inline-block rounded-lg bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 transition-colors shadow-md"
-				>
-					アルバム作成
-				</Link>
-			</div>
-
+		<div className="min-h-screen bg-gradient-to-b from-orange-50 to-amber-50">
 			{loading ? (
-				<div className="flex items-center justify-center h-64">
+				<div className="flex justify-center items-center h-[calc(100vh-65px)]">
 					<Spinner size="lg" />
 				</div>
 			) : (
-				<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-					{albums?.length === 0 ? (
-						<div className="col-span-full bg-white rounded-lg shadow-md p-6 text-center border border-amber-200">
-							<p className="text-orange-800 mb-4">
-								このルームにはまだアルバムがありません
-							</p>
+				<div className="container mx-auto px-4 py-8">
+					<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
+						<h1 className="text-2xl font-medium text-orange-800 flex items-center">
+							<FiBook className="mr-2" size={24} />
+							{sharedRoomTitle}
+						</h1>
+						<Link
+							href="/albums/create"
+							className="flex items-center px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
+						>
+							<FiPlusCircle className="mr-2" />
+							アルバム作成
+						</Link>
+					</div>
+					{albums && albums.length > 0 ? (
+						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+							{albums.map((album) => (
+								<AlbumCard
+									key={album.albumId}
+									album={album}
+									shareRoomId={album.shareRoomId}
+								/>
+							))}
 						</div>
 					) : (
-						albums?.map((album) => (
+						<div className="bg-white rounded-lg shadow-md p-8 text-center">
+							<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+								<FiCamera className="text-orange-500" size={28} />
+							</div>
+							<p className="text-orange-800 mb-4 text-lg font-medium">
+								アルバムがありません
+							</p>
 							<Link
-								href={{
-									pathname: `/albums/${album.albumId}`,
-									query: { albumTitle: album.title, shareRoomId: shareRoomId },
-								}}
-								key={album.albumId}
-								className="block hover:opacity-90 transition-opacity"
+								href="/albums/create"
+								className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 							>
-								<article className="bg-white rounded-lg shadow-md overflow-hidden border border-amber-200">
-									<div className="relative aspect-[1]">
-										<Image
-											src={album.coverPhotoUrl ?? "/default-album.jpg"}
-											alt={`${album.title} のアルバムカバー画像`}
-											priority={true}
-											fill
-											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-											className="object-cover"
-										/>
-									</div>
-									<div className="p-4">
-										<h2 className="font-medium text-orange-800 text-sm md:text-base mb-1 truncate">
-											{album.title}
-										</h2>
-										<time className="text-xs md:text-sm text-orange-600">
-											{album.createdAt}
-										</time>
-									</div>
-								</article>
+								<FiPlusCircle className="mr-2" />
+								アルバム作成
 							</Link>
-						))
+						</div>
 					)}
 				</div>
 			)}
