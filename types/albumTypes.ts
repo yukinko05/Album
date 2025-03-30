@@ -12,6 +12,7 @@ export interface AlbumCardProps {
 	album: Album;
 	shareRoomId: string;
 	className?: string;
+	sharedRoomTitle?: string;
 }
 
 export interface AlbumUpdateRequest {

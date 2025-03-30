@@ -6,12 +6,18 @@ export default function AlbumCard({
 	album,
 	shareRoomId,
 	className = "",
+	sharedRoomTitle,
 }: AlbumCardProps) {
+	console.log(sharedRoomTitle);
 	return (
 		<Link
 			href={{
 				pathname: `/albums/${album.albumId}`,
-				query: { albumTitle: album.title, shareRoomId: shareRoomId },
+				query: {
+					albumTitle: album.title,
+					shareRoomId: shareRoomId,
+					sharedRoomTitle: sharedRoomTitle,
+				},
 			}}
 			className={`block hover:opacity-60 transition-opacity ${className}`}
 		>

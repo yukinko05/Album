@@ -15,11 +15,11 @@ export default function RoomPage() {
 	const shareRoomId = String(params.id);
 	const searchParams = useSearchParams();
 	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
-	const { currentUser } = useAuth();
-	const [albums, setAlbums] = useState<Album[]>([]);
 	const [loading, setLoading] = useState(true);
-	const userId = currentUser?.uid;
+	const [albums, setAlbums] = useState<Album[]>([]);
 	const getAlbums = useAlbumStore((state) => state.getAlbums);
+	const { currentUser } = useAuth();
+	const userId = currentUser?.uid;
 
 	useEffect(() => {
 		if (!userId) {
@@ -69,7 +69,8 @@ export default function RoomPage() {
 								<AlbumCard
 									key={album.albumId}
 									album={album}
-									shareRoomId={album.shareRoomId}
+									shareRoomId={shareRoomId}
+									sharedRoomTitle={sharedRoomTitle || ""}
 								/>
 							))}
 						</div>

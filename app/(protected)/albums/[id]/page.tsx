@@ -17,6 +17,7 @@ export default function AlbumPhotosPage() {
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
 	const shareRoomId = searchParams.get("shareRoomId");
+	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
 	const [isTitleEditing, setIsTitleEditing] = useState(false);
 	const getPhotos = usePhotoStore((state) => state.getPhotos);
 
@@ -56,7 +57,10 @@ export default function AlbumPhotosPage() {
 				/>
 				<div className="flex items-center gap-4">
 					<Link
-						href={`/rooms/${shareRoomId}`}
+						href={{
+							pathname: `/rooms/${shareRoomId}`,
+							query: { sharedRoomTitle: sharedRoomTitle },
+						}}
 						className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-600 transition-colors"
 					>
 						ルームに戻る
