@@ -5,11 +5,17 @@ import type { ShareRooms } from "@/types/shareTypes";
 import Link from "next/link";
 import { useShareStore } from "@/stores/shareStore";
 import { useAuth } from "@/hooks/useAuth";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function ShareRoomSidebarList() {
 	const { currentUser, isAuthenticated } = useAuth();
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
 	const getShareRooms = useShareStore((state) => state.getShareRooms);
+	const pathname = usePathname();
+	const serchParams = useSearchParams();
+	const surrentRoomId = pathname.includes("/rooms/")
+		? pathname.split("/rooms/")[1]
+		: null;
 
 	useEffect(() => {
 		const fetchShareRoomData = async () => {
@@ -42,17 +48,24 @@ export default function ShareRoomSidebarList() {
 						共有ルームがありません
 					</li>
 				) : (
-					shareRooms.map((room) => (
-						<li key={room.shareRoomId}>
-							<Link
-								href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
-								className="block px-4 py-2 text-stone-800/70
- hover:bg-gray-100 hover:text-orange-600 rounded-md transition-colors"
-							>
-								{room.sharedRoomTitle}
-							</Link>
-						</li>
-					))
+					shareRooms.map((room) => {
+						const isActive = room.shareRoomId === surrentRoomId;
+						return (
+							<li key={room.shareRoomId}>
+								<Link
+									href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
+									className={`block px-4 py-2 rounded-md transition-colors
+										${
+											isActive
+												? "bg-white/40 text-orange-900 font-medium border-l-4 border-orange-500"
+												: "text-stone-800/70 hover:bg-white/40 hover:text-orange-600"
+										}`}
+								>
+									{room.sharedRoomTitle}
+								</Link>
+							</li>
+						);
+					})
 				)}
 			</ul>
 		</div>
