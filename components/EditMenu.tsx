@@ -5,6 +5,7 @@ import type { Photo } from "@/types/photoTypes";
 import { AnimatePresence, motion } from "framer-motion";
 import ChangeCoverPhoto from "@/components/AlbumEdit/ChangeCoverPhoto";
 import AddPhotos from "@/components/AlbumEdit/AddPhoto";
+import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 import AlbumDeleteButton from "@/components/AlbumEdit/DeleteAlbumButton";
 import {
 	FiX,
@@ -173,6 +174,16 @@ export default function EditMenu({
 			<AnimatePresence>
 				{editMode === "addPhoto" && (
 					<AddPhotos albumId={albumId} onClose={closeEditMode} />
+				)}
+			</AnimatePresence>
+
+			<AnimatePresence>
+				{editMode === "deletePhotos" && (
+					<PhotoSelectDelete
+						albumId={albumId}
+						photos={photos}
+						onClose={closeEditMode}
+					/>
 				)}
 			</AnimatePresence>
 		</div>

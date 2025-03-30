@@ -5,9 +5,10 @@ export interface Photo {
 	photoUrl: string;
 	userId: string;
 }
-export interface PhotosProps {
+export interface PhotoSelectDeleteProps {
 	albumId: string;
 	photos: Photo[];
+	onClose: () => void;
 }
 export interface AddPhotosRequest {
 	albumId: string;

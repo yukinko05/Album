@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
-import { Photo } from "@/types/photoTypes";
-import { PhotosProps } from "@/types/photoTypes";
+import { PhotoSelectDeleteProps } from "@/types/photoTypes";
 import { useAlbumStore } from "@/stores/albumStore";
 import { usePhotoStore } from "@/stores/photoStore";
 import { useAuth } from "@/hooks/useAuth";
+import { motion } from "framer-motion";
+import { FiX, FiTrash2 } from "react-icons/fi";
+import Image from "next/image";
 
-export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
+export default function PhotoSelectDelete({
+	albumId,
+	photos,
+	onClose,
+}: PhotoSelectDeleteProps) {
 	const [selectedPhotoIds, setSelectedPhotoIds] = useState<string[]>([]);
 	const { currentUser } = useAuth();
 	const [isLoading, setIsLoading] = useState(false);
@@ -59,11 +65,15 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 				selectedPhotoIds.includes(photo.photoId),
 			);
 
-			await deletePhotos(photosToDelete);
+			await deletePhotos({
+				photosToDelete,
+				albumId,
+			});
 			setSelectedPhotoIds([]);
 			alert("選択した写真を削除しました");
 			// ページをリロードして最新の状態を表示
 			window.location.reload();
+			onClose();
 		} catch (error) {
 			console.error("写真の削除に失敗しました:", error);
 			alert("写真の削除に失敗しました");
@@ -73,44 +83,123 @@ export default function PhotoSelectDelete({ albumId, photos }: PhotosProps) {
 	};
 
 	return (
-		<div>
-			<h2>写真を選択して削除</h2>
-			<div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
-				{photos.map((photo) => (
-					<label key={photo.photoId} style={{ cursor: "pointer" }}>
-						<input
-							type="checkbox"
-							value={photo.photoId}
-							onChange={() => handleCheckboxChange(photo.photoId)}
-							checked={selectedPhotoIds.includes(photo.photoId)}
-							disabled={isLoading || status === "loading"}
-						/>
-						<img
-							src={photo.photoUrl}
-							alt="アルバム写真"
-							style={{
-								width: "100px",
-								height: "100px",
-								objectFit: "cover",
-								border: selectedPhotoIds.includes(photo.photoId)
-									? "2px solid red"
-									: "none",
-							}}
-						/>
-					</label>
-				))}
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
+			transition={{ duration: 0.3 }}
+			className="fixed inset-0 h-screen bg-gradient-to-b from-orange-50 to-amber-50 z-50 overflow-y-auto"
+		>
+			<div className="p-6 max-w-4xl mx-auto">
+				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
+					<h2 className="text-2xl font-medium text-orange-800 flex items-center">
+						<FiTrash2 className="mr-2" size={24} />
+						写真を選択して削除
+					</h2>
+					<button
+						onClick={onClose}
+						className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-100 text-orange-800 hover:bg-orange-200 transition-colors"
+						aria-label="閉じる"
+					>
+						<FiX size={20} />
+					</button>
+				</div>
+
+				{photos.length === 0 ? (
+					<div className="bg-white rounded-lg shadow-sm p-8 text-center">
+						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+							<FiTrash2 className="text-orange-500" size={28} />
+						</div>
+						<p className="text-orange-800 mb-4 text-lg font-medium">
+							写真がありません
+						</p>
+						<p className="text-orange-600 mb-6">
+							まずは写真を追加してください。
+						</p>
+					</div>
+				) : (
+					<div className="bg-white rounded-lg shadow-sm p-6">
+						<div className="flex justify-between items-center mb-4">
+							<div className="flex items-center">
+								<span className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mr-3">
+									<FiTrash2 size={18} />
+								</span>
+								<span className="text-orange-800 font-medium">
+									削除する写真を選択してください
+								</span>
+							</div>
+							<div className="text-sm text-orange-600">
+								{selectedPhotoIds.length}枚選択中
+							</div>
+						</div>
+
+						<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+							{photos.map((photo) => (
+								<div
+									key={photo.photoId}
+									className={`relative aspect-square cursor-pointer rounded-lg overflow-hidden border ${
+										selectedPhotoIds.includes(photo.photoId)
+											? "border-red-400 ring-2 ring-red-400"
+											: "border-amber-200 hover:border-red-300"
+									} transition-all`}
+									onClick={() => handleCheckboxChange(photo.photoId)}
+								>
+									<div className="relative w-full h-full">
+										<Image
+											src={photo.photoUrl}
+											alt="アルバム写真"
+											fill
+											sizes="(max-width: 640px) 40vw, (max-width: 768px) 30vw, (max-width: 1024px) 20vw, 16vw"
+											className="object-cover"
+										/>
+										{selectedPhotoIds.includes(photo.photoId) && (
+											<div className="absolute inset-0 bg-red-500 bg-opacity-30 flex items-center justify-center">
+												<div className="bg-white rounded-full p-1">
+													<FiTrash2 className="text-red-500" size={24} />
+												</div>
+											</div>
+										)}
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
+
+				<div className="flex justify-between mt-8 border-t border-amber-200 pt-4">
+					<button
+						type="button"
+						onClick={onClose}
+						className="px-6 py-2 bg-white border border-amber-300 text-orange-700 rounded-lg hover:bg-amber-50 transition-colors"
+					>
+						キャンセル
+					</button>
+
+					<button
+						type="button"
+						onClick={handleDelete}
+						disabled={
+							isLoading ||
+							status === "loading" ||
+							selectedPhotoIds.length === 0 ||
+							photos.length === 0
+						}
+						className="px-8 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+					>
+						{isLoading || status === "loading" ? (
+							<>
+								<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+								削除中...
+							</>
+						) : (
+							<>
+								<FiTrash2 size={18} />
+								{selectedPhotoIds.length}枚の写真を削除
+							</>
+						)}
+					</button>
+				</div>
 			</div>
-			<button
-				type="button"
-				onClick={handleDelete}
-				disabled={
-					isLoading || status === "loading" || selectedPhotoIds.length === 0
-				}
-			>
-				{isLoading || status === "loading"
-					? "削除中..."
-					: `選択した${selectedPhotoIds.length}枚の写真を削除`}
-			</button>
-		</div>
+		</motion.div>
 	);
 }

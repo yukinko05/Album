@@ -10,7 +10,10 @@ interface PhotoState {
 
 	getPhotos: (albumId: string) => Promise<Photo[]>;
 	addPhotos: (data: AddPhotosRequest) => Promise<void>;
-	deletePhotos: (photos: Photo[]) => Promise<void>;
+	deletePhotos: (data: {
+		photosToDelete: Photo[];
+		albumId: string;
+	}) => Promise<void>;
 }
 
 export const usePhotoStore = create<PhotoState>((set, get) => ({
@@ -54,10 +57,10 @@ export const usePhotoStore = create<PhotoState>((set, get) => ({
 		}
 	},
 
-	deletePhotos: async (photos) => {
+	deletePhotos: async (data) => {
 		set({ status: "loading", error: null });
 		try {
-			await photoRepository.photoSelectDelete(photos);
+			await photoRepository.photoSelectDelete(data);
 
 			set({ status: "succeeded" });
 		} catch (error) {
