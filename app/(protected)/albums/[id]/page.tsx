@@ -74,7 +74,7 @@ export default function AlbumPhotosPage() {
 				</div>
 			</div>
 			{!loading && (
-				<div className="flex flex-wrap gap-1 mt-8 px-6">
+				<div className="flex flex-wrap gap-1 mt-8">
 					{photos.map((photo) => (
 						<img
 							key={photo.photoId}

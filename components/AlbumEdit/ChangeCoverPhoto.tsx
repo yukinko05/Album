@@ -4,7 +4,7 @@ import { useAlbumStore } from "@/stores/albumStore";
 import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { FiX, FiCheck } from "react-icons/fi";
+import { FiX, FiCheck, FiImage } from "react-icons/fi";
 
 type ChangeCoverPhoto = {
 	albumId: string;
@@ -76,7 +76,8 @@ export default function ChangeCoverPhoto({
 		>
 			<div className="p-6 max-w-4xl mx-auto">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
-					<h2 className="text-2xl font-medium text-orange-800">
+					<h2 className="text-2xl font-medium text-orange-800 flex items-center">
+						<FiImage className="mr-2" size={24} />
 						カバー写真を選択
 					</h2>
 					<button
@@ -87,40 +88,64 @@ export default function ChangeCoverPhoto({
 						<FiX size={20} />
 					</button>
 				</div>
-				<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-8">
-					{photos.length === 0 ? (
-						<p className="text-orange-600 col-span-full text-center py-8">
-							写真がありません。まずは写真を追加してください。
+
+				{photos.length === 0 ? (
+					<div className="bg-white rounded-lg shadow-sm p-8 text-center">
+						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+							<FiImage className="text-orange-500" size={28} />
+						</div>
+						<p className="text-orange-800 mb-4 text-lg font-medium">
+							写真がありません
 						</p>
-					) : (
-						photos.map((photo) => (
-							<div
-								key={photo.photoId}
-								className={`relative aspect-square cursor-pointer rounded-lg overflow-hidden border border-amber-200 transition-all ${
-									selectedPhoto === photo.photoUrl
-										? "ring-4 ring-orange-400 scale-[0.97]"
-										: "hover:scale-[0.97]"
-								}`}
-								onClick={() => setSelectedPhoto(photo.photoUrl)}
-							>
-								<Image
-									src={photo.photoUrl}
-									alt="アルバム写真"
-									fill
-									sizes="(max-width: 640px) 40vw, (max-width: 768px) 30vw, (max-width: 1024px) 20vw, 16vw"
-									className="object-cover"
-								/>
-								{selectedPhoto === photo.photoUrl && (
-									<div className="absolute inset-0 bg-orange-500 bg-opacity-30 flex items-center justify-center">
-										<div className="bg-white rounded-full p-1">
-											<FiCheck className="text-orange-500" size={24} />
-										</div>
-									</div>
-								)}
+						<p className="text-orange-600 mb-6">
+							まずは写真を追加してください。
+						</p>
+					</div>
+				) : (
+					<div className="bg-white rounded-lg shadow-sm p-6">
+						<div className="flex justify-between items-center mb-4">
+							<div className="flex items-center">
+								<span className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mr-3">
+									<FiImage size={18} />
+								</span>
+								<span className="text-orange-800 font-medium">
+									カバー写真として使用する写真を選択してください
+								</span>
 							</div>
-						))
-					)}
-				</div>
+						</div>
+
+						<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+							{photos.map((photo) => (
+								<div
+									key={photo.photoId}
+									className={`relative aspect-square cursor-pointer rounded-lg overflow-hidden border ${
+										selectedPhoto === photo.photoUrl
+											? "border-orange-400 ring-2 ring-orange-400"
+											: "border-amber-200 hover:border-orange-300"
+									} transition-all`}
+									onClick={() => setSelectedPhoto(photo.photoUrl)}
+								>
+									<div className="relative w-full h-full">
+										<Image
+											src={photo.photoUrl}
+											alt="アルバム写真"
+											fill
+											sizes="(max-width: 640px) 40vw, (max-width: 768px) 30vw, (max-width: 1024px) 20vw, 16vw"
+											className="object-cover"
+										/>
+										{selectedPhoto === photo.photoUrl && (
+											<div className="absolute inset-0 bg-orange-500 bg-opacity-30 flex items-center justify-center">
+												<div className="bg-white rounded-full p-1">
+													<FiCheck className="text-orange-500" size={24} />
+												</div>
+											</div>
+										)}
+									</div>
+								</div>
+							))}
+						</div>
+					</div>
+				)}
 
 				<div className="flex justify-between mt-8 border-t border-amber-200 pt-4">
 					<button
@@ -134,12 +159,17 @@ export default function ChangeCoverPhoto({
 					<button
 						type="button"
 						onClick={handleUpdate}
-						disabled={isLoading || status === "loading" || !selectedPhoto}
+						disabled={
+							isLoading ||
+							status === "loading" ||
+							!selectedPhoto ||
+							photos.length === 0
+						}
 						className="px-8 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 					>
 						{isLoading || status === "loading" ? (
 							<>
-								<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+								<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
 								更新中...
 							</>
 						) : (
