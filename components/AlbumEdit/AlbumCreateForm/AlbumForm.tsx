@@ -18,7 +18,7 @@ type AlbumFormProps = {
 const schema = zod.object({
 	title: zod.string().min(1, { message: "タイトルを入力してください" }),
 	file: zod
-		.custom<FileList>()
+		.custom<FileList | File[]>()
 		.refine((value) => value.length > 0, "ファイルを選択してください。"),
 });
 
@@ -51,25 +51,23 @@ export default function AlbumForm({
 
 		// ファイルをFileListに変換するための処理
 		if (files.length > 0 && fileInputRef.current) {
-			setValue(
-				"file",
-				{
-					item: (index: number) => files[index],
-					length: files.length,
-					[Symbol.iterator]: function* () {
-						for (let i = 0; i < files.length; i++) {
-							yield files[i];
-						}
-					},
-				} as unknown as FileList,
-				{ shouldValidate: true },
-			);
+			//FileListオブジェクトを作成
+			const dataTransfer = new DataTransfer();
+			files.forEach((file) => {
+				dataTransfer.items.add(file);
+			});
+
+			setValue("file", dataTransfer.files, { shouldValidate: true });
 		}
 	};
 
 	const handleFormSubmit = (data: FormFields) => {
 		setStatus("loading");
-		onSubmit(data);
+		const formData = {
+			...data,
+			file: selectedFiles,
+		};
+		onSubmit(formData);
 	};
 
 	return (
