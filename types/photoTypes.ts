@@ -5,13 +5,20 @@ export interface Photo {
 	photoUrl: string;
 	userId: string;
 }
+
+export interface AddPhotosRequest {
+	albumId: string;
+	photosList: string[];
+	userId: string;
+}
+
 export interface PhotoSelectDeleteProps {
 	albumId: string;
 	photos: Photo[];
 	onClose: () => void;
 }
-export interface AddPhotosRequest {
+
+export interface PhotoSelectDeleteRequest {
+	photosToDelete: Photo[];
 	albumId: string;
-	photosList: string[];
-	userId: string;
 }
