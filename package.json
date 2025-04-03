@@ -9,6 +9,7 @@
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^3.9.0",
+		"clsx": "^2.1.1",
 		"compressorjs": "^1.2.1",
 		"dayjs": "^1.11.13",
 		"firebase": "^11.1.0",
