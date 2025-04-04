@@ -25,7 +25,8 @@ export default function AlbumCard({
 					<Image
 						src={album.coverPhotoUrl}
 						alt={`${album.title} のアルバムカバー画像`}
-						fill
+						width={200}
+						height={200}
 						className="object-cover"
 						priority={true}
 					/>
