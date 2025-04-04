@@ -23,3 +23,15 @@ export interface BaseButtonProps
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
 }
+
+export interface ActionButtonProps extends BaseButtonProps {
+	type: "button";
+	onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+export interface SubmitButtonProps extends BaseButtonProps {
+	type: "submit";
+	onClick?: never; // submitボタンではonClickを使用しない
+}
+
+export type ButtonProps = ActionButtonProps | SubmitButtonProps;
