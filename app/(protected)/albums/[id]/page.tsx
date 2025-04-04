@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { usePhotoStore } from "@/stores/photoStore";
-import Spinner from "@/components/Spinner";
 import AlbumTitle from "@/components/AlbumEdit/AlbumTitle";
 import EditMenu from "@/components/EditMenu";
 
@@ -84,12 +83,6 @@ export default function AlbumPhotosPage() {
 							className="rounded-md w-[300px] h-[300px] object-cover"
 						/>
 					))}
-				</div>
-			)}
-
-			{loading && (
-				<div className="flex justify-center pt-24">
-					<Spinner />
 				</div>
 			)}
 		</div>

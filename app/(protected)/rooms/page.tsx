@@ -5,7 +5,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useShareStore } from "@/stores/shareStore";
 import type { ShareRooms } from "@/types/shareTypes";
 import Link from "next/link";
-import Spinner from "@/components/Spinner";
 import { FiPlus, FiUsers, FiLogIn } from "react-icons/fi";
 
 export default function RoomsPage() {
@@ -59,11 +58,7 @@ export default function RoomsPage() {
 					</div>
 				</div>
 
-				{loading ? (
-					<div className="flex items-center justify-center h-64">
-						<Spinner />
-					</div>
-				) : shareRooms.length === 0 ? (
+				{shareRooms.length === 0 ? (
 					<div className="bg-white rounded-lg shadow-md p-8 text-center">
 						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
 							<FiUsers className="text-orange-500" size={28} />

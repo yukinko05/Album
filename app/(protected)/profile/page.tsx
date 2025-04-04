@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Spinner from "@/components/Spinner";
 import { useUserStore } from "@/stores/userStore";
 import { useAuth } from "@/hooks/useAuth";
 import { FaCircleUser } from "react-icons/fa6";
@@ -33,14 +32,6 @@ export default function ProfilePage() {
 
 		fetchUserData();
 	}, [currentUser, getUser]);
-
-	if (isLoading || loading) {
-		return (
-			<div className="flex justify-center items-center h-screen">
-				<Spinner size="lg" />
-			</div>
-		);
-	}
 
 	if (!isAuthenticated) {
 		return null;
