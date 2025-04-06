@@ -58,6 +58,7 @@ export default function RoomPage() {
 								pathname: "/albums/create",
 								query: {
 									shareRoomId,
+									sharedRoomTitle,
 								},
 							}}
 							className="flex items-center px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
@@ -89,6 +90,7 @@ export default function RoomPage() {
 								pathname: "/albums/create",
 								query: {
 									shareRoomId,
+									sharedRoomTitle,
 								},
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
