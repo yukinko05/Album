@@ -6,6 +6,9 @@ import { compressMultipleImagesToBase64 } from "@/utils/imageCompressor";
 import { motion } from "framer-motion";
 import { FiX, FiCheck, FiImage } from "react-icons/fi";
 import ImageUploader from "@/components/ImageUploader";
+import { Button } from "@/components/common/Button/Button";
+import { CircleCancelButton } from "@/components/common/Button/CircleCancelButton";
+import { CancelButton } from "@/components/common/Button/CancelButton";
 
 type AddPhotosProps = {
 	albumId: string;
@@ -82,13 +85,9 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 						<FiImage className="mr-2" size={24} />
 						写真を追加
 					</h2>
-					<button
-						onClick={onClose}
-						className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-100 text-orange-800 hover:bg-orange-200 transition-colors"
-						aria-label="閉じる"
-					>
+					<CircleCancelButton onClick={onClose} aria-label="閉じる">
 						<FiX size={20} />
-					</button>
+					</CircleCancelButton>
 				</div>
 				<form className="flex flex-col gap-4">
 					<div className="mb-8">
@@ -103,20 +102,12 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 					</div>
 
 					<div className="flex justify-between mt-8 border-t border-amber-200 pt-4">
-						<button
-							type="button"
-							onClick={onClose}
-							className="px-6 py-2 bg-white border border-amber-300 text-orange-700 rounded-lg hover:bg-amber-50 transition-colors"
-						>
-							キャンセル
-						</button>
-						<button
-							type="button"
+						<CancelButton onClick={onClose} className="px-6 py-2" />
+						<Button
 							onClick={handleUpload}
 							disabled={
 								isLoading || status === "loading" || selectedFiles.length === 0
 							}
-							className="px-8 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
 						>
 							{isLoading || status === "loading" ? (
 								<>
@@ -129,7 +120,7 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 									アップロード
 								</>
 							)}
-						</button>
+						</Button>
 					</div>
 				</form>
 			</div>

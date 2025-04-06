@@ -7,7 +7,7 @@ import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
 import ImageUploader from "@/components/ImageUploader";
 import { FiBook } from "react-icons/fi";
-
+import { Button } from "@/components/common/Button/Button";
 type AlbumFormProps = {
 	onSubmit: SubmitHandler<FormFields>;
 	formTitle: string;
@@ -147,13 +147,14 @@ export default function AlbumForm({
 				</div>
 
 				<div className="mt-8 pt-4 border-t border-amber-200">
-					<button
+					<Button
 						type="submit"
-						disabled={status === "loading"}
-						className="w-full bg-orange-500 text-white rounded-lg py-3 font-medium hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+						isFullWidth={true}
+						size={"lg"}
+						isLoading={status === "loading"}
 					>
 						{status === "loading" ? "処理中..." : submitButtonText}
-					</button>
+					</Button>
 				</div>
 			</form>
 		</div>

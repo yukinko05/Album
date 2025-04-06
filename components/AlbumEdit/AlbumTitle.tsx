@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useAlbumStore } from "@/stores/albumStore";
 import { FiBook } from "react-icons/fi";
-
+import { Button } from "@/components/common/Button/Button";
 type AlbumTitle = {
 	albumId: string;
 	currentTitle: string;
@@ -93,16 +93,15 @@ export default function AlbumTitle({
 						className={`flex-1 px-4 py-1 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${title.trim().length === 0 ? "border-red-500 focus:ring-red-200" : "border-amber-200 focus:ring-orange-200"}`}
 					/>
 
-					<button
-						type="button"
+					<Button
 						disabled={
 							isLoading || status === "loading" || title.trim().length === 0
 						}
 						onClick={handleClickUpdate}
-						className={` text-sm px-6 py-3 ml-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+						className={"ml-2"}
 					>
 						{isLoading || status === "loading" ? "更新中..." : "変更"}
-					</button>
+					</Button>
 				</div>
 			) : (
 				<div className="flex items-center">

@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { motion } from "framer-motion";
 import { FiX, FiTrash2 } from "react-icons/fi";
 import Image from "next/image";
+import { CircleCancelButton } from "@/components/common/Button/CircleCancelButton";
+import { CancelButton } from "@/components/common/Button/CancelButton";
 
 export default function PhotoSelectDelete({
 	albumId,
@@ -96,13 +98,9 @@ export default function PhotoSelectDelete({
 						<FiTrash2 className="mr-2" size={24} />
 						写真を選択して削除
 					</h2>
-					<button
-						onClick={onClose}
-						className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-100 text-orange-800 hover:bg-orange-200 transition-colors"
-						aria-label="閉じる"
-					>
+					<CircleCancelButton onClick={onClose} aria-label="閉じる">
 						<FiX size={20} />
-					</button>
+					</CircleCancelButton>
 				</div>
 
 				{photos.length === 0 ? (
@@ -167,13 +165,7 @@ export default function PhotoSelectDelete({
 				)}
 
 				<div className="flex justify-between mt-8 border-t border-amber-200 pt-4">
-					<button
-						type="button"
-						onClick={onClose}
-						className="px-6 py-2 bg-white border border-amber-300 text-orange-700 rounded-lg hover:bg-amber-50 transition-colors"
-					>
-						キャンセル
-					</button>
+					<CancelButton onClick={onClose} />
 
 					<button
 						type="button"

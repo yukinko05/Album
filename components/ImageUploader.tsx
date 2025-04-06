@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FiUpload, FiImage, FiX } from "react-icons/fi";
+import { FiUpload, FiImage, FiX, FiFile } from "react-icons/fi";
 import Image from "next/image";
+import { Button } from "@/components/common/Button/Button";
+import { CircleCancelButton } from "@/components/common/Button/CircleCancelButton";
 
 type ImageUploaderProps = {
 	onFileSelect: (files: File[]) => void;
@@ -154,15 +156,10 @@ export default function ImageUploader({
 					<p className="text-orange-600 text-sm mb-6 text-center">
 						写真をここにペーストすることもできます
 					</p>
-					<button
-						type="button"
-						onClick={() => fileInputRef.current?.click()}
-						disabled={isLoading || status === "loading"}
-						className="inline-flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-					>
+					<Button onClick={() => fileInputRef.current?.click()}>
 						<FiUpload className="mr-2" />
 						写真を選択する
-					</button>
+					</Button>
 					<input
 						type="file"
 						ref={fileInputRef}
@@ -184,15 +181,10 @@ export default function ImageUploader({
 								{previewUrls.length}枚の写真が選択されています
 							</span>
 						</div>
-						<button
-							type="button"
-							onClick={() => fileInputRef.current?.click()}
-							disabled={isLoading || status === "loading"}
-							className="inline-flex items-center px-3 py-1 bg-orange-100 text-orange-700 rounded-lg hover:bg-orange-200 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-						>
+						<Button size={"sm"} onClick={() => fileInputRef.current?.click()}>
 							<FiUpload className="mr-1" size={14} />
 							追加
-						</button>
+						</Button>
 					</div>
 
 					<div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
@@ -209,14 +201,14 @@ export default function ImageUploader({
 										sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
 										className="object-cover"
 									/>
-									<button
-										type="button"
+									<CircleCancelButton
 										onClick={() => removePreview(index)}
-										className="absolute top-1 right-1 bg-black bg-opacity-50 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
 										aria-label="削除"
+										size="sm"
+										className="absolute top-2 right-2 bg-black bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
 									>
 										<FiX size={16} />
-									</button>
+									</CircleCancelButton>
 								</div>
 							</div>
 						))}

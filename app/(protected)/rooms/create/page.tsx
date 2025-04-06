@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FiUsers, FiPlusCircle } from "react-icons/fi";
+import { CancelButton } from "@/components/common/Button/CancelButton";
 
 const shareRoomSchema = z.object({
 	sharedRoomTitle: z
@@ -112,14 +113,10 @@ export default function CreateRoomPage() {
 					</div>
 
 					<div className="flex justify-between mt-8 pt-4 border-t border-amber-200">
-						<button
-							type="button"
+						<CancelButton
 							onClick={() => router.back()}
-							className="px-6 py-2 bg-white border border-amber-300 text-orange-700 rounded-lg hover:bg-amber-50 transition-colors"
 							disabled={isSubmitting || status === "loading"}
-						>
-							キャンセル
-						</button>
+						/>
 						<button
 							type="submit"
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
