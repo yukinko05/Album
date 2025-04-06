@@ -146,7 +146,7 @@ export default function EditMenu({
 								<AlbumDeleteButton
 									albumId={albumId}
 									photos={photos}
-									classNames="w-full text-left px-3 py-2 rounded-md hover:bg-red-50 flex items-center gap-2.5 text-red-600"
+									classNames="w-full text-left py-2 rounded-md hover:bg-red-50 flex items-center gap-2.5 text-red-600"
 								>
 									<div className="flex items-center gap-2.5 w-full">
 										<span className="p-1.5 rounded-md bg-red-100 text-red-500">

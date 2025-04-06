@@ -4,6 +4,7 @@ import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { usePhotoStore } from "@/stores/photoStore";
 import AlbumTitle from "@/components/AlbumEdit/AlbumTitle";
 import EditMenu from "@/components/EditMenu";
@@ -45,7 +46,6 @@ export default function AlbumPhotosPage() {
 		setIsTitleEditing(false);
 	};
 
-	console.log(photos);
 	return (
 		<div className="px-4 py-8">
 			<div className="flex justify-between items-center border-b border-amber-200 pb-4">
@@ -76,12 +76,15 @@ export default function AlbumPhotosPage() {
 			{!loading && (
 				<div className="flex flex-wrap gap-1 mt-8">
 					{photos.map((photo) => (
-						<img
-							key={photo.photoId}
-							src={photo.photoUrl}
-							alt={`${albumTitle}のアルバム内の写真`}
-							className="rounded-md w-[300px] h-[300px] object-cover"
-						/>
+						<div key={photo.photoId} className="relative w-[300px] h-[300px]">
+							<Image
+								src={photo.photoUrl}
+								alt={`${albumTitle}のアルバム内の写真`}
+								fill
+								sizes="300px"
+								className="rounded-md object-cover"
+							/>
+						</div>
 					))}
 				</div>
 			)}

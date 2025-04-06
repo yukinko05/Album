@@ -25,17 +25,17 @@ export default function AlbumCard({
 					<Image
 						src={album.coverPhotoUrl}
 						alt={`${album.title} のアルバムカバー画像`}
-						width={200}
-						height={200}
+						fill
+						sizes=""
 						className="object-cover"
 						priority={true}
 					/>
 				</div>
 				<div className="p-4">
-					<h2 className="font-medium text-gray-900 text-sm md:text-base mb-1 truncate">
+					<h2 className="font-medium text-orange-800 text-sm md:text-base mb-1 truncate">
 						{album.title}
 					</h2>
-					<time className="text-xs md:text-sm text-gray-500">
+					<time className="text-xs md:text-sm text-orange-800">
 						{album.createdAt}
 					</time>
 				</div>

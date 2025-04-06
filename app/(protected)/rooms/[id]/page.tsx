@@ -5,7 +5,6 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
-import LoadingSpinner from "@/components/LoadingSpinner";
 import { useAlbumStore } from "@/stores/albumStore";
 import { FiPlusCircle, FiCamera, FiUsers } from "react-icons/fi";
 import AlbumCard from "@/components/AlbumCard";
@@ -50,9 +49,7 @@ export default function RoomPage() {
 						<FiUsers className="mr-2" size={24} />
 						{sharedRoomTitle}
 					</h1>
-				</div>
-				{albums && albums.length > 0 ? (
-					<>
+					{albums && albums.length > 0 && (
 						<Link
 							href={{
 								pathname: "/albums/create",
@@ -61,22 +58,24 @@ export default function RoomPage() {
 									sharedRoomTitle,
 								},
 							}}
-							className="flex items-center px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
+							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
 							<FiPlusCircle className="mr-2" />
 							アルバム作成
 						</Link>
-						<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-							{albums.map((album) => (
-								<AlbumCard
-									key={album.albumId}
-									album={album}
-									shareRoomId={shareRoomId}
-									sharedRoomTitle={sharedRoomTitle || ""}
-								/>
-							))}
-						</div>
-					</>
+					)}
+				</div>
+				{albums && albums.length > 0 ? (
+					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+						{albums.map((album) => (
+							<AlbumCard
+								key={album.albumId}
+								album={album}
+								shareRoomId={shareRoomId}
+								sharedRoomTitle={sharedRoomTitle || ""}
+							/>
+						))}
+					</div>
 				) : (
 					<div className="bg-white rounded-lg shadow-md p-8 text-center">
 						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">

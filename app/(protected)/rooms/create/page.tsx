@@ -10,7 +10,6 @@ import { z } from "zod";
 import { FiUsers, FiPlusCircle } from "react-icons/fi";
 import { CancelButton } from "@/components/common/Button/CancelButton";
 import { SubmitButton } from "@/components/common/Button/SubmitButton";
-import { LoadingIndicator } from "@/components/common/LoadingIndicator";
 
 const shareRoomSchema = z.object({
 	sharedRoomTitle: z
