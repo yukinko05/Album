@@ -3,6 +3,7 @@ export const BUTTON_VARIANTS = {
 	secondary: "secondary",
 	danger: "danger",
 	ghost: "ghost",
+	circle: "circle",
 } as const;
 
 export const BUTTON_SIZES = {
