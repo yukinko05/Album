@@ -5,6 +5,7 @@ import LoadingSpinner from "../../LoadingSpinner";
 export const Button: React.FC<BaseButtonProps> = ({
 	variant = "primary",
 	size = "md",
+	type = "button",
 	isLoading = false,
 	isFullWidth = false,
 	leftIcon,
@@ -12,6 +13,7 @@ export const Button: React.FC<BaseButtonProps> = ({
 	className,
 	children,
 	disabled,
+	onClick,
 	...props
 }) => {
 	const buttonClasses = clsx(
@@ -58,8 +60,10 @@ export const Button: React.FC<BaseButtonProps> = ({
 
 	return (
 		<button
+			type={type}
 			className={buttonClasses}
 			disabled={disabled || isLoading}
+			onClick={onClick}
 			{...props}
 		>
 			{isLoading && <LoadingSpinner size={size} className={"mr-2"} />}

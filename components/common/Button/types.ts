@@ -18,10 +18,12 @@ export interface BaseButtonProps
 	extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: ButtonVariant;
 	size?: ButtonSize;
+	type?: "button" | "submit" | "reset";
 	isLoading?: boolean;
 	isFullWidth?: boolean;
 	leftIcon?: React.ReactNode;
 	rightIcon?: React.ReactNode;
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface ActionButtonProps extends BaseButtonProps {
