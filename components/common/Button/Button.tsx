@@ -62,15 +62,7 @@ export const Button: React.FC<BaseButtonProps> = ({
 			disabled={disabled || isLoading}
 			{...props}
 		>
-			{isLoading && (
-				<LoadingSpinner
-					className={clsx("mr-2", {
-						"w-4 h-4": size === "sm",
-						"w-5 h-5": size === "md",
-						"w-6 h-6": size === "lg",
-					})}
-				/>
-			)}
+			{isLoading && <LoadingSpinner size={size} className={"mr-2"} />}
 			{leftIcon && <span className="mr-2">{leftIcon}</span>}
 			{children}
 			{rightIcon && <span className="ml-2">{rightIcon}</span>}

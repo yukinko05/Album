@@ -2,12 +2,20 @@ import clsx from "clsx";
 
 interface LoadingSpinnerProps {
 	className?: string;
+	size?: "sm" | "md" | "lg";
 }
 
-export default function LoadingSpinner({ className }: LoadingSpinnerProps) {
+export default function LoadingSpinner({
+	className,
+	size = "md",
+}: LoadingSpinnerProps) {
 	return (
 		<svg
-			className={clsx("animate-spin", className)}
+			className={clsx("mr-2", "animate-spin", className, {
+				"w-4 h-4": size === "sm",
+				"w-5 h-5": size === "md",
+				"w-6 h-6": size === "lg",
+			})}
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
