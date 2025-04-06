@@ -4,6 +4,7 @@ import type { Photo } from "@/types/photoTypes";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useAlbumStore } from "@/stores/albumStore";
+import { LoadingIndicator } from "@/components/common/LoadingIndicator";
 
 type AlbumDeleteButtonProps = {
 	albumId: string;
@@ -71,7 +72,7 @@ export default function AlbumDeleteButton({
 		>
 			{isLoading || status === "loading" ? (
 				<>
-					<span className="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin mr-1.5" />
+					<LoadingIndicator color="orange" size="sm" className="mr-1.5" />
 					削除中...
 				</>
 			) : (

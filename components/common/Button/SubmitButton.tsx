@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Button } from "./Button";
 import { FiCheck } from "react-icons/fi";
+import { LoadingIndicator } from "@/components/common/LoadingIndicator";
 
 interface SubmitButtonProps {
 	onClick?: (...args: any[]) => void;
@@ -31,7 +32,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
 		>
 			{isLoading ? (
 				<>
-					<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+					<LoadingIndicator color="white" size="md" className="mr-2" />
 					処理中...
 				</>
 			) : (
