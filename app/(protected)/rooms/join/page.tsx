@@ -9,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { FiUsers, FiLogIn } from "react-icons/fi";
 import { CancelButton } from "@/components/common/Button/CancelButton";
+import { SubmitButton } from "@/components/common/Button/SubmitButton";
+import { LoadingIndicator } from "@/components/common/LoadingIndicator";
 
 const joinRoomSchema = z.object({
 	shareRoomId: z
@@ -118,23 +120,14 @@ export default function JoinRoomPage() {
 							onClick={() => router.back()}
 							disabled={isSubmitting || status === "loading"}
 						/>
-						<button
+						<SubmitButton
 							type="submit"
-							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
 							disabled={isSubmitting || status === "loading"}
+							isLoading={isSubmitting || status === "loading"}
+							icon={<FiLogIn size={18} />}
 						>
-							{isSubmitting || status === "loading" ? (
-								<>
-									<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-									参加中...
-								</>
-							) : (
-								<>
-									<FiLogIn className="mr-2" />
-									ルームに参加
-								</>
-							)}
-						</button>
+							ルームに参加
+						</SubmitButton>
 					</div>
 				</form>
 			</div>

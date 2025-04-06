@@ -6,9 +6,9 @@ import { compressMultipleImagesToBase64 } from "@/utils/imageCompressor";
 import { motion } from "framer-motion";
 import { FiX, FiCheck, FiImage } from "react-icons/fi";
 import ImageUploader from "@/components/ImageUploader";
-import { Button } from "@/components/common/Button/Button";
 import { CircleCancelButton } from "@/components/common/Button/CircleCancelButton";
 import { CancelButton } from "@/components/common/Button/CancelButton";
+import { SubmitButton } from "@/components/common/Button/SubmitButton";
 
 type AddPhotosProps = {
 	albumId: string;
@@ -103,24 +103,17 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 
 					<div className="flex justify-between mt-8 border-t border-amber-200 pt-4">
 						<CancelButton onClick={onClose} className="px-6 py-2" />
-						<Button
+						<SubmitButton
+							type="button"
 							onClick={handleUpload}
 							disabled={
 								isLoading || status === "loading" || selectedFiles.length === 0
 							}
+							isLoading={isLoading || status === "loading"}
+							icon={<FiCheck size={18} />}
 						>
-							{isLoading || status === "loading" ? (
-								<>
-									<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-									アップロード中...
-								</>
-							) : (
-								<>
-									<FiCheck size={18} />
-									アップロード
-								</>
-							)}
-						</Button>
+							アップロード
+						</SubmitButton>
 					</div>
 				</form>
 			</div>

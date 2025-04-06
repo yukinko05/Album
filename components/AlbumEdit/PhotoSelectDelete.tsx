@@ -8,6 +8,7 @@ import { FiX, FiTrash2 } from "react-icons/fi";
 import Image from "next/image";
 import { CircleCancelButton } from "@/components/common/Button/CircleCancelButton";
 import { CancelButton } from "@/components/common/Button/CancelButton";
+import { DangerButton } from "@/components/common/Button/DangerButton";
 
 export default function PhotoSelectDelete({
 	albumId,
@@ -167,8 +168,7 @@ export default function PhotoSelectDelete({
 				<div className="flex justify-between mt-8 border-t border-amber-200 pt-4">
 					<CancelButton onClick={onClose} />
 
-					<button
-						type="button"
+					<DangerButton
 						onClick={handleDelete}
 						disabled={
 							isLoading ||
@@ -176,20 +176,11 @@ export default function PhotoSelectDelete({
 							selectedPhotoIds.length === 0 ||
 							photos.length === 0
 						}
-						className="px-8 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+						isLoading={isLoading || status === "loading"}
+						icon={<FiTrash2 size={18} />}
 					>
-						{isLoading || status === "loading" ? (
-							<>
-								<span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-								削除中...
-							</>
-						) : (
-							<>
-								<FiTrash2 size={18} />
-								{selectedPhotoIds.length}枚の写真を削除
-							</>
-						)}
-					</button>
+						{selectedPhotoIds.length}枚の写真を削除
+					</DangerButton>
 				</div>
 			</div>
 		</motion.div>
