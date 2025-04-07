@@ -74,14 +74,14 @@ export default function AlbumPhotosPage() {
 				</div>
 			</div>
 			{!loading && (
-				<div className="flex flex-wrap gap-1 mt-8">
+				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 mx-auto">
 					{photos.map((photo) => (
-						<div key={photo.photoId} className="relative w-[300px] h-[300px]">
+						<div key={photo.photoId} className="relative aspect-square w-full">
 							<Image
 								src={photo.photoUrl}
 								alt={`${albumTitle}のアルバム内の写真`}
 								fill
-								sizes="300px"
+								sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
 								className="rounded-md object-cover"
 							/>
 						</div>
