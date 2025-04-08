@@ -1,6 +1,6 @@
 "use client";
 
-import SideBar from "@/components/SideBar/SideBar";
+import SideBar from "@/components/ResponsiveSidebar/SideBar";
 import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
