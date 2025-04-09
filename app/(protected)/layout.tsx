@@ -6,7 +6,7 @@ import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { User as AppUser } from "@/types/userTypes";
-
+import LoadingSpinner from "@/components/LoadingSpinner";
 export default function ProtectedLayout({
 	children,
 }: {
@@ -56,8 +56,8 @@ export default function ProtectedLayout({
 	// ユーザーデータ取得中はローディング表示
 	if (isLoading) {
 		return (
-			<div className="flex justify-center items-center min-h-screen">
-				Loading...
+			<div className="flex justify-center items-center py-12">
+				<LoadingSpinner />
 			</div>
 		);
 	}
