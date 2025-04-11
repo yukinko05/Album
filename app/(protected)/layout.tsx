@@ -4,7 +4,7 @@ import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
-import SideBar from "@/components/ResponsiveSidebar/SideBar";
+import SideBar from "@/components/common/SideBar";
 import { Button } from "@/components/common/Button/Button";
 import { FiMenu, FiX } from "react-icons/fi";
 import type { User as AppUser } from "@/types/userTypes";
@@ -111,11 +111,10 @@ export default function ProtectedLayout({
 						animate={isMobile ? { opacity: 1, x: 0 } : { opacity: 1 }}
 						exit={isMobile ? { opacity: 0, x: -300 } : { opacity: 0 }}
 						transition={{ duration: 0.3 }}
-						className={`${
-							isMobile
-								? "fixed top-0 left-0 h-full w-[300px] shadow-lg z-40"
-								: "w-64 shadow-sm"
-						}`}
+						className={`${isMobile
+							? "fixed top-0 left-0 h-full w-[300px] shadow-lg z-40"
+							: "w-64 shadow-sm"
+							}`}
 					>
 						<div className="h-full">
 							<SideBar
