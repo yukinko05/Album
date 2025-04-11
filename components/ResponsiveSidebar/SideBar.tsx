@@ -4,14 +4,13 @@ import ShareRoomSidebarList from "@/components/ShareRoom/ShareRoomSidebarList";
 import Link from "next/link";
 import SignOut from "@/app/signout/signout";
 import Image from "next/image";
-import type { User } from "firebase/auth";
-import type { User as AppUser } from "@/types/userTypes";
+import type { User } from "@/types/userTypes";
 import { FaCircleUser } from "react-icons/fa6";
 
 interface SideBarProps {
-	currentUser?: User | null;
+	currentUser?: string | null;
 	isAuthenticated?: boolean;
-	userData?: AppUser | null;
+	userData?: User | null;
 }
 
 export default function SideBar({
