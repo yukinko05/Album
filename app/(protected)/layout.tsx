@@ -1,77 +1,137 @@
 "use client";
-
-import SideBar from "@/components/ResponsiveSidebar/SideBar";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import SideBar from "@/components/ResponsiveSidebar/SideBar";
+import { Button } from "@/components/common/Button/Button";
+import { FiMenu, FiX } from "react-icons/fi";
 import type { User as AppUser } from "@/types/userTypes";
 import LoadingSpinner from "@/components/LoadingSpinner";
+
 export default function ProtectedLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const router = useRouter();
 	const currentUser = useAuthStore((state) => state.currentUser);
 	const isAuthStateChecking = useAuthStore(
 		(state) => state.isAuthStateChecking,
 	);
 	const getUser = useUserStore((state) => state.getUser);
-	const router = useRouter();
-	const [userData, setUserData] = useState<AppUser | null>(null);
-	const [isLoading, setIsLoading] = useState<boolean>(true);
 
-	// 認証状態とユーザーデータの処理
+	const [userData, setUserData] = useState<AppUser | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+	const [sideBarOpen, setSideBarOpen] = useState(false);
+	const [isMobile, setIsMobile] = useState(false);
+
+	// 画面サイズの監視
 	useEffect(() => {
-		// 認証されていない場合はログインページにリダイレクト
-		if (isAuthStateChecking && !currentUser) {
+		const checkMobile = () => {
+			setIsMobile(window.innerWidth < 768);
+		};
+
+		checkMobile();
+		window.addEventListener("resize", checkMobile);
+
+		return () => {
+			window.removeEventListener("resize", checkMobile);
+		};
+	}, []);
+
+	// 認証状態のチェックとユーザーデータの取得
+	useEffect(() => {
+		if (!isAuthStateChecking && !currentUser) {
 			router.push("/login");
-			return;
 		}
 
-		// ユーザーデータを取得
 		const fetchUserData = async () => {
+			if (!currentUser) {
+				router.push("/login");
+				return;
+			}
+
 			try {
-				if (!currentUser) return;
 				setIsLoading(true);
 				const user = await getUser(currentUser.uid);
 				setUserData(user);
 			} catch (error) {
 				console.error("ユーザー情報の取得に失敗しました:", error);
+				router.push("/login");
 			} finally {
 				setIsLoading(false);
 			}
 		};
 
-		if (currentUser) {
+		if (currentUser && !isAuthStateChecking) {
 			fetchUserData();
 		}
-	}, [currentUser, isAuthStateChecking, router, getUser]);
+	}, [currentUser, isAuthStateChecking, getUser]);
 
-	// 認証状態確認中またはユーザーがnullの場合は何も表示しない
-	if (!isAuthStateChecking || !currentUser) {
-		return null; // ログインページにリダイレクト中は何も表示しない
+	if (!currentUser || !userData) {
+		return null;
 	}
 
 	// ユーザーデータ取得中はローディング表示
-	if (isLoading) {
+	if (isLoading || isAuthStateChecking) {
 		return (
 			<div className="flex justify-center items-center py-12">
-				<LoadingSpinner />
+				<LoadingSpinner size="md" />
 			</div>
 		);
 	}
 
+	const toggleSideBar = () => {
+		setSideBarOpen(!sideBarOpen);
+	};
+
 	return (
-		<div className="min-h-screen">
-			<div className="hidden md:block">
-				<SideBar
-					currentUser={currentUser}
-					isAuthenticated={true}
-					userData={userData}
-				/>
+		<div className="flex min-h-screen">
+			{/* モバイル用ハンバーガーメニュー */}
+			{isMobile && (
+				<div className="fixed top-4 right-4 mt-4 z-50">
+					<Button
+						onClick={toggleSideBar}
+						variant="ghost"
+						size="md"
+						className="p-2"
+					>
+						{sideBarOpen ? <FiX size={20} /> : <FiMenu size={20} />}
+					</Button>
+				</div>
+			)}
+
+			{/* サイドバー */}
+			<AnimatePresence>
+				{(!isMobile || sideBarOpen) && (
+					<motion.div
+						initial={isMobile ? { opacity: 0, x: -300 } : { opacity: 0 }}
+						animate={isMobile ? { opacity: 1, x: 0 } : { opacity: 1 }}
+						exit={isMobile ? { opacity: 0, x: -300 } : { opacity: 0 }}
+						transition={{ duration: 0.3 }}
+						className={`${
+							isMobile
+								? "fixed top-0 left-0 h-full w-[300px] shadow-lg z-40"
+								: "w-64 shadow-sm"
+						}`}
+					>
+						<div className="h-full">
+							<SideBar
+								currentUser={currentUser.uid}
+								isAuthenticated={true}
+								userData={userData}
+							/>
+						</div>
+					</motion.div>
+				)}
+			</AnimatePresence>
+
+			{/* メインコンテンツ */}
+			<div className={`flex-1 ${isMobile && sideBarOpen ? "ml-[300px]" : ""}`}>
+				{children}
 			</div>
-			<main className="md:ml-64">{children}</main>
 		</div>
 	);
 }
