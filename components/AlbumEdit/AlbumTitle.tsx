@@ -9,6 +9,7 @@ type AlbumTitle = {
 	currentTitle: string;
 	isEditing: boolean;
 	onEditComplete: () => void;
+	className?: string;
 };
 
 export default function AlbumTitle({
@@ -16,6 +17,7 @@ export default function AlbumTitle({
 	currentTitle,
 	isEditing,
 	onEditComplete,
+	className,
 }: AlbumTitle) {
 	const editAlbumTitle = useAlbumStore((state) => state.editAlbumTitle);
 	const status = useAlbumStore((state) => state.status);
@@ -90,7 +92,7 @@ export default function AlbumTitle({
 						minLength={1}
 						maxLength={100}
 						disabled={isLoading || status === "loading"}
-						className={`flex-1 px-4 py-1 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${title.trim().length === 0 ? "border-red-500 focus:ring-red-200" : "border-amber-200 focus:ring-orange-200"}`}
+						className={`flex-1 px-4 py-1 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${title.trim().length === 0 ? "border-red-500 focus:ring-red-200" : "border-amber-200 focus:ring-orange-200"} ${className}`}
 					/>
 
 					<Button
