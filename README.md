@@ -1,93 +1,82 @@
-<a href="https://demo-nextjs-with-supabase.vercel.app/">
-  <img alt="Next.js and Supabase Starter Kit - the fastest way to build apps with Next.js and Supabase" src="https://demo-nextjs-with-supabase.vercel.app/opengraph-image.png">
-  <h1 align="center">Next.js and Supabase Starter Kit</h1>
-</a>
+# Album - フォトアルバム共有アプリ
 
-<p align="center">
- The fastest way to build apps with Next.js and Supabase
-</p>
+アルバムは、友人や家族と簡単に写真を共有できる Web アプリケーションです。共有ルームを作成し、そのルーム内でアルバムを作成して写真を整理することができます。
 
-<p align="center">
-  <a href="#features"><strong>Features</strong></a> ·
-  <a href="#demo"><strong>Demo</strong></a> ·
-  <a href="#deploy-to-vercel"><strong>Deploy to Vercel</strong></a> ·
-  <a href="#clone-and-run-locally"><strong>Clone and run locally</strong></a> ·
-  <a href="#feedback-and-issues"><strong>Feedback and issues</strong></a>
-  <a href="#more-supabase-examples"><strong>More Examples</strong></a>
-</p>
-<br/>
+## 主な機能
 
-## Features
+- **ユーザー認証**: 安全なアカウント作成とログイン機能
+- **共有ルーム**: 友人や家族との共有スペースを作成
+- **アルバム管理**: 共有ルーム内で複数のアルバムを作成・管理
+- **写真アップロード**: 写真を簡単にアップロードして共有
+- **レスポンシブデザイン**: スマートフォンからデスクトップまであらゆるデバイスで最適表示
 
-- Works across the entire [Next.js](https://nextjs.org) stack
-  - App Router
-  - Pages Router
-  - Middleware
-  - Client
-  - Server
-  - It just works!
-- supabase-ssr. A package to configure Supabase Auth to use cookies
-- Styling with [Tailwind CSS](https://tailwindcss.com)
-- Optional deployment with [Supabase Vercel Integration and Vercel deploy](#deploy-your-own)
-  - Environment variables automatically assigned to Vercel project
+## 技術スタック
 
-## Demo
+- **フレームワーク**: [Next.js](https://nextjs.org/) (App Router)
+- **認証**: [Firebase Authentication](https://firebase.google.com/products/auth)
+- **ストレージ**: [Firebase Storage](https://firebase.google.com/products/storage)
+- **データベース**: [Firebase Firestore](https://firebase.google.com/products/firestore)
+- **スタイリング**: [Tailwind CSS](https://tailwindcss.com)
+- **フォーム管理**: [React Hook Form](https://react-hook-form.com/)
+- **バリデーション**: [Zod](https://github.com/colinhacks/zod)
+- **状態管理**: [Zustand](https://github.com/pmndrs/zustand)
 
-You can view a fully working demo at [demo-nextjs-with-supabase.vercel.app](https://demo-nextjs-with-supabase.vercel.app/).
+## ローカル環境での実行方法
 
-## Deploy to Vercel
+1. リポジトリをクローンする
 
-Vercel deployment will guide you through creating a Supabase account and project.
+```bash
+git clone https://github.com/yourusername/album.git
+cd album
+```
 
-After installation of the Supabase integration, all relevant environment variables will be assigned to the project so the deployment is fully functioning.
+2. 依存パッケージをインストールする
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&demo-title=nextjs-with-supabase&demo-description=This%20starter%20configures%20Supabase%20Auth%20to%20use%20cookies%2C%20making%20the%20user's%20session%20available%20throughout%20the%20entire%20Next.js%20app%20-%20Client%20Components%2C%20Server%20Components%2C%20Route%20Handlers%2C%20Server%20Actions%20and%20Middleware.&demo-url=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2F&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fwith-supabase&demo-image=https%3A%2F%2Fdemo-nextjs-with-supabase.vercel.app%2Fopengraph-image.png&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6)
+```bash
+npm install
+```
 
-The above will also clone the Starter kit to your GitHub, you can clone that locally and develop locally.
+3. 開発サーバーを起動する
 
-If you wish to just develop locally and not deploy to Vercel, [follow the steps below](#clone-and-run-locally).
+```bash
+npm run dev
+```
 
-## Clone and run locally
+4. ブラウザで [http://localhost:3000](http://localhost:3000) にアクセスする
 
-1. You'll first need a Supabase project which can be made [via the Supabase dashboard](https://database.new)
+## Firebase 設定
 
-2. Create a Next.js app using the Supabase Starter template npx command
+このアプリケーションを実行するには、Firebase プロジェクトの設定が必要です。
 
-   ```bash
-   npx create-next-app -e with-supabase
-   ```
+1. [Firebase Console](https://console.firebase.google.com/) で新しいプロジェクトを作成
+2. Authentication、Firestore、Storage を有効化
+3. プロジェクトのルートに `.env.local` ファイルを作成し、以下の Firebase 設定を追加:
 
-3. Use `cd` to change into the app's directory
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-auth-domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-storage-bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your-messaging-sender-id
+NEXT_PUBLIC_FIREBASE_APP_ID=your-app-id
+```
 
-   ```bash
-   cd name-of-new-app
-   ```
+## デプロイ
 
-4. Rename `.env.local.example` to `.env.local` and update the following:
+このアプリケーションは [Vercel](https://vercel.com) にデプロイすることができます。最も簡単な方法は以下の通りです：
 
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=[INSERT SUPABASE PROJECT URL]
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=[INSERT SUPABASE PROJECT API ANON KEY]
-   ```
+1. Vercel アカウントを作成し、GitHub リポジトリと連携する
+2. Vercel ダッシュボードからプロジェクトをインポート
+3. 環境変数（Firebase の設定など）を設定
+4. デプロイボタンをクリック
 
-   Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
+これにより自動的にビルドとデプロイが行われます。また、GitHub リポジトリへのプッシュ時に自動デプロイするよう設定することもできます。
 
-5. You can now run the Next.js local development server:
+## 開発者向け情報
 
-   ```bash
-   npm run dev
-   ```
+- コードフォーマット: `npm run format`
+- 型チェック: `npm run typecheck`
 
-   The starter kit should now be running on [localhost:3000](http://localhost:3000/).
+## ライセンス
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
-
-## Feedback and issues
-
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
-
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
+MIT
