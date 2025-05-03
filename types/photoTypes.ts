@@ -6,18 +6,19 @@ export interface Photo {
 	userId: string;
 }
 
-export interface Photos {
-	photoId: string;
-	url: string;
-	albumId: string;
-}
-export interface PhotosProps {
-	albumId: string;
-	photos: Photo[];
-}
-
 export interface AddPhotosRequest {
 	albumId: string;
 	photosList: string[];
 	userId: string;
+}
+
+export interface PhotoSelectDeleteProps {
+	albumId: string;
+	photos: Photo[];
+	onClose: () => void;
+}
+
+export interface PhotoSelectDeleteRequest {
+	photosToDelete: Photo[];
+	albumId: string;
 }

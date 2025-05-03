@@ -1,21 +1,19 @@
 "use client";
 
-import { getAuth, signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
-import styles from "./styles.module.css";
-import { Button } from "@nextui-org/react";
 import { useState } from "react";
+import { useAuthStore } from "@/stores/authStore";
 
 export default function SignOut() {
 	const [isLoading, setIsLoading] = useState(false);
-	const auth = getAuth();
 	const router = useRouter();
+	const logout = useAuthStore((state) => state.logout);
 
 	const handleSubmit = async () => {
 		setIsLoading(true);
 
 		try {
-			await signOut(auth);
+			await logout();
 			router.push("/login");
 		} catch (error) {
 			alert("ログアウトに失敗しました。もう一度お試しください。");
@@ -26,15 +24,12 @@ export default function SignOut() {
 	};
 
 	return (
-		<Button
+		<button
+			type="button"
 			onClick={handleSubmit}
-			color="primary"
-			variant="flat"
-			isLoading={isLoading}
-			isDisabled={isLoading}
-			className={styles.button}
+			className="w-full py-2 mt-4 text-center bg-white/20 text-white rounded hover:bg-white/30 transition-colors"
 		>
 			{isLoading ? "ログアウト中..." : "ログアウト"}
-		</Button>
+		</button>
 	);
 }
