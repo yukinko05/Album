@@ -33,6 +33,7 @@ import { useAuth } from "@/hooks/useAuth";
 import type { ShareRooms } from "@/types/shareTypes";
 import { useShareStore } from "@/stores/shareStore";
 import { usePathname } from "next/navigation";
+import { useUserStore } from "@/stores/userStore";
 
 function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(" ");
@@ -45,14 +46,10 @@ const teams = [
 ];
 
 interface SideBarProps {
-	currentUser?: string | null;
-	isAuthenticated?: boolean;
 	userData?: User | null;
-	children?: ReactNode;
-	title?: string;
 }
 
-export default function SideBar() {
+export default function SideBar({ userData }: SideBarProps) {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const { currentUser, isAuthenticated } = useAuth();
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
@@ -79,6 +76,7 @@ export default function SideBar() {
 		fetchShareRoomData();
 	}, [currentUser, getShareRooms]);
 
+	console.log(userData);
 	return (
 		<>
 			<Dialog
@@ -121,6 +119,9 @@ export default function SideBar() {
 							<nav className="flex flex-1 flex-col">
 								<ul role="list" className="flex flex-1 flex-col gap-y-7">
 									<li>
+										<div className="text-xs/6 font-bold text-orange-800/80">
+											ルーム
+										</div>
 										<ul role="list" className="-mx-2 space-y-1">
 											{shareRooms.map((room) => (
 												<li key={room.shareRoomId}>
@@ -128,8 +129,8 @@ export default function SideBar() {
 														href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
 														className={classNames(
 															room.shareRoomId === currentRoomId
-																? "bg-indigo-700 text-white"
-																: "text-indigo-200 hover:bg-indigo-700 hover:text-white",
+																? "bg-orange-400 text-white"
+																: "text-orange-800 hover:bg-white/40",
 															"group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
 														)}
 													>
@@ -140,29 +141,59 @@ export default function SideBar() {
 										</ul>
 									</li>
 									<li>
-										<div className="text-xs/6 font-semibold text-indigo-200">
-											Your teams
+										<div className="text-xs/6 font-bold text-orange-800/80">
+											ルーム操作
 										</div>
 										<ul role="list" className="-mx-2 mt-2 space-y-1">
-											{teams.map((team) => (
-												<li key={team.name}>
-													<a
-														href={team.href}
-														className={classNames(
-															team.current
-																? "bg-indigo-700 text-white"
-																: "text-indigo-200 hover:bg-indigo-700 hover:text-white",
-															"group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
-														)}
-													>
-														<span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
-															{team.initial}
-														</span>
-														<span className="truncate">{team.name}</span>
-													</a>
-												</li>
-											))}
+											<li>
+												<Link
+													href="/rooms/create"
+													aria-label="新しい共有ルームを作成"
+													className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
+												>
+													ルーム作成
+												</Link>
+											</li>
+											<li>
+												<Link
+													href="/rooms/join"
+													className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
+													aria-label="既存の共有ルームに参加"
+												>
+													ルーム参加
+												</Link>
+											</li>
 										</ul>
+									</li>
+									<li className="-mx-6 mt-auto">
+										<Link
+											href="/profile"
+											className="flex items-center gap-2 hover:bg-white/60 rounded-md px-4 py-2 mx-2"
+										>
+											{userData?.iconImg ? (
+												<div className="relative w-[30px] h-[30px]">
+													<Image
+														src={userData.iconImg}
+														alt={`${userData.userName}のプロフィールアイコン`}
+														fill
+														sizes="30px"
+														className="object-cover rounded-full"
+													/>
+												</div>
+											) : (
+												<FaCircleUser className="text-orange-800" size={30} />
+											)}
+											<p className="text-orange-900">
+												{userData?.userName || "ユーザー"}
+											</p>
+										</Link>
+									</li>
+									<li className="border-t border-orange-300 py-4">
+										{currentUser && (
+											<div className="flex justify-center">
+												<SignOut />
+											</div>
+										)}
 									</li>
 								</ul>
 							</nav>
@@ -186,6 +217,9 @@ export default function SideBar() {
 					<nav className="flex flex-1 flex-col">
 						<ul role="list" className="flex flex-1 flex-col gap-y-7">
 							<li>
+								<div className="text-xs/6 font-bold text-orange-800/80">
+									ルーム
+								</div>
 								<ul role="list" className="-mx-2 space-y-1">
 									{shareRooms.map((room) => (
 										<li key={room.shareRoomId}>
@@ -205,7 +239,7 @@ export default function SideBar() {
 								</ul>
 							</li>
 							<li>
-								<div className="text-xs/6 font-semibold text-orange-800">
+								<div className="text-xs/6 font-bold text-orange-800/80">
 									ルーム操作
 								</div>
 								<ul role="list" className="-mx-2 mt-2 space-y-1">
@@ -230,44 +264,76 @@ export default function SideBar() {
 								</ul>
 							</li>
 							<li className="-mx-6 mt-auto">
-								<a
-									href="#"
-									className="flex items-center gap-x-4 px-6 py-3 text-sm/6 font-semibold text-white hover:bg-indigo-700"
+								<Link
+									href="/profile"
+									className="flex items-center gap-2 hover:bg-white/60 rounded-md px-4 py-2 mx-2"
 								>
-									<img
-										alt=""
-										src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-										className="size-8 rounded-full bg-indigo-700"
-									/>
-									<span className="sr-only">Your profile</span>
-									<span aria-hidden="true">Tom Cook</span>
-								</a>
+									{userData?.iconImg ? (
+										<div className="relative w-[30px] h-[30px]">
+											<Image
+												src={userData.iconImg}
+												alt={`${userData.userName}のプロフィールアイコン`}
+												fill
+												sizes="30px"
+												className="object-cover rounded-full"
+											/>
+										</div>
+									) : (
+										<FaCircleUser className="text-orange-800" size={30} />
+									)}
+									<p className="text-orange-900">
+										{userData?.userName || "ユーザー"}
+									</p>
+								</Link>
+							</li>
+							<li className="border-t border-orange-300 py-4">
+								{currentUser && (
+									<div className="flex justify-center">
+										<SignOut />
+									</div>
+								)}
 							</li>
 						</ul>
 					</nav>
 				</div>
 			</div>
 
-			<div className="sticky top-0 z-40 flex items-center gap-x-6 bg-indigo-600 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+			<div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gradient-to-b from-amber-100 to-orange-200 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
 				<button
 					type="button"
 					onClick={() => setSidebarOpen(true)}
 					className="-m-2.5 p-2.5 text-indigo-200 lg:hidden"
 				>
 					<span className="sr-only">Open sidebar</span>
-					<Bars3Icon aria-hidden="true" className="size-6" />
+					<Bars3Icon aria-hidden="true" className="size-6 text-orange-800" />
 				</button>
-				<div className="flex-1 text-sm/6 font-semibold text-white">
-					Dashboard
+				<div className="flex-1">
+					<Link
+						href="/rooms"
+						className="text-3xl font-bold text-orange-800 hover:text-orange-600 font-cherry"
+					>
+						ALBUM
+					</Link>
 				</div>
-				<a href="#">
-					<span className="sr-only">Your profile</span>
-					<img
-						alt=""
-						src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-						className="size-8 rounded-full bg-indigo-700"
-					/>
-				</a>
+				<Link
+					href="/profile"
+					className="flex items-center gap-2 p-2 bg-white/40 hover:bg-white/60 rounded-full mt-2"
+				>
+					{userData?.iconImg ? (
+						<div className="relative w-[30px] h-[30px]">
+							<Image
+								src={userData.iconImg}
+								alt={`${userData.userName}のプロフィールアイコン`}
+								fill
+								sizes="30px"
+								className="object-cover rounded-full"
+							/>
+						</div>
+					) : (
+						<FaCircleUser className="text-orange-800" size={30} />
+					)}
+					<p className="text-orange-900">{userData?.userName || "ユーザー"}</p>
+				</Link>
 			</div>
 		</>
 	);
