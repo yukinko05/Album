@@ -65,7 +65,7 @@ export default function ProtectedLayout({
 	}
 
 	return (
-		<div>
+		<div className="min-h-screen">
 			{/* サイドバー */}
 			<SideBar userData={userData} />
 			{/* メインコンテンツ */}
