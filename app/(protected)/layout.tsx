@@ -1,21 +1,11 @@
 "use client";
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect } from "react";
 import { useAuthStore } from "@/stores/authStore";
 import { useUserStore } from "@/stores/userStore";
 import { useRouter } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
 import SideBar from "@/components/common/SideBar";
 import type { User as AppUser } from "@/types/userTypes";
 import LoadingSpinner from "@/components/LoadingSpinner";
-
-// サイドバーの状態を共有するコンテキストを作成
-export const SidebarContext = createContext<{
-	sideBarOpen: boolean;
-	setSideBarOpen: (value: boolean) => void;
-}>({
-	sideBarOpen: false,
-	setSideBarOpen: () => { },
-});
 
 export default function ProtectedLayout({
 	children,
@@ -31,22 +21,6 @@ export default function ProtectedLayout({
 
 	const [userData, setUserData] = useState<AppUser | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
-	const [sideBarOpen, setSideBarOpen] = useState(false);
-	const [isMobile, setIsMobile] = useState(false);
-
-	// 画面サイズの監視
-	useEffect(() => {
-		const checkMobile = () => {
-			setIsMobile(window.innerWidth < 768);
-		};
-
-		checkMobile();
-		window.addEventListener("resize", checkMobile);
-
-		return () => {
-			window.removeEventListener("resize", checkMobile);
-		};
-	}, []);
 
 	// 認証状態のチェックとユーザーデータの取得
 	useEffect(() => {
@@ -91,35 +65,11 @@ export default function ProtectedLayout({
 	}
 
 	return (
-		<div className="flex min-h-screen">
+		<div>
 			{/* サイドバー */}
-			<AnimatePresence>
-				{(!isMobile || sideBarOpen) && (
-					<motion.div
-						initial={isMobile ? { opacity: 0, x: -300 } : { opacity: 0 }}
-						animate={isMobile ? { opacity: 1, x: 0 } : { opacity: 1 }}
-						exit={isMobile ? { opacity: 0, x: -300 } : { opacity: 0 }}
-						transition={{ duration: 0.3 }}
-						className={`${isMobile
-								? "fixed top-0 left-0 h-full shadow-lg z-40"
-								: "w-64 shadow-sm"
-							}`}
-					>
-						<div className="h-full">
-							<SideBar
-								currentUser={currentUser.uid}
-								isAuthenticated={true}
-								userData={userData}
-							/>
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
-
+			<SideBar userData={userData} />
 			{/* メインコンテンツ */}
-			<div className={`flex-1 ${isMobile && sideBarOpen ? "ml-[255px]" : ""}`}>
-				{children}
-			</div>
+			<main className="py-6 lg:pl-72">{children}</main>
 		</div>
 	);
 }
