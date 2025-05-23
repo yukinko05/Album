@@ -96,12 +96,12 @@ export default function SideBar({ userData }: SideBarProps) {
 								</Link>
 							</div>
 							<nav className="flex flex-1 flex-col">
-								<ul role="list" className="flex flex-1 flex-col gap-y-7">
+								<ul className="flex flex-1 flex-col gap-y-7">
 									<li>
 										<div className="text-xs/6 font-bold text-orange-800/80">
 											ルーム
 										</div>
-										<ul role="list" className="-mx-2 space-y-1">
+										<ul className="-mx-2 space-y-1">
 											{shareRooms.map((room) => (
 												<li key={room.shareRoomId}>
 													<Link
@@ -123,7 +123,7 @@ export default function SideBar({ userData }: SideBarProps) {
 										<div className="text-xs/6 font-bold text-orange-800/80">
 											ルーム操作
 										</div>
-										<ul role="list" className="-mx-2 mt-2 space-y-1">
+										<ul className="-mx-2 mt-2 space-y-1">
 											<li>
 												<Link
 													href="/rooms/create"
@@ -194,12 +194,12 @@ export default function SideBar({ userData }: SideBarProps) {
 						</Link>
 					</div>
 					<nav className="flex flex-1 flex-col">
-						<ul role="list" className="flex flex-1 flex-col gap-y-7">
+						<ul className="flex flex-1 flex-col gap-y-7">
 							<li>
 								<div className="text-xs/6 font-bold text-orange-800/80">
 									ルーム
 								</div>
-								<ul role="list" className="-mx-2 space-y-1">
+								<ul className="-mx-2 space-y-1">
 									{shareRooms.map((room) => (
 										<li key={room.shareRoomId}>
 											<Link
@@ -221,7 +221,7 @@ export default function SideBar({ userData }: SideBarProps) {
 								<div className="text-xs/6 font-bold text-orange-800/80">
 									ルーム操作
 								</div>
-								<ul role="list" className="-mx-2 mt-2 space-y-1">
+								<ul className="-mx-2 mt-2 space-y-1">
 									<li>
 										<Link
 											href="/rooms/create"
