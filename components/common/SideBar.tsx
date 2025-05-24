@@ -4,7 +4,7 @@ import Link from "next/link";
 import SignOut from "@/app/signout/signout";
 import Image from "next/image";
 import type { User } from "@/types/userTypes";
-import { User as FirebaseUser } from "firebase/auth";
+import type { User as FirebaseUser } from "firebase/auth";
 import {
 	Dialog,
 	DialogBackdrop,
@@ -159,7 +159,6 @@ const SidebarNavigation = ({
 	userData,
 	currentUser,
 }: SidebarContentProps) => {
-	console.log(shareRooms);
 	return (
 		<>
 			<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-amber-100 to-orange-200 px-6">
