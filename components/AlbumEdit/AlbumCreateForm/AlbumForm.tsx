@@ -6,7 +6,7 @@ import { useState, useRef } from "react";
 import { type SubmitHandler, useForm } from "react-hook-form";
 import * as zod from "zod";
 import ImageUploader from "@/components/ImageUploader";
-import { FiBook } from "react-icons/fi";
+import { BookOpenIcon } from "@heroicons/react/24/outline";
 import { SubmitButton } from "@/components/common/Button/SubmitButton";
 
 type AlbumFormProps = {
@@ -79,7 +79,7 @@ export default function AlbumForm({
 			>
 				<div className="flex items-center justify-center mb-4 pb-4 border-b border-amber-200">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-						<FiBook className="mr-2" size={24} />
+						<BookOpenIcon className="size-6 mr-2" aria-hidden="true" />
 						{formTitle}
 					</h1>
 				</div>

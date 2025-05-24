@@ -7,7 +7,7 @@ import { useShareStore } from "@/stores/shareStore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { FiUsers, FiPlusCircle } from "react-icons/fi";
+import { PlusCircleIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { CancelButton } from "@/components/common/Button/CancelButton";
 import { SubmitButton } from "@/components/common/Button/SubmitButton";
 
@@ -67,7 +67,7 @@ export default function CreateRoomPage() {
 		<div className="container mx-auto px-4 py-8">
 			<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 				<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-					<FiUsers className="mr-2" size={24} />
+					<UsersIcon className="mr-2 size-6" aria-hidden="true" />
 					新しい共有ルームを作成
 				</h1>
 			</div>
@@ -91,11 +91,10 @@ export default function CreateRoomPage() {
 							type="text"
 							id="sharedRoomTitle"
 							{...register("sharedRoomTitle")}
-							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${
-								errors.sharedRoomTitle
+							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${errors.sharedRoomTitle
 									? "border-red-500 focus:ring-red-200"
 									: "border-amber-200 focus:ring-orange-200"
-							}`}
+								}`}
 							placeholder="家族アルバム"
 						/>
 						{errors.sharedRoomTitle && (
@@ -122,7 +121,7 @@ export default function CreateRoomPage() {
 							type="submit"
 							disabled={isSubmitting || status === "loading"}
 							isLoading={isSubmitting || status === "loading"}
-							icon={<FiPlusCircle size={18} />}
+							icon={<PlusCircleIcon className="text-white size-5" />}
 						>
 							ルームを作成
 						</SubmitButton>

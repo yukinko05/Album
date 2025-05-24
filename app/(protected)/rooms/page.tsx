@@ -5,7 +5,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { useShareStore } from "@/stores/shareStore";
 import type { ShareRooms } from "@/types/shareTypes";
 import Link from "next/link";
-import { FiPlus, FiUsers, FiLogIn } from "react-icons/fi";
+import {
+	PlusCircleIcon,
+	UsersIcon,
+	ArrowRightStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
+
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function RoomsPage() {
@@ -38,7 +43,7 @@ export default function RoomsPage() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-						<FiUsers className="mr-2" size={24} />
+						<UsersIcon className="mr-2 size-6" aria-hidden="true" />
 						共有ルーム
 					</h1>
 					<div className="flex space-x-3">
@@ -46,14 +51,17 @@ export default function RoomsPage() {
 							href="/rooms/create"
 							className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<FiPlus className="mr-2" size={16} />
+							<PlusCircleIcon className="mr-2 size-5" aria-hidden="true" />
 							ルーム作成
 						</Link>
 						<Link
 							href="/rooms/join"
 							className="flex items-center px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
 						>
-							<FiLogIn className="mr-2" size={16} />
+							<ArrowRightStartOnRectangleIcon
+								className="mr-2 size-5"
+								aria-hidden="true"
+							/>
 							ルーム参加
 						</Link>
 					</div>
@@ -66,7 +74,10 @@ export default function RoomsPage() {
 				) : shareRooms.length === 0 ? (
 					<div className="bg-white rounded-lg shadow-md p-8 text-center">
 						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-							<FiUsers className="text-orange-500" size={28} />
+							<UsersIcon
+								className="text-orange-500 size-10"
+								aria-hidden="true"
+							/>
 						</div>
 						<p className="text-orange-800 mb-4 text-lg font-medium">
 							参加している共有ルームはありません
@@ -79,14 +90,17 @@ export default function RoomsPage() {
 								href="/rooms/create"
 								className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 							>
-								<FiPlus className="mr-2" />
+								<PlusCircleIcon className="mr-2 size-5" aria-hidden="true" />
 								ルーム作成
 							</Link>
 							<Link
 								href="/rooms/join"
 								className="inline-flex items-center px-6 py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
 							>
-								<FiLogIn className="mr-2" />
+								<ArrowRightStartOnRectangleIcon
+									className="mr-2 size-5"
+									aria-hidden="true"
+								/>
 								ルーム参加
 							</Link>
 						</div>

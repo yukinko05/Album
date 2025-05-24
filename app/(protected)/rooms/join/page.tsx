@@ -7,7 +7,11 @@ import { useShareStore } from "@/stores/shareStore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { FiUsers, FiLogIn } from "react-icons/fi";
+import {
+	PlusCircleIcon,
+	UsersIcon,
+	ArrowRightStartOnRectangleIcon,
+} from "@heroicons/react/24/outline";
 import { CancelButton } from "@/components/common/Button/CancelButton";
 import { SubmitButton } from "@/components/common/Button/SubmitButton";
 
@@ -72,7 +76,7 @@ export default function JoinRoomPage() {
 		<div className="container mx-auto px-4 py-8">
 			<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 				<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-					<FiUsers className="mr-2" size={24} />
+					<UsersIcon className="mr-2 size-6" />
 					共有ルームに参加
 				</h1>
 			</div>
@@ -123,7 +127,9 @@ export default function JoinRoomPage() {
 							type="submit"
 							disabled={isSubmitting || status === "loading"}
 							isLoading={isSubmitting || status === "loading"}
-							icon={<FiLogIn size={18} />}
+							icon={
+								<ArrowRightStartOnRectangleIcon className="text-white size-5" />
+							}
 						>
 							ルームに参加
 						</SubmitButton>
