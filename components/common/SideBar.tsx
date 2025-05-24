@@ -18,6 +18,7 @@ import { useAuth } from "@/hooks/useAuth";
 import type { ShareRooms } from "@/types/shareTypes";
 import { useShareStore } from "@/stores/shareStore";
 import { usePathname } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 function classNames(...classes: string[]) {
 	return classes.filter(Boolean).join(" ");
@@ -32,6 +33,7 @@ interface SidebarContentProps {
 	currentRoomId: string | null;
 	userData: User | null;
 	currentUser: FirebaseUser | null;
+	loading: boolean;
 }
 
 export default function SideBar({ userData }: SideBarProps) {
@@ -40,6 +42,7 @@ export default function SideBar({ userData }: SideBarProps) {
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
 	const getShareRooms = useShareStore((state) => state.getShareRooms);
 	const pathname = usePathname();
+	const [loading, setLoading] = useState(true);
 
 	const currentRoomId = pathname.includes("/rooms/")
 		? pathname.split("/rooms/")[1].split("?")[0]
@@ -48,13 +51,18 @@ export default function SideBar({ userData }: SideBarProps) {
 	useEffect(() => {
 		const fetchShareRoomData = async () => {
 			try {
+				setLoading(true);
 				if (!currentUser) {
 					return;
 				}
 				const rooms = await getShareRooms(currentUser.uid);
 				setShareRooms(rooms);
+				setLoading(false);
 			} catch (error) {
 				console.error("シェアルームデータの取得に失敗しました:", error);
+				alert("シェアルームデータの取得に失敗しました");
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -63,6 +71,7 @@ export default function SideBar({ userData }: SideBarProps) {
 
 	return (
 		<>
+			{/* モバイル */}
 			<Dialog
 				open={sidebarOpen}
 				onClose={setSidebarOpen}
@@ -90,25 +99,25 @@ export default function SideBar({ userData }: SideBarProps) {
 								</button>
 							</div>
 						</TransitionChild>
-						{/* Sidebar component, swap this element with another sidebar if you like */}
 						<SidebarNavigation
 							shareRooms={shareRooms}
 							currentRoomId={currentRoomId}
 							userData={userData}
 							currentUser={currentUser}
+							loading={loading}
 						/>
 					</DialogPanel>
 				</div>
 			</Dialog>
 
-			{/* Static sidebar for desktop */}
+			{/* デスクトップ */}
 			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-				{/* Sidebar component, swap this element with another sidebar if you like */}
 				<SidebarNavigation
 					shareRooms={shareRooms}
 					currentRoomId={currentRoomId}
 					userData={userData}
 					currentUser={currentUser}
+					loading={loading}
 				/>
 			</div>
 
@@ -158,6 +167,7 @@ const SidebarNavigation = ({
 	currentRoomId,
 	userData,
 	currentUser,
+	loading,
 }: SidebarContentProps) => {
 	return (
 		<>
@@ -179,21 +189,27 @@ const SidebarNavigation = ({
 								ルーム
 							</div>
 							<ul className="-mx-2 space-y-1">
-								{shareRooms.map((room) => (
-									<li key={room.shareRoomId}>
-										<Link
-											href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
-											className={classNames(
-												room.shareRoomId === currentRoomId
-													? "bg-orange-400 text-white"
-													: "text-orange-800 hover:bg-white/40",
-												"group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
-											)}
-										>
-											{room.sharedRoomTitle}
-										</Link>
-									</li>
-								))}
+								{loading ? (
+									<div className="flex justify-center items-center py-12">
+										<LoadingSpinner size="md" />
+									</div>
+								) : (
+									shareRooms.map((room) => (
+										<li key={room.shareRoomId}>
+											<Link
+												href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
+												className={classNames(
+													room.shareRoomId === currentRoomId
+														? "bg-orange-400 text-white"
+														: "text-orange-800 hover:bg-white/40",
+													"group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
+												)}
+											>
+												{room.sharedRoomTitle}
+											</Link>
+										</li>
+									))
+								)}
 							</ul>
 						</li>
 						<li>
