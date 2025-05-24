@@ -26,7 +26,7 @@ export default function AlbumCard({
 						src={album.coverPhotoUrl}
 						alt={`${album.title} のアルバムカバー画像`}
 						fill
-						sizes=""
+						sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
 						className="object-cover"
 						priority={true}
 					/>
