@@ -7,11 +7,7 @@ import { useShareStore } from "@/stores/shareStore";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import {
-	PlusCircleIcon,
-	UsersIcon,
-	ArrowRightStartOnRectangleIcon,
-} from "@heroicons/react/24/outline";
+import { UsersIcon, ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/outline";
 import { CancelButton } from "@/components/common/Button/CancelButton";
 import { SubmitButton } from "@/components/common/Button/SubmitButton";
 
@@ -98,11 +94,10 @@ export default function JoinRoomPage() {
 							type="text"
 							id="shareRoomId"
 							{...register("shareRoomId")}
-							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${
-								errors.shareRoomId
-									? "border-red-500 focus:ring-red-200"
-									: "border-amber-200 focus:ring-orange-200"
-							}`}
+							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${errors.shareRoomId
+								? "border-red-500 focus:ring-red-200"
+								: "border-amber-200 focus:ring-orange-200"
+								}`}
 							placeholder="ルームIDを入力"
 						/>
 						{errors.shareRoomId && (
@@ -127,9 +122,7 @@ export default function JoinRoomPage() {
 							type="submit"
 							disabled={isSubmitting || status === "loading"}
 							isLoading={isSubmitting || status === "loading"}
-							icon={
-								<ArrowRightStartOnRectangleIcon className="text-white size-5" />
-							}
+							icon={<ArrowRightStartOnRectangleIcon className="text-white size-5" />}
 						>
 							ルームに参加
 						</SubmitButton>
