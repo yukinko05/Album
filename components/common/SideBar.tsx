@@ -53,11 +53,11 @@ export default function SideBar({ userData }: SideBarProps) {
 			try {
 				setLoading(true);
 				if (!currentUser) {
+					setShareRooms([]);
 					return;
 				}
 				const rooms = await getShareRooms(currentUser.uid);
 				setShareRooms(rooms);
-				setLoading(false);
 			} catch (error) {
 				console.error("シェアルームデータの取得に失敗しました:", error);
 				alert("シェアルームデータの取得に失敗しました");
