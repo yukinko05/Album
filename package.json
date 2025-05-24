@@ -8,6 +8,8 @@
 		"typecheck": "tsc --noEmit --skipLibCheck --project tsconfig.json"
 	},
 	"dependencies": {
+		"@headlessui/react": "^2.2.2",
+		"@heroicons/react": "^2.2.0",
 		"@hookform/resolvers": "^3.9.0",
 		"clsx": "^2.1.1",
 		"compressorjs": "^1.2.1",

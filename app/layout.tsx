@@ -10,14 +10,14 @@ export default function RootLayout({
 	children,
 }: { children: React.ReactNode }) {
 	return (
-		<html lang="ja">
+		<html lang="ja" className="h-full bg-white">
 			<head>
 				<link
 					href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap"
 					rel="stylesheet"
 				/>
 			</head>
-			<body>
+			<body className="h-full">
 				<Providers>{children}</Providers>
 			</body>
 		</html>

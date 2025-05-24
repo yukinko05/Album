@@ -1,40 +1,146 @@
 "use client";
 
-import ShareRoomSidebarList from "@/components/ShareRoom/ShareRoomSidebarList";
 import Link from "next/link";
 import SignOut from "@/app/signout/signout";
 import Image from "next/image";
 import type { User } from "@/types/userTypes";
-import { FaCircleUser } from "react-icons/fa6";
+import type { User as FirebaseUser } from "firebase/auth";
+import {
+	Dialog,
+	DialogBackdrop,
+	DialogPanel,
+	TransitionChild,
+} from "@headlessui/react";
+import { useState, useEffect } from "react";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+import { useAuth } from "@/hooks/useAuth";
+import type { ShareRooms } from "@/types/shareTypes";
+import { useShareStore } from "@/stores/shareStore";
+import { usePathname } from "next/navigation";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
-interface SideBarProps {
-	currentUser?: string | null;
-	isAuthenticated?: boolean;
-	userData?: User | null;
+function classNames(...classes: string[]) {
+	return classes.filter(Boolean).join(" ");
 }
 
-export default function SideBar({
-	currentUser,
-	isAuthenticated = false,
-	userData = null,
-}: SideBarProps) {
-	// ユーザーデータがない場合は何も表示しない
-	if (!isAuthenticated || !currentUser) {
-		return null;
-	}
+interface SideBarProps {
+	userData: User | null;
+}
+
+interface SidebarContentProps {
+	shareRooms: ShareRooms[];
+	currentRoomId: string | null;
+	userData: User | null;
+	currentUser: FirebaseUser | null;
+	loading: boolean;
+}
+
+export default function SideBar({ userData }: SideBarProps) {
+	const [sidebarOpen, setSidebarOpen] = useState(false);
+	const { currentUser } = useAuth();
+	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
+	const getShareRooms = useShareStore((state) => state.getShareRooms);
+	const pathname = usePathname();
+	const [loading, setLoading] = useState(true);
+
+	const currentRoomId = pathname.includes("/rooms/")
+		? pathname.split("/rooms/")[1].split("?")[0]
+		: null;
+
+	useEffect(() => {
+		const fetchShareRoomData = async () => {
+			try {
+				setLoading(true);
+				if (!currentUser) {
+					setShareRooms([]);
+					return;
+				}
+				const rooms = await getShareRooms(currentUser.uid);
+				setShareRooms(rooms);
+			} catch (error) {
+				console.error("シェアルームデータの取得に失敗しました:", error);
+				alert("シェアルームデータの取得に失敗しました");
+			} finally {
+				setLoading(false);
+			}
+		};
+
+		fetchShareRoomData();
+	}, [currentUser, getShareRooms]);
 
 	return (
-		<div className="fixed left-0 h-full w-64 shadow-lg bg-gradient-to-b from-amber-100 to-orange-200">
-			<nav className="flex h-full flex-col p-4">
-				<Link
-					href="/rooms"
-					className="text-4xl font-bold text-orange-800 hover:text-orange-600 font-cherry text-center"
+		<>
+			{/* モバイル */}
+			<Dialog
+				open={sidebarOpen}
+				onClose={setSidebarOpen}
+				className="relative z-50 lg:hidden"
+			>
+				<DialogBackdrop
+					transition
+					className="fixed inset-0 bg-gray-900/80 transition-opacity duration-300 ease-linear data-[closed]:opacity-0"
+				/>
+
+				<div className="fixed inset-0 flex">
+					<DialogPanel
+						transition
+						className="relative mr-16 flex w-full max-w-xs flex-1 transform transition duration-300 ease-in-out data-[closed]:-translate-x-full"
+					>
+						<TransitionChild>
+							<div className="absolute left-full top-0 flex w-16 justify-center pt-5 duration-300 ease-in-out data-[closed]:opacity-0">
+								<button
+									type="button"
+									onClick={() => setSidebarOpen(false)}
+									className="-m-2.5 p-2.5"
+								>
+									<span className="sr-only">Close sidebar</span>
+									<XMarkIcon aria-hidden="true" className="size-6 text-white" />
+								</button>
+							</div>
+						</TransitionChild>
+						<SidebarNavigation
+							shareRooms={shareRooms}
+							currentRoomId={currentRoomId}
+							userData={userData}
+							currentUser={currentUser}
+							loading={loading}
+						/>
+					</DialogPanel>
+				</div>
+			</Dialog>
+
+			{/* デスクトップ */}
+			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
+				<SidebarNavigation
+					shareRooms={shareRooms}
+					currentRoomId={currentRoomId}
+					userData={userData}
+					currentUser={currentUser}
+					loading={loading}
+				/>
+			</div>
+
+			<div className="sticky top-0 z-40 flex items-center gap-x-6 bg-gradient-to-b from-amber-100 to-orange-200 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+				<button
+					type="button"
+					onClick={() => setSidebarOpen(true)}
+					className="-m-2.5 p-2.5 text-indigo-200 lg:hidden"
 				>
-					ALBUM
-				</Link>
+					<span className="sr-only">Open sidebar</span>
+					<Bars3Icon aria-hidden="true" className="size-6 text-orange-800" />
+				</button>
+				<div className="flex-1">
+					<Link
+						href="/rooms"
+						className="text-3xl font-bold text-orange-800 hover:text-orange-600 font-cherry"
+					>
+						ALBUM
+					</Link>
+				</div>
 				<Link
 					href="/profile"
-					className="flex items-center gap-2 p-2 bg-white/40 hover:bg-white/60 rounded-full mt-8"
+					className="flex items-center gap-2 p-2 bg-white/40 hover:bg-white/60 rounded-full mt-2"
 				>
 					{userData?.iconImg ? (
 						<div className="relative w-[30px] h-[30px]">
@@ -47,48 +153,123 @@ export default function SideBar({
 							/>
 						</div>
 					) : (
-						<FaCircleUser className="text-orange-800" size={30} />
+						<UserCircleIcon className="text-orange-800 size-6" />
 					)}
-					<p className="text-orange-900">{userData?.userName}</p>
+					<p className="text-orange-900">{userData?.userName || "ユーザー"}</p>
 				</Link>
-				<div className="flex-1 overflow-y-auto scrollbar-hide">
-					<ShareRoomSidebarList />
-				</div>
-				<div className="border-t border-orange-300 mt-4 pt-4 bg-white/30 rounded-lg">
-					<p className="text-sm font-medium text-orange-900 mb-2 pl-4">
-						ルーム操作
-					</p>
-					<div className="pt-2">
-						<Link
-							href={{
-								pathname: "/rooms/create",
-							}}
-							aria-label="新しい共有ルームを作成"
-							className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
-						>
-							ルーム作成
-						</Link>
-					</div>
-					<div className="pt-2">
-						<Link
-							href={{
-								pathname: "/rooms/join",
-							}}
-							className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
-							aria-label="既存の共有ルームに参加"
-						>
-							ルーム参加
-						</Link>
-					</div>
-				</div>
-				<div className="border-t border-orange-300 py-4">
-					{currentUser && (
-						<div className="flex justify-center">
-							<SignOut />
-						</div>
-					)}
-				</div>
-			</nav>
-		</div>
+			</div>
+		</>
 	);
 }
+
+const SidebarNavigation = ({
+	shareRooms,
+	currentRoomId,
+	userData,
+	currentUser,
+	loading,
+}: SidebarContentProps) => {
+	return (
+		<>
+			<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-amber-100 to-orange-200 px-6">
+				<div className="flex h-16 shrink-0 items-center">
+					<Link
+						href="/rooms"
+						className="text-4xl font-bold text-orange-800 hover:text-orange-600 font-cherry"
+					>
+						ALBUM
+					</Link>
+				</div>
+				<nav className="flex flex-1 flex-col">
+					<ul className="flex flex-1 flex-col gap-y-7">
+						<li>
+							<div
+								className={` ${shareRooms.length > 0 ? "text-xs/6 font-bold text-orange-800/80" : "hidden"}`}
+							>
+								ルーム
+							</div>
+							<ul className="-mx-2 space-y-1">
+								{loading ? (
+									<div className="flex justify-center items-center py-12">
+										<LoadingSpinner size="md" />
+									</div>
+								) : (
+									shareRooms.map((room) => (
+										<li key={room.shareRoomId}>
+											<Link
+												href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
+												className={classNames(
+													room.shareRoomId === currentRoomId
+														? "bg-orange-400 text-white"
+														: "text-orange-800 hover:bg-white/40",
+													"group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
+												)}
+											>
+												{room.sharedRoomTitle}
+											</Link>
+										</li>
+									))
+								)}
+							</ul>
+						</li>
+						<li>
+							<div className="text-xs/6 font-bold text-orange-800/80">
+								ルーム操作
+							</div>
+							<ul className="-mx-2 mt-2 space-y-1">
+								<li>
+									<Link
+										href="/rooms/create"
+										aria-label="新しい共有ルームを作成"
+										className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
+									>
+										ルーム作成
+									</Link>
+								</li>
+								<li>
+									<Link
+										href="/rooms/join"
+										className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
+										aria-label="既存の共有ルームに参加"
+									>
+										ルーム参加
+									</Link>
+								</li>
+							</ul>
+						</li>
+						<li className="-mx-6 mt-auto">
+							<Link
+								href="/profile"
+								className="flex items-center gap-2 hover:bg-white/60 rounded-md px-4 py-2 mx-2"
+							>
+								{userData?.iconImg ? (
+									<div className="relative w-[30px] h-[30px]">
+										<Image
+											src={userData.iconImg}
+											alt={`${userData.userName}のプロフィールアイコン`}
+											fill
+											sizes="30px"
+											className="object-cover rounded-full"
+										/>
+									</div>
+								) : (
+									<UserCircleIcon className="text-orange-800 size-6" />
+								)}
+								<p className="text-orange-900">
+									{userData?.userName || "ユーザー"}
+								</p>
+							</Link>
+						</li>
+						<li className="border-t border-orange-300 py-4">
+							{currentUser && (
+								<div className="flex justify-center">
+									<SignOut />
+								</div>
+							)}
+						</li>
+					</ul>
+				</nav>
+			</div>
+		</>
+	);
+};
