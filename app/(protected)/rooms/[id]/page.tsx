@@ -6,8 +6,13 @@ import { useAuth } from "@/hooks/useAuth";
 import type { Album } from "@/types/albumTypes";
 import Link from "next/link";
 import { useAlbumStore } from "@/stores/albumStore";
-import { FiPlusCircle, FiCamera, FiUsers } from "react-icons/fi";
 import AlbumCard from "@/components/AlbumCard";
+import {
+	BookOpenIcon,
+	PlusCircleIcon,
+	CameraIcon,
+} from "@heroicons/react/24/outline";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function RoomPage() {
 	const params = useParams();
@@ -43,10 +48,10 @@ export default function RoomPage() {
 
 	return (
 		<>
-			<div className="container mx-auto px-4 py-8">
+			<div className="container mx-auto px-4">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-						<FiUsers className="mr-2" size={24} />
+						<BookOpenIcon className="size-6 mr-2" />
 						{sharedRoomTitle}
 					</h1>
 					{albums && albums.length > 0 && (
@@ -60,12 +65,17 @@ export default function RoomPage() {
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<FiPlusCircle className="mr-2" />
+							<PlusCircleIcon className="size-6 mr-2" />
 							アルバム作成
 						</Link>
 					)}
 				</div>
-				{albums && albums.length > 0 ? (
+
+				{loading ? (
+					<div className="flex justify-center items-center py-12">
+						<LoadingSpinner size="md" />
+					</div>
+				) : albums && albums.length > 0 ? (
 					<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
 						{albums.map((album) => (
 							<AlbumCard
@@ -79,7 +89,7 @@ export default function RoomPage() {
 				) : (
 					<div className="bg-white rounded-lg shadow-md p-8 text-center">
 						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-							<FiCamera className="text-orange-500" size={28} />
+							<CameraIcon className="text-orange-500 size-12" />
 						</div>
 						<p className="text-orange-800 mb-4 text-lg font-medium">
 							アルバムがありません
@@ -94,7 +104,7 @@ export default function RoomPage() {
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<FiPlusCircle className="mr-2" />
+							<PlusCircleIcon className="size-6 mr-2" />
 							アルバム作成
 						</Link>
 					</div>

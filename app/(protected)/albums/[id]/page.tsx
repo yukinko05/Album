@@ -1,14 +1,12 @@
 "use client";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import type { Photo } from "@/types/photoTypes";
 import { useParams } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
 import { usePhotoStore } from "@/stores/photoStore";
 import AlbumTitle from "@/components/AlbumEdit/AlbumTitle";
 import EditMenu from "@/components/EditMenu";
-import { SidebarContext } from "@/app/(protected)/layout";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -17,10 +15,7 @@ export default function AlbumPhotosPage() {
 	const albumTitle = searchParams.get("albumTitle");
 	const [photos, setPhotos] = useState<Photo[]>([]);
 	const [loading, setLoading] = useState(true);
-	const shareRoomId = searchParams.get("shareRoomId");
-	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
 	const [isTitleEditing, setIsTitleEditing] = useState(false);
-	const { sideBarOpen } = useContext(SidebarContext);
 	const getPhotos = usePhotoStore((state) => state.getPhotos);
 
 	useEffect(() => {
@@ -49,9 +44,11 @@ export default function AlbumPhotosPage() {
 	};
 
 	return (
-		<div className="px-4 py-8">
+		<div className="px-4">
 			<div
-				className={`flex justify-between items-center border-b border-amber-200 pb-4 ${sideBarOpen ? "hidden" : "block"}`}
+				className={
+					"flex justify-between items-center border-b border-amber-200 pb-4"
+				}
 			>
 				<AlbumTitle
 					albumId={albumId}
@@ -60,15 +57,6 @@ export default function AlbumPhotosPage() {
 					onEditComplete={handleTitleEditComplete}
 				/>
 				<div className="flex items-center gap-4">
-					<Link
-						href={{
-							pathname: `/rooms/${shareRoomId}`,
-							query: { sharedRoomTitle: sharedRoomTitle },
-						}}
-						className="hidden sm:inline-block bg-orange-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-600 transition-colors"
-					>
-						ルームに戻る
-					</Link>
 					<div className="mr-12 md:mr-0">
 						<EditMenu
 							albumId={albumId}

@@ -12,8 +12,7 @@ export default function ShareRoomSidebarList() {
 	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
 	const getShareRooms = useShareStore((state) => state.getShareRooms);
 	const pathname = usePathname();
-	const serchParams = useSearchParams();
-	const surrentRoomId = pathname.includes("/rooms/")
+	const currentRoomId = pathname.includes("/rooms/")
 		? pathname.split("/rooms/")[1]
 		: null;
 
@@ -49,7 +48,7 @@ export default function ShareRoomSidebarList() {
 					</li>
 				) : (
 					shareRooms.map((room) => {
-						const isActive = room.shareRoomId === surrentRoomId;
+						const isActive = room.shareRoomId === currentRoomId;
 						return (
 							<li key={room.shareRoomId}>
 								<Link
