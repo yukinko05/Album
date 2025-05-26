@@ -8,6 +8,7 @@ interface AuthState {
 	isAuthStateChecking: boolean;
 	error: unknown | null;
 
+	setCurrentUser: (user: User | null) => void;
 	initialize: () => Promise<void>;
 	logout: () => Promise<void>;
 }
@@ -15,6 +16,8 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
 	currentUser: null,
 	isAuthStateChecking: true,
+	setCurrentUser: (user) => set({ currentUser: user }),
+
 	error: null,
 
 	initialize: async () => {

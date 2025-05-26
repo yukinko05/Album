@@ -12,6 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 import LoadingSpinner from "@/components/LoadingSpinner";
+import AlbumCard from "@/components/AlbumCard";
 
 export default function RoomsPage() {
 	const { currentUser } = useAuth();
