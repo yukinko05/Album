@@ -91,10 +91,11 @@ export default function CreateRoomPage() {
 							type="text"
 							id="sharedRoomTitle"
 							{...register("sharedRoomTitle")}
-							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${errors.sharedRoomTitle
+							className={`w-full px-4 py-2 border rounded-lg bg-amber-50 focus:ring-2 focus:outline-none ${
+								errors.sharedRoomTitle
 									? "border-red-500 focus:ring-red-200"
 									: "border-amber-200 focus:ring-orange-200"
-								}`}
+							}`}
 							placeholder="家族アルバム"
 						/>
 						{errors.sharedRoomTitle && (
