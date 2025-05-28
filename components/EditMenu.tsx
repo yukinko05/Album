@@ -8,13 +8,13 @@ import AddPhotos from "@/components/AlbumEdit/AddPhoto";
 import PhotoSelectDelete from "@/components/AlbumEdit/PhotoSelectDelete";
 import AlbumDeleteButton from "@/components/AlbumEdit/DeleteAlbumButton";
 import {
-	FiX,
-	FiImage,
-	FiEdit,
-	FiTrash2,
-	FiPlusCircle,
-	FiSettings,
-} from "react-icons/fi";
+	PencilIcon,
+	TrashIcon,
+	PhotoIcon,
+	Cog6ToothIcon,
+	XMarkIcon,
+	CheckIcon,
+} from "@heroicons/react/24/outline";
 
 type EditMode =
 	| ""
@@ -77,7 +77,11 @@ export default function EditMenu({
 				className="flex items-center justify-center w-10 h-10 rounded-full bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-sm"
 				aria-label={isMenuOpen ? "メニューを閉じる" : "編集メニューを開く"}
 			>
-				{isMenuOpen ? <FiX size={20} /> : <FiSettings size={20} />}
+				{isMenuOpen ? (
+					<XMarkIcon className="size-6" aria-hidden="true" />
+				) : (
+					<Cog6ToothIcon className="size-6" aria-hidden="true" />
+				)}
 			</button>
 
 			<AnimatePresence>
@@ -101,7 +105,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<FiImage size={16} />
+									<PhotoIcon className="size-5" aria-hidden="true" />
 								</span>
 								<span>カバー写真を変更</span>
 							</button>
@@ -111,7 +115,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<FiEdit size={16} />
+									<PencilIcon className="size-5" aria-hidden="true" />
 								</span>
 								<span>タイトルを変更</span>
 							</button>
@@ -127,7 +131,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<FiPlusCircle size={16} />
+									<CheckIcon className="size-5" aria-hidden="true" />
 								</span>
 								<span>写真を追加</span>
 							</button>
@@ -137,7 +141,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<FiTrash2 size={16} />
+									<TrashIcon className="size-5" aria-hidden="true" />
 								</span>
 								<span>写真を削除</span>
 							</button>
@@ -150,7 +154,7 @@ export default function EditMenu({
 								>
 									<div className="flex items-center gap-2.5 w-full">
 										<span className="p-1.5 rounded-md bg-red-100 text-red-500">
-											<FiTrash2 size={16} />
+											<TrashIcon className="size-5" aria-hidden="true" />
 										</span>
 										<span>アルバムを削除</span>
 									</div>

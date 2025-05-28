@@ -4,7 +4,7 @@ import { usePhotoStore } from "@/stores/photoStore";
 import { useAuth } from "@/hooks/useAuth";
 import { compressMultipleImagesToBase64 } from "@/utils/imageCompressor";
 import { motion } from "framer-motion";
-import { FiX, FiCheck, FiImage } from "react-icons/fi";
+import { XMarkIcon, CheckIcon, PhotoIcon } from "@heroicons/react/24/outline";
 import ImageUploader from "@/components/ImageUploader";
 import { CircleCancelButton } from "@/components/common/Button/CircleCancelButton";
 import { CancelButton } from "@/components/common/Button/CancelButton";
@@ -82,11 +82,11 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 			<div className="p-6 max-w-4xl mx-auto">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h2 className="text-2xl font-medium text-orange-800 flex items-center">
-						<FiImage className="mr-2" size={24} />
+						<PhotoIcon className="mr-2 size-5" aria-hidden="true" />
 						写真を追加
 					</h2>
 					<CircleCancelButton onClick={onClose} aria-label="閉じる">
-						<FiX size={20} />
+						<XMarkIcon className="size-5" aria-hidden="true" />
 					</CircleCancelButton>
 				</div>
 				<form className="flex flex-col gap-4">
@@ -110,7 +110,7 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 								isLoading || status === "loading" || selectedFiles.length === 0
 							}
 							isLoading={isLoading || status === "loading"}
-							icon={<FiCheck size={18} />}
+							icon={<CheckIcon className="size-5" aria-hidden="true" />}
 						>
 							アップロード
 						</SubmitButton>

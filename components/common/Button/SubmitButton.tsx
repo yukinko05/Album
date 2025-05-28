@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Button } from "./Button";
-import { FiCheck } from "react-icons/fi";
+import { CheckIcon } from "@heroicons/react/24/outline";
 import { LoadingIndicator } from "@/components/common/LoadingIndicator";
 
 interface SubmitButtonProps {
@@ -18,7 +18,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
 	type = "submit",
 	isLoading = false,
 	disabled = false,
-	icon = <FiCheck size={18} />,
+	icon = <CheckIcon className="size-5" aria-hidden="true" />,
 	children,
 	className,
 }) => {

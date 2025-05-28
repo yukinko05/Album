@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useAlbumStore } from "@/stores/albumStore";
-import { FiBook } from "react-icons/fi";
+import { BookOpenIcon } from "@heroicons/react/24/outline";
 import { Button } from "@/components/common/Button/Button";
 type AlbumTitle = {
 	albumId: string;
@@ -107,7 +107,7 @@ export default function AlbumTitle({
 				</div>
 			) : (
 				<div className="flex items-center">
-					<FiBook className="mr-2 text-orange-800" size={24} />
+					<BookOpenIcon className="size-6 text-orange-800" aria-hidden="true" />
 					<h1 onClick={() => setLocalEditing(true)} className="text-orange-800">
 						{title}
 					</h1>
