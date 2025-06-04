@@ -80,11 +80,11 @@ export default function ChangeCoverPhoto({
 			<div className="p-6 max-w-4xl mx-auto">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h2 className="text-2xl font-medium text-orange-800 flex items-center">
-						<PhotoIcon className="mr-2 size-5" aria-hidden="true" />
+						<PhotoIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 						カバー写真を選択
 					</h2>
 					<CircleCancelButton onClick={onClose} aria-label="閉じる">
-						<XMarkIcon className="size-5" aria-hidden="true" />
+						<XMarkIcon className="h-5 w-5" aria-hidden="true" />
 					</CircleCancelButton>
 				</div>
 
@@ -92,7 +92,7 @@ export default function ChangeCoverPhoto({
 					<div className="bg-white rounded-lg shadow-sm p-8 text-center">
 						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
 							<PhotoIcon
-								className="text-orange-500 size-7"
+								className="text-orange-500 h-7 w-7"
 								aria-hidden="true"
 							/>
 						</div>
@@ -108,7 +108,7 @@ export default function ChangeCoverPhoto({
 						<div className="flex justify-between items-center mb-4">
 							<div className="flex items-center">
 								<span className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mr-3">
-									<PhotoIcon className="size-5" aria-hidden="true" />
+									<PhotoIcon className="h-5 w-5" aria-hidden="true" />
 								</span>
 								<span className="text-orange-800 font-medium">
 									カバー写真として使用する写真を選択してください
@@ -139,7 +139,7 @@ export default function ChangeCoverPhoto({
 											<div className="absolute inset-0 bg-orange-500 bg-opacity-30 flex items-center justify-center">
 												<div className="bg-white rounded-full p-1">
 													<CheckIcon
-														className="text-orange-500 size-5"
+														className="text-orange-500 h-5 w-5"
 														aria-hidden="true"
 													/>
 												</div>
@@ -165,7 +165,7 @@ export default function ChangeCoverPhoto({
 							photos.length === 0
 						}
 						isLoading={isLoading || status === "loading"}
-						icon={<CheckIcon className="size-5" aria-hidden="true" />}
+						icon={<CheckIcon className="h-5 w-5" aria-hidden="true" />}
 					>
 						更新する
 					</SubmitButton>

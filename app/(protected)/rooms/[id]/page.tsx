@@ -51,7 +51,7 @@ export default function RoomPage() {
 			<div className="container mx-auto px-4">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-						<BookOpenIcon className="size-6 mr-2" />
+						<BookOpenIcon className="h-5 w-5 mr-2" />
 						{sharedRoomTitle}
 					</h1>
 					{albums && albums.length > 0 && (
@@ -65,7 +65,7 @@ export default function RoomPage() {
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<PlusCircleIcon className="size-6 mr-2" />
+							<PlusCircleIcon className="h-5 w-5 mr-2" />
 							アルバム作成
 						</Link>
 					)}
@@ -89,7 +89,7 @@ export default function RoomPage() {
 				) : (
 					<div className="bg-white rounded-lg shadow-md p-8 text-center">
 						<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-							<CameraIcon className="text-orange-500 size-12" />
+							<CameraIcon className="text-orange-500 h-12 w-12" />
 						</div>
 						<p className="text-orange-800 mb-4 text-lg font-medium">
 							アルバムがありません
@@ -104,7 +104,7 @@ export default function RoomPage() {
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<PlusCircleIcon className="size-6 mr-2" />
+							<PlusCircleIcon className="h-5 w-5 mr-2" />
 							アルバム作成
 						</Link>
 					</div>

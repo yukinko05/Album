@@ -82,11 +82,11 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 			<div className="p-6 max-w-4xl mx-auto">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h2 className="text-2xl font-medium text-orange-800 flex items-center">
-						<PhotoIcon className="mr-2 size-5" aria-hidden="true" />
+						<PhotoIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 						写真を追加
 					</h2>
 					<CircleCancelButton onClick={onClose} aria-label="閉じる">
-						<XMarkIcon className="size-5" aria-hidden="true" />
+						<XMarkIcon className="h-5 w-5" aria-hidden="true" />
 					</CircleCancelButton>
 				</div>
 				<form className="flex flex-col gap-4">
@@ -110,7 +110,7 @@ export default function AddPhotos({ albumId, onClose }: AddPhotosProps) {
 								isLoading || status === "loading" || selectedFiles.length === 0
 							}
 							isLoading={isLoading || status === "loading"}
-							icon={<CheckIcon className="size-5" aria-hidden="true" />}
+							icon={<CheckIcon className="h-5 w-5" aria-hidden="true" />}
 						>
 							アップロード
 						</SubmitButton>

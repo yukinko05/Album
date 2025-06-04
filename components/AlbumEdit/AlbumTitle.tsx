@@ -107,7 +107,10 @@ export default function AlbumTitle({
 				</div>
 			) : (
 				<div className="flex items-center">
-					<BookOpenIcon className="size-6 text-orange-800" aria-hidden="true" />
+					<BookOpenIcon
+						className="h-5 w-5 text-orange-800"
+						aria-hidden="true"
+					/>
 					<h1 onClick={() => setLocalEditing(true)} className="text-orange-800">
 						{title}
 					</h1>

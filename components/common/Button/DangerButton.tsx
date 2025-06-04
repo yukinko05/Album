@@ -16,7 +16,7 @@ export const DangerButton: React.FC<DangerButtonProps> = ({
 	onClick,
 	isLoading = false,
 	disabled = false,
-	icon = <TrashIcon className="size-5" aria-hidden="true" />,
+	icon = <TrashIcon className="h-5 w-5" aria-hidden="true" />,
 	children,
 	className,
 }) => {

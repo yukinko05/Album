@@ -95,7 +95,10 @@ export default function SideBar({ userData }: SideBarProps) {
 									className="-m-2.5 p-2.5"
 								>
 									<span className="sr-only">Close sidebar</span>
-									<XMarkIcon aria-hidden="true" className="size-6 text-white" />
+									<XMarkIcon
+										aria-hidden="true"
+										className="h-6 w-6 text-white"
+									/>
 								</button>
 							</div>
 						</TransitionChild>
@@ -128,7 +131,7 @@ export default function SideBar({ userData }: SideBarProps) {
 					className="-m-2.5 p-2.5 text-indigo-200 lg:hidden"
 				>
 					<span className="sr-only">Open sidebar</span>
-					<Bars3Icon aria-hidden="true" className="size-6 text-orange-800" />
+					<Bars3Icon aria-hidden="true" className="h-6 w-6 text-orange-800" />
 				</button>
 				<div className="flex-1">
 					<Link
@@ -153,7 +156,7 @@ export default function SideBar({ userData }: SideBarProps) {
 							/>
 						</div>
 					) : (
-						<UserCircleIcon className="text-orange-800 size-6" />
+						<UserCircleIcon className="text-orange-800 h-6 w-6" />
 					)}
 					<p className="text-orange-900">{userData?.userName || "ユーザー"}</p>
 				</Link>
@@ -253,7 +256,7 @@ const SidebarNavigation = ({
 										/>
 									</div>
 								) : (
-									<UserCircleIcon className="text-orange-800 size-6" />
+									<UserCircleIcon className="text-orange-800 h-6 w-6" />
 								)}
 								<p className="text-orange-900">
 									{userData?.userName || "ユーザー"}

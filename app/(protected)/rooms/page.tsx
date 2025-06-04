@@ -13,7 +13,7 @@ export default function RoomsPage() {
 			<div className="container mx-auto px-4 py-8">
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-						<UsersIcon className="mr-2 size-6" aria-hidden="true" />
+						<UsersIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 						共有ルーム
 					</h1>
 					<div className="flex space-x-3">
@@ -21,7 +21,7 @@ export default function RoomsPage() {
 							href="/rooms/create"
 							className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<PlusCircleIcon className="mr-2 size-5" aria-hidden="true" />
+							<PlusCircleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 							ルーム作成
 						</Link>
 						<Link
@@ -29,7 +29,7 @@ export default function RoomsPage() {
 							className="flex items-center px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
 						>
 							<ArrowRightStartOnRectangleIcon
-								className="mr-2 size-5"
+								className="mr-2 h-5 w-5"
 								aria-hidden="true"
 							/>
 							ルーム参加
@@ -39,7 +39,10 @@ export default function RoomsPage() {
 
 				<div className="bg-white rounded-lg shadow-md p-8 text-center">
 					<div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
-						<UsersIcon className="text-orange-500 size-10" aria-hidden="true" />
+						<UsersIcon
+							className="text-orange-500 h-10 w-10"
+							aria-hidden="true"
+						/>
 					</div>
 					<p className="text-orange-800 mb-4 text-lg font-medium">
 						参加している共有ルームはありません
@@ -52,7 +55,7 @@ export default function RoomsPage() {
 							href="/rooms/create"
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
-							<PlusCircleIcon className="mr-2 size-5" aria-hidden="true" />
+							<PlusCircleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 							ルーム作成
 						</Link>
 						<Link
@@ -60,7 +63,7 @@ export default function RoomsPage() {
 							className="inline-flex items-center px-6 py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
 						>
 							<ArrowRightStartOnRectangleIcon
-								className="mr-2 size-5"
+								className="mr-2 h-5 w-5"
 								aria-hidden="true"
 							/>
 							ルーム参加

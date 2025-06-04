@@ -154,7 +154,7 @@ export default function ImageUploader({
 					}`}
 				>
 					<PhotoIcon
-						className="size-5 text-orange-300 mb-4"
+						className="h-5 w-5 text-orange-300 mb-4"
 						aria-hidden="true"
 					/>
 					<p className="text-orange-800 mb-4 text-center">
@@ -164,7 +164,7 @@ export default function ImageUploader({
 						写真をここにペーストすることもできます
 					</p>
 					<Button onClick={() => fileInputRef.current?.click()}>
-						<ArrowUpTrayIcon className="size-5 mr-2" aria-hidden="true" />
+						<ArrowUpTrayIcon className="h-5 w-5 mr-2" aria-hidden="true" />
 						写真を選択する
 					</Button>
 					<input
@@ -182,14 +182,14 @@ export default function ImageUploader({
 					<div className="flex justify-between items-center mb-4">
 						<div className="flex items-center">
 							<span className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-orange-600 mr-3">
-								<PhotoIcon className="size-5" aria-hidden="true" />
+								<PhotoIcon className="h-5 w-5" aria-hidden="true" />
 							</span>
 							<span className="text-orange-800 font-medium">
 								{previewUrls.length}枚の写真が選択されています
 							</span>
 						</div>
 						<Button size={"sm"} onClick={() => fileInputRef.current?.click()}>
-							<ArrowUpTrayIcon className="size-5 mr-1" aria-hidden="true" />
+							<ArrowUpTrayIcon className="h-5 w-5 mr-1" aria-hidden="true" />
 							追加
 						</Button>
 					</div>
@@ -214,7 +214,7 @@ export default function ImageUploader({
 										size="sm"
 										className="absolute top-2 right-2 bg-black bg-opacity-50 text-white opacity-0 group-hover:opacity-100 transition-opacity"
 									>
-										<XMarkIcon className="size-5" aria-hidden="true" />
+										<XMarkIcon className="h-5 w-5" aria-hidden="true" />
 									</CircleCancelButton>
 								</div>
 							</div>

@@ -67,7 +67,7 @@ export default function CreateRoomPage() {
 		<div className="container mx-auto px-4 py-8">
 			<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 				<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-					<UsersIcon className="mr-2 size-6" aria-hidden="true" />
+					<UsersIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 					新しい共有ルームを作成
 				</h1>
 			</div>
@@ -122,7 +122,12 @@ export default function CreateRoomPage() {
 							type="submit"
 							disabled={isSubmitting || status === "loading"}
 							isLoading={isSubmitting || status === "loading"}
-							icon={<PlusCircleIcon className="text-white size-5" />}
+							icon={
+								<PlusCircleIcon
+									className="text-white h-5 w-5"
+									aria-hidden="true"
+								/>
+							}
 						>
 							ルームを作成
 						</SubmitButton>

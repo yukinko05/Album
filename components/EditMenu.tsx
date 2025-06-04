@@ -13,7 +13,7 @@ import {
 	PhotoIcon,
 	Cog6ToothIcon,
 	XMarkIcon,
-	CheckIcon,
+	PlusIcon,
 } from "@heroicons/react/24/outline";
 
 type EditMode =
@@ -78,9 +78,9 @@ export default function EditMenu({
 				aria-label={isMenuOpen ? "メニューを閉じる" : "編集メニューを開く"}
 			>
 				{isMenuOpen ? (
-					<XMarkIcon className="size-6" aria-hidden="true" />
+					<XMarkIcon className="h-5 w-5" aria-hidden="true" />
 				) : (
-					<Cog6ToothIcon className="size-6" aria-hidden="true" />
+					<Cog6ToothIcon className="h-5 w-5" aria-hidden="true" />
 				)}
 			</button>
 
@@ -105,7 +105,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<PhotoIcon className="size-5" aria-hidden="true" />
+									<PhotoIcon className="h-5 w-5" aria-hidden="true" />
 								</span>
 								<span>カバー写真を変更</span>
 							</button>
@@ -115,7 +115,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<PencilIcon className="size-5" aria-hidden="true" />
+									<PencilIcon className="h-5 w-5" aria-hidden="true" />
 								</span>
 								<span>タイトルを変更</span>
 							</button>
@@ -131,7 +131,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<CheckIcon className="size-5" aria-hidden="true" />
+									<PlusIcon className="h-5 w-5" aria-hidden="true" />
 								</span>
 								<span>写真を追加</span>
 							</button>
@@ -141,7 +141,7 @@ export default function EditMenu({
 								className="w-full text-left px-3 py-2 rounded-md hover:bg-orange-50 flex items-center gap-2.5 text-orange-800 my-1"
 							>
 								<span className="p-1.5 rounded-md bg-orange-100 text-orange-600">
-									<TrashIcon className="size-5" aria-hidden="true" />
+									<TrashIcon className="h-5 w-5" aria-hidden="true" />
 								</span>
 								<span>写真を削除</span>
 							</button>
@@ -154,7 +154,7 @@ export default function EditMenu({
 								>
 									<div className="flex items-center gap-2.5 w-full">
 										<span className="p-1.5 rounded-md bg-red-100 text-red-500">
-											<TrashIcon className="size-5" aria-hidden="true" />
+											<TrashIcon className="h-5 w-5" aria-hidden="true" />
 										</span>
 										<span>アルバムを削除</span>
 									</div>

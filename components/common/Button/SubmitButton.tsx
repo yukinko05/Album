@@ -18,7 +18,7 @@ export const SubmitButton: React.FC<SubmitButtonProps> = ({
 	type = "submit",
 	isLoading = false,
 	disabled = false,
-	icon = <CheckIcon className="size-5" aria-hidden="true" />,
+	icon = <CheckIcon className="h-5 w-5" aria-hidden="true" />,
 	children,
 	className,
 }) => {

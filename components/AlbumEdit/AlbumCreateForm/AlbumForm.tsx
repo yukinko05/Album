@@ -79,7 +79,7 @@ export default function AlbumForm({
 			>
 				<div className="flex items-center justify-center mb-4 pb-4 border-b border-amber-200">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
-						<BookOpenIcon className="size-6 mr-2" aria-hidden="true" />
+						<BookOpenIcon className="h-6 w-6 mr-2" aria-hidden="true" />
 						{formTitle}
 					</h1>
 				</div>
