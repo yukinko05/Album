@@ -28,13 +28,13 @@ flowchart TD
 
     subgraph DataModel["データモデル"]
         Users[ユーザー]
-        ShareRooms[共有ルーム]
+        Sharegroups[共有ルーム]
         Albums[アルバム]
         Photos[写真]
     end
 
     Firestore --> Users
-    Firestore --> ShareRooms
+    Firestore --> Sharegroups
     Firestore --> Albums
     Storage --> Photos
 
@@ -72,17 +72,17 @@ flowchart TD
 | photoURL     | string (オプション) | プロフィール画像 URL     |
 | createdAt    | timestamp           | アカウント作成日時       |
 
-### 共有ルーム (ShareRooms)
+### 共有ルーム (Sharegroups)
 
-| フィールド名    | 型        | 説明                 |
-| --------------- | --------- | -------------------- |
-| shareRoomId     | string    | ルームの一意識別子   |
-| sharedRoomTitle | string    | ルームの表示タイトル |
-| createdUserId   | string    | ルーム作成者の ID    |
-| inviteCode      | string    | ルーム招待コード     |
-| participantIds  | string[]  | 参加者 ID のリスト   |
-| createdAt       | timestamp | ルーム作成日時       |
-| updatedAt       | timestamp | 最終更新日時         |
+| フィールド名     | 型        | 説明                 |
+| ---------------- | --------- | -------------------- |
+| sharegroupId     | string    | ルームの一意識別子   |
+| sharedgroupTitle | string    | ルームの表示タイトル |
+| createdUserId    | string    | ルーム作成者の ID    |
+| inviteCode       | string    | ルーム招待コード     |
+| participantIds   | string[]  | 参加者 ID のリスト   |
+| createdAt        | timestamp | ルーム作成日時       |
+| updatedAt        | timestamp | 最終更新日時         |
 
 ### アルバム (Albums)
 
@@ -90,7 +90,7 @@ flowchart TD
 | ------------- | --------- | ---------------------- |
 | albumId       | string    | アルバムの一意識別子   |
 | albumTitle    | string    | アルバムの表示タイトル |
-| shareRoomId   | string    | 所属する共有ルーム ID  |
+| sharegroupId  | string    | 所属する共有ルーム ID  |
 | createdUserId | string    | アルバム作成者の ID    |
 | createdAt     | timestamp | アルバム作成日時       |
 | updatedAt     | timestamp | 最終更新日時           |

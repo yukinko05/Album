@@ -57,8 +57,8 @@ export default function AlbumPhotosPage() {
 					isEditing={isTitleEditing}
 					onEditComplete={handleTitleEditComplete}
 				/>
-				<div className="flex items-center gap-4">
-					<div className="mr-12 md:mr-0">
+				<div className="flex justify-end">
+					<div className="mr-12 md:mr-0 flex items-end">
 						<EditMenu
 							albumId={albumId}
 							photos={photos}

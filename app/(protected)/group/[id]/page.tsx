@@ -14,11 +14,11 @@ import {
 } from "@heroicons/react/24/outline";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
-export default function RoomPage() {
+export default function groupPage() {
 	const params = useParams();
-	const shareRoomId = String(params.id);
+	const sharegroupId = String(params.id);
 	const searchParams = useSearchParams();
-	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
+	const sharedgroupTitle = searchParams.get("sharedgroupTitle");
 	const [loading, setLoading] = useState(true);
 	const [albums, setAlbums] = useState<Album[]>([]);
 	const getAlbums = useAlbumStore((state) => state.getAlbums);
@@ -34,7 +34,7 @@ export default function RoomPage() {
 
 		const fetchAlbumsData = async () => {
 			try {
-				const albumsData = await getAlbums(shareRoomId);
+				const albumsData = await getAlbums(sharegroupId);
 				setAlbums(albumsData);
 			} catch (error) {
 				console.error("アルバムデータの取得に失敗しました:", error);
@@ -44,7 +44,7 @@ export default function RoomPage() {
 		};
 
 		fetchAlbumsData();
-	}, [userId, shareRoomId, getAlbums]);
+	}, [userId, sharegroupId, getAlbums]);
 
 	return (
 		<>
@@ -52,15 +52,15 @@ export default function RoomPage() {
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
 						<BookOpenIcon className="h-5 w-5 mr-2" />
-						{sharedRoomTitle}
+						{sharedgroupTitle}
 					</h1>
 					{albums && albums.length > 0 && (
 						<Link
 							href={{
 								pathname: "/albums/create",
 								query: {
-									shareRoomId,
-									sharedRoomTitle,
+									sharegroupId,
+									sharedgroupTitle,
 								},
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
@@ -81,8 +81,8 @@ export default function RoomPage() {
 							<AlbumCard
 								key={album.albumId}
 								album={album}
-								shareRoomId={shareRoomId}
-								sharedRoomTitle={sharedRoomTitle || ""}
+								sharegroupId={sharegroupId}
+								sharedgroupTitle={sharedgroupTitle || ""}
 							/>
 						))}
 					</div>
@@ -98,8 +98,8 @@ export default function RoomPage() {
 							href={{
 								pathname: "/albums/create",
 								query: {
-									shareRoomId,
-									sharedRoomTitle,
+									sharegroupId,
+									sharedgroupTitle,
 								},
 							}}
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"

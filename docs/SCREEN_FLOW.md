@@ -10,30 +10,30 @@ flowchart TD
     HomePage[トップページ] --> LoginPage[ログインページ]
     HomePage --> SignupPage[新規登録ページ]
 
-    LoginPage --> RoomsPage[共有ルーム一覧]
-    SignupPage --> RoomsPage
+    LoginPage --> groupsPage[共有ルーム一覧]
+    SignupPage --> groupsPage
 
-    RoomsPage --> CreateRoomPage[ルーム作成]
-    RoomsPage --> JoinRoomPage[ルーム参加]
-    RoomsPage --> RoomDetailPage[ルーム詳細]
+    groupsPage --> CreategroupPage[ルーム作成]
+    groupsPage --> JoingroupPage[ルーム参加]
+    groupsPage --> groupDetailPage[ルーム詳細]
 
-    CreateRoomPage --> RoomDetailPage
-    JoinRoomPage --> RoomDetailPage
+    CreategroupPage --> groupDetailPage
+    JoingroupPage --> groupDetailPage
 
-    RoomDetailPage --> CreateAlbumPage[アルバム作成]
-    RoomDetailPage --> AlbumDetailPage[アルバム詳細]
+    groupDetailPage --> CreateAlbumPage[アルバム作成]
+    groupDetailPage --> AlbumDetailPage[アルバム詳細]
 
     CreateAlbumPage --> AlbumDetailPage
 
-    RoomsPage --> ProfilePage[プロフィール]
+    groupsPage --> ProfilePage[プロフィール]
 
     style HomePage fill:#ffe0cc
     style LoginPage fill:#ffe0cc
     style SignupPage fill:#ffe0cc
-    style RoomsPage fill:#ffd1a3
-    style CreateRoomPage fill:#ffd1a3
-    style JoinRoomPage fill:#ffd1a3
-    style RoomDetailPage fill:#ffd1a3
+    style groupsPage fill:#ffd1a3
+    style CreategroupPage fill:#ffd1a3
+    style JoingroupPage fill:#ffd1a3
+    style groupDetailPage fill:#ffd1a3
     style CreateAlbumPage fill:#ffc78a
     style AlbumDetailPage fill:#ffc78a
     style ProfilePage fill:#ffd1a3

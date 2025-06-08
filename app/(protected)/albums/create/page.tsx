@@ -18,8 +18,8 @@ export default function CreatePage() {
 	const addPhotos = usePhotoStore((state) => state.addPhotos);
 	const router = useRouter();
 	const searchParams = useSearchParams();
-	const shareRoomId = searchParams.get("shareRoomId");
-	const sharedRoomTitle = searchParams.get("sharedRoomTitle");
+	const sharegroupId = searchParams.get("sharegroupId");
+	const sharedgroupTitle = searchParams.get("sharedgroupTitle");
 	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
@@ -29,7 +29,7 @@ export default function CreatePage() {
 	}, [userId]);
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
-		if (!userId || !shareRoomId) {
+		if (!userId || !sharegroupId) {
 			console.error("ユーザーIDまたは共有ルームIDが不足しています");
 			return;
 		}
@@ -49,13 +49,13 @@ export default function CreatePage() {
 					photos: compressedFiles,
 				},
 				userId,
-				shareRoomId,
+				sharegroupId,
 			};
 
 			// アルバムを作成
 			await createAlbum(albumData);
 
-			router.push(`/rooms/${shareRoomId}?sharedRoomTitle=${sharedRoomTitle}`);
+			router.push(`/groups/${sharegroupId}?sharedgroupTitle=${sharedgroupTitle}`);
 		} catch (error) {
 			console.error("アルバム作成に失敗しました:", error);
 		} finally {

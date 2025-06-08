@@ -22,7 +22,7 @@ export default function AlbumDeleteButton({
 	const router = useRouter();
 	const [isLoading, setIsLoading] = useState(false);
 	const searchParams = useSearchParams();
-	const shareRoomId = searchParams.get("shareRoomId");
+	const sharegroupId = searchParams.get("sharegroupId");
 	const deleteAlbum = useAlbumStore((state) => state.deleteAlbum);
 	const status = useAlbumStore((state) => state.status);
 
@@ -39,8 +39,8 @@ export default function AlbumDeleteButton({
 			await deleteAlbum({ albumId, photos });
 
 			// 共有ルームIDがある場合はそのルームページに、なければダッシュボードに遷移
-			if (shareRoomId) {
-				router.push(`/rooms/${shareRoomId}`);
+			if (sharegroupId) {
+				router.push(`/groups/${sharegroupId}`);
 			} else {
 				router.push("/dashboard");
 			}

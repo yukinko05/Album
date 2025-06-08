@@ -27,7 +27,7 @@ export default function LoginPage() {
 	const login = useUserStore((state) => state.login);
 	const status = useUserStore((state) => state.status);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
-	const getShareRooms = useShareStore((state) => state.getShareRooms);
+	const getSharegroups = useShareStore((state) => state.getSharegroups);
 
 	const {
 		register,
@@ -50,14 +50,14 @@ export default function LoginPage() {
 				throw new Error("ログインに失敗しました");
 			}
 
-			const rooms = await getShareRooms(user.uid);
+			const groups = await getSharegroups(user.uid);
 
-			if (rooms.length > 0) {
+			if (groups.length > 0) {
 				router.push(
-					`/rooms/${rooms[0].shareRoomId}?sharedRoomTitle=${rooms[0].sharedRoomTitle}`,
+					`/groups/${groups[0].sharegroupId}?sharedgroupTitle=${groups[0].sharedgroupTitle}`,
 				);
 			} else {
-				router.push("/rooms/");
+				router.push("/groups/");
 			}
 		} catch (error) {
 			console.error("Login failed:", error);
@@ -89,9 +89,8 @@ export default function LoginPage() {
 					<input
 						type="text"
 						id="email"
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
-							errors.email ? "border-red-500" : "border-amber-200"
-						}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.email ? "border-red-500" : "border-amber-200"
+							}`}
 						{...register("email")}
 					/>
 					{errors.email && (
@@ -110,9 +109,8 @@ export default function LoginPage() {
 					</label>
 					<input
 						type="password"
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
-							errors.password ? "border-red-500" : "border-amber-200"
-						}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.password ? "border-red-500" : "border-amber-200"
+							}`}
 						{...register("password")}
 					/>
 					{errors.password && (

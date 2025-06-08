@@ -4,9 +4,9 @@ import { AlbumCardProps } from "@/types/albumTypes";
 
 export default function AlbumCard({
 	album,
-	shareRoomId,
+	sharegroupId,
 	className = "",
-	sharedRoomTitle,
+	sharedgroupTitle,
 }: AlbumCardProps) {
 	return (
 		<Link
@@ -14,8 +14,8 @@ export default function AlbumCard({
 				pathname: `/albums/${album.albumId}`,
 				query: {
 					albumTitle: album.title,
-					shareRoomId: shareRoomId,
-					sharedRoomTitle: sharedRoomTitle,
+					sharegroupId: sharegroupId,
+					sharedgroupTitle: sharedgroupTitle,
 				},
 			}}
 			className={`block hover:opacity-60 transition-opacity ${className}`}

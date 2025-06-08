@@ -7,7 +7,7 @@ import {
 	ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 
-export default function RoomsPage() {
+export default function groupsPage() {
 	return (
 		<>
 			<div className="container mx-auto px-4 py-8">
@@ -18,14 +18,14 @@ export default function RoomsPage() {
 					</h1>
 					<div className="flex space-x-3">
 						<Link
-							href="/rooms/create"
+							href="/groups/create"
 							className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
 							<PlusCircleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 							ルーム作成
 						</Link>
 						<Link
-							href="/rooms/join"
+							href="/groups/join"
 							className="flex items-center px-4 py-2 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
 						>
 							<ArrowRightStartOnRectangleIcon
@@ -52,14 +52,14 @@ export default function RoomsPage() {
 					</p>
 					<div className="flex space-x-4 justify-center">
 						<Link
-							href="/rooms/create"
+							href="/groups/create"
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
 							<PlusCircleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
 							ルーム作成
 						</Link>
 						<Link
-							href="/rooms/join"
+							href="/groups/join"
 							className="inline-flex items-center px-6 py-2.5 bg-amber-500 text-white rounded-lg hover:bg-amber-600 transition-colors shadow-sm"
 						>
 							<ArrowRightStartOnRectangleIcon
