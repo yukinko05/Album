@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Button } from "./Button";
-import { FiTrash2 } from "react-icons/fi";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { LoadingIndicator } from "@/components/common/LoadingIndicator";
 
 interface DangerButtonProps {
@@ -16,7 +16,7 @@ export const DangerButton: React.FC<DangerButtonProps> = ({
 	onClick,
 	isLoading = false,
 	disabled = false,
-	icon = <FiTrash2 size={18} />,
+	icon = <TrashIcon className="h-5 w-5" aria-hidden="true" />,
 	children,
 	className,
 }) => {

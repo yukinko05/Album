@@ -1,17 +1,17 @@
-export interface ShareRooms {
-	shareRoomId: string;
-	sharedRoomTitle: string;
+export interface Sharegroups {
+	sharegroupId: string;
+	sharedgroupTitle: string;
 	createdAt: string;
 	updatedAt: string;
 	users: string[];
 }
 
-export interface CreateShareRoomRequest {
+export interface CreateSharegroupRequest {
 	userId: string;
-	sharedRoomTitle: string;
+	sharedgroupTitle: string;
 }
 
-export interface ShareRoomJoinRequest {
+export interface SharegroupJoinRequest {
 	userId: string;
-	sharedRoomId: string;
+	sharedgroupId: string;
 }

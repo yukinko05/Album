@@ -15,7 +15,7 @@ interface AlbumState {
 	status: "idle" | "loading" | "succeeded" | "failed";
 	error: unknown | null;
 
-	getAlbums: (shareRoomId: string) => Promise<Album[]>;
+	getAlbums: (sharegroupId: string) => Promise<Album[]>;
 	createAlbum: (albumData: AlbumCreateInputs) => Promise<void>;
 	updateAlbum: (data: AlbumUpdateRequest) => Promise<void>;
 	editAlbumTitle: (data: EditAlbumTitleRequest) => Promise<void>;
@@ -28,11 +28,11 @@ export const useAlbumStore = create<AlbumState>((set, get) => ({
 	status: "idle",
 	error: null,
 
-	getAlbums: async (shareRoomId) => {
+	getAlbums: async (sharegroupId) => {
 		set({ status: "loading", error: null });
 		try {
 			// リポジトリを使用してアルバム情報を取得
-			const albumsSnapshot = await albumRepository.fetchAlbums(shareRoomId);
+			const albumsSnapshot = await albumRepository.fetchAlbums(sharegroupId);
 
 			const albums = albumsSnapshot.docs.map((doc) => {
 				const data = doc.data();
@@ -43,7 +43,7 @@ export const useAlbumStore = create<AlbumState>((set, get) => ({
 					updatedAt: dayjs(data.updatedAt.toDate()).format("YYYY-MM-DD"),
 					coverPhotoUrl: data.coverPhotoUrl,
 					userId: data.userId,
-					shareRoomId: data.shareRoomId,
+					sharegroupId: data.sharegroupId,
 				};
 			});
 

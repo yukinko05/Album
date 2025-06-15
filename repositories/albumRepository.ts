@@ -28,12 +28,12 @@ import {
 import type { DeleteAlbumRequest } from "@/types/albumTypes";
 
 export const albumRepository = {
-	async fetchAlbums(shareRoomId: string) {
+	async fetchAlbums(sharegroupId: string) {
 		const ALBUMS_PER_PAGE = 10;
 		const col = collection(db, "albums");
 		const q = query(
 			col,
-			where("shareRoomId", "==", shareRoomId),
+			where("sharegroupId", "==", sharegroupId),
 			orderBy("createdAt", "desc"),
 			limit(ALBUMS_PER_PAGE),
 		);
@@ -42,7 +42,7 @@ export const albumRepository = {
 		return albumsSnapshot;
 	},
 
-	async createAlbum({ albumData, userId, shareRoomId }: AlbumCreateInputs) {
+	async createAlbum({ albumData, userId, sharegroupId }: AlbumCreateInputs) {
 		const albumId = crypto.randomUUID();
 		let photos: string[] = [];
 
@@ -69,7 +69,7 @@ export const albumRepository = {
 				updatedAt: serverTimestamp(),
 				coverPhotoUrl: photos[0],
 				userId,
-				shareRoomId,
+				sharegroupId,
 			};
 
 			const albumRef = doc(db, "albums", albumId);
@@ -82,7 +82,7 @@ export const albumRepository = {
 						userId,
 						photoUrl: photoUrl,
 						createdAt: serverTimestamp(),
-						shareRoomId,
+						sharegroupId,
 					};
 
 					await addDoc(collection(db, "photos"), photosDocumentData);
