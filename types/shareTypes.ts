@@ -1,17 +1,17 @@
 export interface Sharegroups {
-  sharegroupId: string;
-  sharedgroupTitle: string;
-  createdAt: string;
-  updatedAt: string;
-  users: string[];
+	sharegroupId: string;
+	sharedgroupTitle: string;
+	createdAt: string;
+	updatedAt: string;
+	users: string[];
 }
 
 export interface CreateSharegroupRequest {
-  userId: string;
-  sharedgroupTitle: string;
+	userId: string;
+	sharedgroupTitle: string;
 }
 
 export interface SharegroupJoinRequest {
-  userId: string;
-  sharedgroupId: string;
+	userId: string;
+	sharedgroupId: string;
 }

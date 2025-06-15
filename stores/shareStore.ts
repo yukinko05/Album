@@ -29,7 +29,7 @@ export const useShareStore = create<ShareState>((set, get) => ({
   getSharegroups: async (userId) => {
     set({ status: "loading", error: null });
     try {
-      // リポジトリを使用して共有ルーム情報を取得
+      // リポジトリを使用して共有グループ情報を取得
       const sharegroupsSnapshot = await shareRepository.fetchSharegroups(
         userId
       );
@@ -76,7 +76,7 @@ export const useShareStore = create<ShareState>((set, get) => ({
   createSharegroup: async (data) => {
     set({ status: "loading", error: null });
     try {
-      // リポジトリを使用して共有ルームを作成
+      // リポジトリを使用して共有グループを作成
       const result = await shareRepository.createSharegroup(data);
 
       set({ status: "succeeded" });
@@ -90,7 +90,7 @@ export const useShareStore = create<ShareState>((set, get) => ({
   sharegroupJoin: async (data) => {
     set({ status: "loading", error: null });
     try {
-      // リポジトリを使用して共有ルームに参加
+      // リポジトリを使用して共有グループに参加
       const result = await shareRepository.sharegroupJoin(data);
 
       set({ status: "succeeded" });

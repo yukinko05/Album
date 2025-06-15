@@ -89,8 +89,9 @@ export default function LoginPage() {
 					<input
 						type="text"
 						id="email"
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.email ? "border-red-500" : "border-amber-200"
-							}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.email ? "border-red-500" : "border-amber-200"
+						}`}
 						{...register("email")}
 					/>
 					{errors.email && (
@@ -109,8 +110,9 @@ export default function LoginPage() {
 					</label>
 					<input
 						type="password"
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.password ? "border-red-500" : "border-amber-200"
-							}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.password ? "border-red-500" : "border-amber-200"
+						}`}
 						{...register("password")}
 					/>
 					{errors.password && (

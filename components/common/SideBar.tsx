@@ -59,8 +59,8 @@ export default function SideBar({ userData }: SideBarProps) {
 				const groups = await getSharegroups(currentUser.uid);
 				setSharegroups(groups);
 			} catch (error) {
-				console.error("シェアルームデータの取得に失敗しました:", error);
-				alert("シェアルームデータの取得に失敗しました");
+				console.error("シェアグループデータの取得に失敗しました:", error);
+				alert("シェアグループデータの取得に失敗しました");
 			} finally {
 				setLoading(false);
 			}
@@ -189,7 +189,7 @@ const SidebarNavigation = ({
 							<div
 								className={` ${sharegroups.length > 0 ? "text-xs/6 font-bold text-orange-800/80" : "hidden"}`}
 							>
-								ルーム
+								グループ
 							</div>
 							<ul className="-mx-2 space-y-1">
 								{loading ? (
@@ -217,25 +217,25 @@ const SidebarNavigation = ({
 						</li>
 						<li>
 							<div className="text-xs/6 font-bold text-orange-800/80">
-								ルーム操作
+								グループ操作
 							</div>
 							<ul className="-mx-2 mt-2 space-y-1">
 								<li>
 									<Link
 										href="/groups/create"
-										aria-label="新しい共有ルームを作成"
+										aria-label="新しい共有グループを作成"
 										className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
 									>
-										ルーム作成
+										グループ作成
 									</Link>
 								</li>
 								<li>
 									<Link
 										href="/groups/join"
 										className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
-										aria-label="既存の共有ルームに参加"
+										aria-label="既存の共有グループに参加"
 									>
-										ルーム参加
+										グループ参加
 									</Link>
 								</li>
 							</ul>

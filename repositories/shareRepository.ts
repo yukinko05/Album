@@ -36,9 +36,9 @@ export const shareRepository = {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "不明なエラー";
-      console.error(`ルームデータ取得に失敗しました: ${errorMessage}`);
+      console.error(`グループデータ取得に失敗しました: ${errorMessage}`);
       throw new Error(
-        `ルームデータ取得に失敗しました。詳細: ${errorMessage}。}`
+        `グループデータ取得に失敗しました。詳細: ${errorMessage}。}`
       );
     }
   },
@@ -68,7 +68,7 @@ export const shareRepository = {
 
   async sharegroupJoin({ userId, sharedgroupId }: SharegroupJoinRequest) {
     if (!userId || !sharedgroupId) {
-      throw new Error("ユーザーIDまたは共有ルームIDが指定されていません");
+      throw new Error("ユーザーIDまたは共有グループIDが指定されていません");
     }
 
     try {
@@ -76,7 +76,7 @@ export const shareRepository = {
       const shareDoc = await getDoc(shareRef);
 
       if (!shareDoc.exists()) {
-        throw new Error("指定されたシェアルームが見つかりません。");
+        throw new Error("指定されたシェアグループが見つかりません。");
       }
 
       const shareData = shareDoc.data();
@@ -84,15 +84,15 @@ export const shareRepository = {
 
       const MAX_USERS = 50;
       if (users.length >= MAX_USERS) {
-        throw new Error("シェアルームの参加人数が上限に達しています。");
+        throw new Error("シェアグループの参加人数が上限に達しています。");
       }
 
       if (shareData.status === "closed") {
-        throw new Error("このシェアルームは現在クローズされています。");
+        throw new Error("このシェアグループは現在クローズされています。");
       }
 
       if (users.includes(userId)) {
-        throw new Error("既にこのシェアルームに参加しています。");
+        throw new Error("既にこのシェアグループに参加しています。");
       }
 
       await updateDoc(shareRef, {
@@ -107,9 +107,9 @@ export const shareRepository = {
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "不明なエラー";
-      console.error(`シェアルームの参加に失敗しました: ${errorMessage}`);
+      console.error(`シェアグループの参加に失敗しました: ${errorMessage}`);
       throw new Error(
-        `シェアルームの参加に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, sharedgroupId: ${sharedgroupId} }`
+        `シェアグループの参加に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, sharedgroupId: ${sharedgroupId} }`
       );
     }
   },

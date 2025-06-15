@@ -14,7 +14,7 @@ export default function groupsPage() {
 				<div className="flex justify-between items-center mb-8 border-b border-amber-200 pb-4">
 					<h1 className="text-2xl font-medium text-orange-800 flex items-center">
 						<UsersIcon className="mr-2 h-5 w-5" aria-hidden="true" />
-						共有ルーム
+						共有グループ
 					</h1>
 					<div className="flex space-x-3">
 						<Link
@@ -22,7 +22,7 @@ export default function groupsPage() {
 							className="flex items-center px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
 							<PlusCircleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
-							ルーム作成
+							グループ作成
 						</Link>
 						<Link
 							href="/groups/join"
@@ -32,7 +32,7 @@ export default function groupsPage() {
 								className="mr-2 h-5 w-5"
 								aria-hidden="true"
 							/>
-							ルーム参加
+							グループ参加
 						</Link>
 					</div>
 				</div>
@@ -45,10 +45,10 @@ export default function groupsPage() {
 						/>
 					</div>
 					<p className="text-orange-800 mb-4 text-lg font-medium">
-						参加している共有ルームはありません
+						参加している共有グループはありません
 					</p>
 					<p className="text-orange-600 mb-6">
-						新しいルームを作成するか、既存のルームに参加してみましょう
+						新しいグループを作成するか、既存のグループに参加してみましょう
 					</p>
 					<div className="flex space-x-4 justify-center">
 						<Link
@@ -56,7 +56,7 @@ export default function groupsPage() {
 							className="inline-flex items-center px-6 py-2.5 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm"
 						>
 							<PlusCircleIcon className="mr-2 h-5 w-5" aria-hidden="true" />
-							ルーム作成
+							グループ作成
 						</Link>
 						<Link
 							href="/groups/join"
@@ -66,7 +66,7 @@ export default function groupsPage() {
 								className="mr-2 h-5 w-5"
 								aria-hidden="true"
 							/>
-							ルーム参加
+							グループ参加
 						</Link>
 					</div>
 				</div>

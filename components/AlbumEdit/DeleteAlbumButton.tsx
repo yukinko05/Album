@@ -38,7 +38,7 @@ export default function AlbumDeleteButton({
 			setIsLoading(true);
 			await deleteAlbum({ albumId, photos });
 
-			// 共有ルームIDがある場合はそのルームページに、なければダッシュボードに遷移
+			// 共有グループIDがある場合はそのグループページに、なければダッシュボードに遷移
 			if (sharegroupId) {
 				router.push(`/groups/${sharegroupId}`);
 			} else {

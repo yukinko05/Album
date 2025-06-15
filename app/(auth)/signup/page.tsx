@@ -95,8 +95,9 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("userName")}
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.userName ? "border-red-500" : "border-amber-200"
-							}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.userName ? "border-red-500" : "border-amber-200"
+						}`}
 						type="text"
 					/>
 					{errors.userName && (
@@ -114,8 +115,9 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("email")}
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.email ? "border-red-500" : "border-amber-200"
-							}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.email ? "border-red-500" : "border-amber-200"
+						}`}
 						type="text"
 					/>
 					{errors.email && (
@@ -133,8 +135,9 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("password")}
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.password ? "border-red-500" : "border-amber-200"
-							}`}
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.password ? "border-red-500" : "border-amber-200"
+						}`}
 						type="password"
 					/>
 					{errors.password && (
@@ -151,10 +154,11 @@ export default function SignupPage() {
 					</label>
 					<input
 						{...register("passwordConfirmation")}
-						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${errors.passwordConfirmation
+						className={`w-full p-3 border rounded-md bg-orange-50 text-orange-900 placeholder-orange-300 ${
+							errors.passwordConfirmation
 								? "border-red-500"
 								: "border-amber-200"
-							}`}
+						}`}
 						type="password"
 					/>
 					{errors.passwordConfirmation && (

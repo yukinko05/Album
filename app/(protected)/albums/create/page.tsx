@@ -30,7 +30,7 @@ export default function CreatePage() {
 
 	const onSubmit: SubmitHandler<FormFields> = async (data) => {
 		if (!userId || !sharegroupId) {
-			console.error("ユーザーIDまたは共有ルームIDが不足しています");
+			console.error("ユーザーIDまたは共有グループIDが不足しています");
 			return;
 		}
 
@@ -55,7 +55,9 @@ export default function CreatePage() {
 			// アルバムを作成
 			await createAlbum(albumData);
 
-			router.push(`/groups/${sharegroupId}?sharedgroupTitle=${sharedgroupTitle}`);
+			router.push(
+				`/groups/${sharegroupId}?sharedgroupTitle=${sharedgroupTitle}`,
+			);
 		} catch (error) {
 			console.error("アルバム作成に失敗しました:", error);
 		} finally {
