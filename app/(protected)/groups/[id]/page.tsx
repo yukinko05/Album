@@ -54,6 +54,9 @@ export default function groupPage() {
 						<BookOpenIcon className="h-5 w-5 mr-2" />
 						{sharedgroupTitle}
 					</h1>
+					<div>
+						<h2 className="text-sm text-orange-800">ID:{sharegroupId}</h2>
+					</div>
 					{albums && albums.length > 0 && (
 						<Link
 							href={{
