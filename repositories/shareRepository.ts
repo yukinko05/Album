@@ -1,113 +1,116 @@
 import { db } from "@/lib/firebase";
 import {
-	collection,
-	serverTimestamp,
-	addDoc,
-	doc,
-	getDoc,
-	updateDoc,
-	arrayUnion,
-	query,
-	where,
-	getDocs,
-	orderBy,
-	limit,
+  collection,
+  serverTimestamp,
+  addDoc,
+  doc,
+  getDoc,
+  updateDoc,
+  arrayUnion,
+  query,
+  where,
+  getDocs,
+  orderBy,
+  limit,
 } from "@firebase/firestore";
 import type {
-	CreateShareRoomRequest,
-	ShareRoomJoinRequest,
+  CreateSharegroupRequest,
+  SharegroupJoinRequest,
 } from "@/types/shareTypes";
 
 export const shareRepository = {
-	async fetchShareRooms(userId: string) {
-		const ROOMS_PER_PAGE = 10;
+  async fetchSharegroups(userId: string) {
+    const groupS_PER_PAGE = 10;
 
-		try {
-			const col = collection(db, "shareID");
-			const q = query(
-				col,
-				where("users", "array-contains", userId),
-				orderBy("createdAt", "desc"),
-				limit(ROOMS_PER_PAGE),
-			);
+    try {
+      const col = collection(db, "shareID");
+      const q = query(
+        col,
+        where("users", "array-contains", userId),
+        orderBy("createdAt", "desc"),
+        limit(groupS_PER_PAGE)
+      );
 
-			const shareRoomSnapshot = await getDocs(q);
-			return shareRoomSnapshot;
-		} catch (error) {
-			const errorMessage =
-				error instanceof Error ? error.message : "不明なエラー";
-			console.error(`ルームデータ取得に失敗しました: ${errorMessage}`);
-			throw new Error(
-				`ルームデータ取得に失敗しました。詳細: ${errorMessage}。}`,
-			);
-		}
-	},
-	async createShareRoom({ userId, sharedRoomTitle }: CreateShareRoomRequest) {
-		try {
-			const shareIDCollection = collection(db, "shareID");
-			const shareIdRef = await addDoc(shareIDCollection, {
-				sharedRoomTitle,
-				users: [userId],
-				createdAt: serverTimestamp(),
-				updatedAt: serverTimestamp(),
-			});
+      const sharegroupSnapshot = await getDocs(q);
+      return sharegroupSnapshot;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "不明なエラー";
+      console.error(`グループデータ取得に失敗しました: ${errorMessage}`);
+      throw new Error(
+        `グループデータ取得に失敗しました。詳細: ${errorMessage}。}`
+      );
+    }
+  },
+  async createSharegroup({
+    userId,
+    sharedgroupTitle,
+  }: CreateSharegroupRequest) {
+    try {
+      const shareIDCollection = collection(db, "shareID");
+      const shareIdRef = await addDoc(shareIDCollection, {
+        sharedgroupTitle,
+        users: [userId],
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
 
-			return { shareId: shareIdRef.id, sharedRoomTitle };
-		} catch (error) {
-			const errorMessage =
-				error instanceof Error ? error.message : "不明なエラー";
-			console.error(`シェアIDの発行に失敗しました: ${errorMessage}`);
-			throw new Error(
-				`シェアIDの発行に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, title: ${sharedRoomTitle} }`,
-			);
-		}
-	},
+      return { shareId: shareIdRef.id, sharedgroupTitle };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "不明なエラー";
+      console.error(`シェアIDの発行に失敗しました: ${errorMessage}`);
+      throw new Error(
+        `シェアIDの発行に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, title: ${sharedgroupTitle} }`
+      );
+    }
+  },
 
-	async shareRoomJoin({ userId, sharedRoomId }: ShareRoomJoinRequest) {
-		if (!userId || !sharedRoomId) {
-			throw new Error("ユーザーIDまたは共有ルームIDが指定されていません");
-		}
+  async sharegroupJoin({ userId, sharedgroupId }: SharegroupJoinRequest) {
+    if (!userId || !sharedgroupId) {
+      throw new Error("ユーザーIDまたは共有グループIDが指定されていません");
+    }
 
-		try {
-			const shareRef = doc(db, "shareID", sharedRoomId);
-			const shareDoc = await getDoc(shareRef);
+    try {
+      const shareRef = doc(db, "shareID", sharedgroupId);
+      const shareDoc = await getDoc(shareRef);
 
-			if (!shareDoc.exists()) {
-				throw new Error("指定されたシェアルームが見つかりません。");
-			}
+      if (!shareDoc.exists()) {
+        throw new Error("指定されたシェアグループが見つかりません。");
+      }
 
-			const shareData = shareDoc.data();
-			const users = shareData.users || [];
+      const shareData = shareDoc.data();
+      const users = shareData.users || [];
 
-			const MAX_USERS = 50;
-			if (users.length >= MAX_USERS) {
-				throw new Error("シェアルームの参加人数が上限に達しています。");
-			}
+      const MAX_USERS = 50;
+      if (users.length >= MAX_USERS) {
+        throw new Error("シェアグループの参加人数が上限に達しています。");
+      }
 
-			if (shareData.status === "closed") {
-				throw new Error("このシェアルームは現在クローズされています。");
-			}
+      if (shareData.status === "closed") {
+        throw new Error("このシェアグループは現在クローズされています。");
+      }
 
-			if (users.includes(userId)) {
-				throw new Error("既にこのシェアルームに参加しています。");
-			}
+      if (users.includes(userId)) {
+        throw new Error("既にこのシェアグループに参加しています。");
+      }
 
-			await updateDoc(shareRef, {
-				users: arrayUnion(userId),
-				updatedAt: serverTimestamp(),
-			});
+      await updateDoc(shareRef, {
+        users: arrayUnion(userId),
+        updatedAt: serverTimestamp(),
+      });
 
-			return {
-				shareId: shareRef.id,
-				sharedRoomTitle: shareData.sharedRoomTitle,
-			};
-		} catch (error) {
-			const errorMessage =
-				error instanceof Error ? error.message : "不明なエラー";
-			console.error(`シェアルームの参加に失敗しました: ${errorMessage}`);
-			throw new Error(
-				`シェアルームの参加に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, sharedRoomId: ${sharedRoomId} }`,
-			);
-		}
-	},
+      return {
+        shareId: shareRef.id,
+        sharedgroupTitle: shareData.sharedgroupTitle,
+      };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "不明なエラー";
+      console.error(`シェアグループの参加に失敗しました: ${errorMessage}`);
+      throw new Error(
+        `シェアグループの参加に失敗しました。詳細: ${errorMessage}。データ: { userId: ${userId}, sharedgroupId: ${sharedgroupId} }`
+      );
+    }
+  },
 };

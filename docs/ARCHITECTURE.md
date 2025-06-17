@@ -28,13 +28,13 @@ flowchart TD
 
     subgraph DataModel["データモデル"]
         Users[ユーザー]
-        ShareRooms[共有ルーム]
+        Sharegroups[共有グループ]
         Albums[アルバム]
         Photos[写真]
     end
 
     Firestore --> Users
-    Firestore --> ShareRooms
+    Firestore --> Sharegroups
     Firestore --> Albums
     Storage --> Photos
 
@@ -72,28 +72,28 @@ flowchart TD
 | photoURL     | string (オプション) | プロフィール画像 URL     |
 | createdAt    | timestamp           | アカウント作成日時       |
 
-### 共有ルーム (ShareRooms)
+### 共有グループ (Sharegroups)
 
-| フィールド名    | 型        | 説明                 |
-| --------------- | --------- | -------------------- |
-| shareRoomId     | string    | ルームの一意識別子   |
-| sharedRoomTitle | string    | ルームの表示タイトル |
-| createdUserId   | string    | ルーム作成者の ID    |
-| inviteCode      | string    | ルーム招待コード     |
-| participantIds  | string[]  | 参加者 ID のリスト   |
-| createdAt       | timestamp | ルーム作成日時       |
-| updatedAt       | timestamp | 最終更新日時         |
+| フィールド名     | 型        | 説明                   |
+| ---------------- | --------- | ---------------------- |
+| sharegroupId     | string    | グループの一意識別子   |
+| sharedgroupTitle | string    | グループの表示タイトル |
+| createdUserId    | string    | グループ作成者の ID    |
+| inviteCode       | string    | グループ招待コード     |
+| participantIds   | string[]  | 参加者 ID のリスト     |
+| createdAt        | timestamp | グループ作成日時       |
+| updatedAt        | timestamp | 最終更新日時           |
 
 ### アルバム (Albums)
 
-| フィールド名  | 型        | 説明                   |
-| ------------- | --------- | ---------------------- |
-| albumId       | string    | アルバムの一意識別子   |
-| albumTitle    | string    | アルバムの表示タイトル |
-| shareRoomId   | string    | 所属する共有ルーム ID  |
-| createdUserId | string    | アルバム作成者の ID    |
-| createdAt     | timestamp | アルバム作成日時       |
-| updatedAt     | timestamp | 最終更新日時           |
+| フィールド名  | 型        | 説明                    |
+| ------------- | --------- | ----------------------- |
+| albumId       | string    | アルバムの一意識別子    |
+| albumTitle    | string    | アルバムの表示タイトル  |
+| sharegroupId  | string    | 所属する共有グループ ID |
+| createdUserId | string    | アルバム作成者の ID     |
+| createdAt     | timestamp | アルバム作成日時        |
+| updatedAt     | timestamp | 最終更新日時            |
 
 ### 写真 (Photos)
 
@@ -112,6 +112,6 @@ flowchart TD
 Firebase Security Rules によって、以下のセキュリティポリシーを実装しています：
 
 1. ユーザーは自分自身のプロフィール情報のみ更新可能
-2. 共有ルームのメンバーのみが、そのルーム内のアルバムと写真にアクセス可能
-3. 写真のアップロード・削除は、共有ルームのメンバーのみ実行可能
-4. 招待コードを知っているユーザーのみが共有ルームに参加可能
+2. 共有グループのメンバーのみが、そのグループ内のアルバムと写真にアクセス可能
+3. 写真のアップロード・削除は、共有グループのメンバーのみ実行可能
+4. 招待コードを知っているユーザーのみが共有グループに参加可能

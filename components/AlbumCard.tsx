@@ -4,9 +4,9 @@ import { AlbumCardProps } from "@/types/albumTypes";
 
 export default function AlbumCard({
 	album,
-	shareRoomId,
+	sharegroupId,
 	className = "",
-	sharedRoomTitle,
+	sharedgroupTitle,
 }: AlbumCardProps) {
 	return (
 		<Link
@@ -14,8 +14,8 @@ export default function AlbumCard({
 				pathname: `/albums/${album.albumId}`,
 				query: {
 					albumTitle: album.title,
-					shareRoomId: shareRoomId,
-					sharedRoomTitle: sharedRoomTitle,
+					sharegroupId: sharegroupId,
+					sharedgroupTitle: sharedgroupTitle,
 				},
 			}}
 			className={`block hover:opacity-60 transition-opacity ${className}`}
@@ -26,7 +26,7 @@ export default function AlbumCard({
 						src={album.coverPhotoUrl}
 						alt={`${album.title} のアルバムカバー画像`}
 						fill
-						sizes=""
+						sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
 						className="object-cover"
 						priority={true}
 					/>
