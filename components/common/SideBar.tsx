@@ -15,7 +15,7 @@ import { useState, useEffect } from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { useAuth } from "@/hooks/useAuth";
-import type { ShareRooms } from "@/types/shareTypes";
+import type { Sharegroups } from "@/types/shareTypes";
 import { useShareStore } from "@/stores/shareStore";
 import { usePathname } from "next/navigation";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -29,8 +29,8 @@ interface SideBarProps {
 }
 
 interface SidebarContentProps {
-	shareRooms: ShareRooms[];
-	currentRoomId: string | null;
+	sharegroups: Sharegroups[];
+	currentgroupId: string | null;
 	userData: User | null;
 	currentUser: FirebaseUser | null;
 	loading: boolean;
@@ -39,35 +39,35 @@ interface SidebarContentProps {
 export default function SideBar({ userData }: SideBarProps) {
 	const [sidebarOpen, setSidebarOpen] = useState(false);
 	const { currentUser } = useAuth();
-	const [shareRooms, setShareRooms] = useState<ShareRooms[]>([]);
-	const getShareRooms = useShareStore((state) => state.getShareRooms);
+	const [sharegroups, setSharegroups] = useState<Sharegroups[]>([]);
+	const getSharegroups = useShareStore((state) => state.getSharegroups);
 	const pathname = usePathname();
 	const [loading, setLoading] = useState(true);
 
-	const currentRoomId = pathname.includes("/rooms/")
-		? pathname.split("/rooms/")[1].split("?")[0]
+	const currentgroupId = pathname.includes("/groups/")
+		? pathname.split("/groups/")[1].split("?")[0]
 		: null;
 
 	useEffect(() => {
-		const fetchShareRoomData = async () => {
+		const fetchSharegroupData = async () => {
 			try {
 				setLoading(true);
 				if (!currentUser) {
-					setShareRooms([]);
+					setSharegroups([]);
 					return;
 				}
-				const rooms = await getShareRooms(currentUser.uid);
-				setShareRooms(rooms);
+				const groups = await getSharegroups(currentUser.uid);
+				setSharegroups(groups);
 			} catch (error) {
-				console.error("シェアルームデータの取得に失敗しました:", error);
-				alert("シェアルームデータの取得に失敗しました");
+				console.error("シェアグループデータの取得に失敗しました:", error);
+				alert("シェアグループデータの取得に失敗しました");
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		fetchShareRoomData();
-	}, [currentUser, getShareRooms]);
+		fetchSharegroupData();
+	}, [currentUser, getSharegroups]);
 
 	return (
 		<>
@@ -95,13 +95,16 @@ export default function SideBar({ userData }: SideBarProps) {
 									className="-m-2.5 p-2.5"
 								>
 									<span className="sr-only">Close sidebar</span>
-									<XMarkIcon aria-hidden="true" className="size-6 text-white" />
+									<XMarkIcon
+										aria-hidden="true"
+										className="h-6 w-6 text-white"
+									/>
 								</button>
 							</div>
 						</TransitionChild>
 						<SidebarNavigation
-							shareRooms={shareRooms}
-							currentRoomId={currentRoomId}
+							sharegroups={sharegroups}
+							currentgroupId={currentgroupId}
 							userData={userData}
 							currentUser={currentUser}
 							loading={loading}
@@ -113,8 +116,8 @@ export default function SideBar({ userData }: SideBarProps) {
 			{/* デスクトップ */}
 			<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
 				<SidebarNavigation
-					shareRooms={shareRooms}
-					currentRoomId={currentRoomId}
+					sharegroups={sharegroups}
+					currentgroupId={currentgroupId}
 					userData={userData}
 					currentUser={currentUser}
 					loading={loading}
@@ -128,11 +131,11 @@ export default function SideBar({ userData }: SideBarProps) {
 					className="-m-2.5 p-2.5 text-indigo-200 lg:hidden"
 				>
 					<span className="sr-only">Open sidebar</span>
-					<Bars3Icon aria-hidden="true" className="size-6 text-orange-800" />
+					<Bars3Icon aria-hidden="true" className="h-6 w-6 text-orange-800" />
 				</button>
 				<div className="flex-1">
 					<Link
-						href="/rooms"
+						href="/groups"
 						className="text-3xl font-bold text-orange-800 hover:text-orange-600 font-cherry"
 					>
 						ALBUM
@@ -153,7 +156,7 @@ export default function SideBar({ userData }: SideBarProps) {
 							/>
 						</div>
 					) : (
-						<UserCircleIcon className="text-orange-800 size-6" />
+						<UserCircleIcon className="text-orange-800 h-6 w-6" />
 					)}
 					<p className="text-orange-900">{userData?.userName || "ユーザー"}</p>
 				</Link>
@@ -163,8 +166,8 @@ export default function SideBar({ userData }: SideBarProps) {
 }
 
 const SidebarNavigation = ({
-	shareRooms,
-	currentRoomId,
+	sharegroups,
+	currentgroupId,
 	userData,
 	currentUser,
 	loading,
@@ -174,7 +177,7 @@ const SidebarNavigation = ({
 			<div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-amber-100 to-orange-200 px-6">
 				<div className="flex h-16 shrink-0 items-center">
 					<Link
-						href="/rooms"
+						href="/groups"
 						className="text-4xl font-bold text-orange-800 hover:text-orange-600 font-cherry"
 					>
 						ALBUM
@@ -184,9 +187,9 @@ const SidebarNavigation = ({
 					<ul className="flex flex-1 flex-col gap-y-7">
 						<li>
 							<div
-								className={` ${shareRooms.length > 0 ? "text-xs/6 font-bold text-orange-800/80" : "hidden"}`}
+								className={` ${sharegroups.length > 0 ? "text-xs/6 font-bold text-orange-800/80" : "hidden"}`}
 							>
-								ルーム
+								グループ
 							</div>
 							<ul className="-mx-2 space-y-1">
 								{loading ? (
@@ -194,18 +197,18 @@ const SidebarNavigation = ({
 										<LoadingSpinner size="md" />
 									</div>
 								) : (
-									shareRooms.map((room) => (
-										<li key={room.shareRoomId}>
+									sharegroups.map((group) => (
+										<li key={group.sharegroupId}>
 											<Link
-												href={`/rooms/${room.shareRoomId}?sharedRoomTitle=${room.sharedRoomTitle}`}
+												href={`/groups/${group.sharegroupId}?sharedgroupTitle=${group.sharedgroupTitle}`}
 												className={classNames(
-													room.shareRoomId === currentRoomId
+													group.sharegroupId === currentgroupId
 														? "bg-orange-400 text-white"
 														: "text-orange-800 hover:bg-white/40",
 													"group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold",
 												)}
 											>
-												{room.sharedRoomTitle}
+												{group.sharedgroupTitle}
 											</Link>
 										</li>
 									))
@@ -214,25 +217,25 @@ const SidebarNavigation = ({
 						</li>
 						<li>
 							<div className="text-xs/6 font-bold text-orange-800/80">
-								ルーム操作
+								グループ操作
 							</div>
 							<ul className="-mx-2 mt-2 space-y-1">
 								<li>
 									<Link
-										href="/rooms/create"
-										aria-label="新しい共有ルームを作成"
+										href="/groups/create"
+										aria-label="新しい共有グループを作成"
 										className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
 									>
-										ルーム作成
+										グループ作成
 									</Link>
 								</li>
 								<li>
 									<Link
-										href="/rooms/join"
+										href="/groups/join"
 										className="block rounded-lg px-4 py-2 text-orange-800 hover:bg-white/40 transition-colors"
-										aria-label="既存の共有ルームに参加"
+										aria-label="既存の共有グループに参加"
 									>
-										ルーム参加
+										グループ参加
 									</Link>
 								</li>
 							</ul>
@@ -253,7 +256,7 @@ const SidebarNavigation = ({
 										/>
 									</div>
 								) : (
-									<UserCircleIcon className="text-orange-800 size-6" />
+									<UserCircleIcon className="text-orange-800 h-6 w-6" />
 								)}
 								<p className="text-orange-900">
 									{userData?.userName || "ユーザー"}

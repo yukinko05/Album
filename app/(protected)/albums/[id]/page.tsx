@@ -7,6 +7,7 @@ import Image from "next/image";
 import { usePhotoStore } from "@/stores/photoStore";
 import AlbumTitle from "@/components/AlbumEdit/AlbumTitle";
 import EditMenu from "@/components/EditMenu";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function AlbumPhotosPage() {
 	const params = useParams();
@@ -56,8 +57,8 @@ export default function AlbumPhotosPage() {
 					isEditing={isTitleEditing}
 					onEditComplete={handleTitleEditComplete}
 				/>
-				<div className="flex items-center gap-4">
-					<div className="mr-12 md:mr-0">
+				<div className="flex justify-end">
+					<div className="mr-12 md:mr-0 flex items-end">
 						<EditMenu
 							albumId={albumId}
 							photos={photos}
@@ -67,7 +68,11 @@ export default function AlbumPhotosPage() {
 					</div>
 				</div>
 			</div>
-			{!loading && (
+			{loading ? (
+				<div className="flex justify-center items-center py-12">
+					<LoadingSpinner size="md" />
+				</div>
+			) : (
 				<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mt-8 mx-auto">
 					{photos.map((photo) => (
 						<div key={photo.photoId} className="relative aspect-square w-full">

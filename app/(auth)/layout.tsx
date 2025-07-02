@@ -19,7 +19,7 @@ export default function AuthLayout({
 	// ログイン済みの場合はdashboardにリダイレクト
 	useEffect(() => {
 		if (isAuthStateChecking && currentUser) {
-			router.push("/rooms");
+			router.push("/groups");
 		}
 	}, [currentUser, isAuthStateChecking, router]);
 

@@ -4,10 +4,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useUserStore } from "@/stores/userStore";
 import { useAuth } from "@/hooks/useAuth";
-import { FaCircleUser } from "react-icons/fa6";
+import { UserCircleIcon } from "@heroicons/react/24/solid";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function ProfilePage() {
-	const { currentUser, isAuthenticated, isLoading } = useAuth();
+	const { currentUser, isAuthenticated } = useAuth();
 	const [userName, setUserName] = useState<string | null>(null);
 	const [iconImg, setIconImg] = useState<string | null>(null);
 	const [email, setEmail] = useState<string | null>(null);
@@ -43,7 +44,11 @@ export default function ProfilePage() {
 			<div className="bg-white rounded-lg shadow-md p-8 border border-amber-200 w-5/6">
 				<div className="flex flex-col md:flex-row items-center gap-6">
 					<div className="w-32 h-32 relative">
-						{iconImg ? (
+						{loading ? (
+							<div className="flex justify-center items-center py-12">
+								<LoadingSpinner size="md" />
+							</div>
+						) : iconImg ? (
 							<Image
 								src={iconImg}
 								alt="プロフィール画像"
@@ -52,9 +57,7 @@ export default function ProfilePage() {
 								className="object-cover rounded-full"
 							/>
 						) : (
-							<div className="w-full h-full bg-orange-100 rounded-full flex items-center justify-center">
-								<FaCircleUser className="text-orange-800" size={128} />
-							</div>
+							<UserCircleIcon className="text-orange-800 size-30" />
 						)}
 					</div>
 					<div className="flex-1">

@@ -7,6 +7,10 @@ import { z } from "zod";
 import { useState } from "react";
 import { useUserStore } from "@/stores/userStore";
 import Link from "next/link";
+import { User } from "firebase/auth";
+import { useShareStore } from "@/stores/shareStore";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 const userSchema = z.object({
 	email: z
@@ -22,8 +26,8 @@ export default function LoginPage() {
 	const router = useRouter();
 	const login = useUserStore((state) => state.login);
 	const status = useUserStore((state) => state.status);
-	const error = useUserStore((state) => state.error);
 	const [errorMessage, setErrorMessage] = useState<string | null>(null);
+	const getSharegroups = useShareStore((state) => state.getSharegroups);
 
 	const {
 		register,
@@ -34,7 +38,27 @@ export default function LoginPage() {
 	const onSubmit: SubmitHandler<UserData> = async (data) => {
 		try {
 			await login(data);
-			router.push("/rooms");
+
+			const user = await new Promise<User | null>((resolve) => {
+				const unsubscribe = onAuthStateChanged(auth, (user) => {
+					unsubscribe();
+					resolve(user);
+				});
+			});
+
+			if (!user) {
+				throw new Error("ログインに失敗しました");
+			}
+
+			const groups = await getSharegroups(user.uid);
+
+			if (groups.length > 0) {
+				router.push(
+					`/groups/${groups[0].sharegroupId}?sharedgroupTitle=${groups[0].sharedgroupTitle}`,
+				);
+			} else {
+				router.push("/groups/");
+			}
 		} catch (error) {
 			console.error("Login failed:", error);
 			setErrorMessage(

@@ -5,14 +5,14 @@ export interface Album {
 	updatedAt: string;
 	coverPhotoUrl: string;
 	userId: string;
-	shareRoomId: string;
+	sharegroupId: string;
 }
 
 export interface AlbumCardProps {
 	album: Album;
-	shareRoomId: string;
+	sharegroupId: string;
 	className?: string;
-	sharedRoomTitle?: string;
+	sharedgroupTitle?: string;
 }
 
 export interface AlbumUpdateRequest {
@@ -39,7 +39,7 @@ export interface AlbumCreateInputs {
 		photos: string[];
 	};
 	userId: string;
-	shareRoomId: string;
+	sharegroupId: string;
 }
 
 export interface AlbumFormProps {
